@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace ProyectoVDI.CORE.Core.Entities;
+
+public partial class Autoria
+{
+    public int IdAutoria { get; set; }
+
+    public int? IdRevista { get; set; }
+
+    public bool? CoautoriaEsan { get; set; }
+
+    public string? PosiciónDelAutor { get; set; }
+
+    public virtual Revista? IdRevistaNavigation { get; set; }
+}
