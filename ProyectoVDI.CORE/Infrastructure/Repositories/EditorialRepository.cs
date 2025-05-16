@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ProyectoVDI.CORE.Entities;
+using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Infrastructure.Data;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
@@ -20,84 +20,80 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         // Get All
         public IEnumerable<Editorial> GetAll()
         {
-            return _context.Editoriales.ToList();
+            return _context.Editorial.ToList();
         }
 
         public async Task<IEnumerable<Editorial>> GetAllAsync()
         {
-            return await _context.Editoriales.ToListAsync();
+            return await _context.Editorial.ToListAsync();
         }
 
-        //Get by id
-
+        // Get by ID
         public Editorial GetById(int id)
         {
-            return _context.Editoriales.FirstOrDefault(e => e.IdEditorial == id);
+            return _context.Editorial.FirstOrDefault(e => e.IdEditorial == id);
         }
 
         public async Task<Editorial> GetByIdAsync(int id)
         {
-            return await _context.Editoriales.FindAsync(id);
+            return await _context.Editorial.FindAsync(id);
         }
 
-        //Agregar 
-
+        // Create
         public int Create(Editorial editorial)
         {
-            _context.Editoriales.Add(editorial);
+            _context.Editorial.Add(editorial);
             _context.SaveChanges();
             return editorial.IdEditorial;
         }
 
         public async Task<int> CreateAsync(Editorial editorial)
         {
-            await _context.Editoriales.AddAsync(editorial);
+            await _context.Editorial.AddAsync(editorial);
             await _context.SaveChangesAsync();
             return editorial.IdEditorial;
         }
 
-        //Actualizar
-
+        // Update
         public bool Update(Editorial editorial)
         {
-            var existing = _context.Editoriales.Find(editorial.IdEditorial);
+            var existing = _context.Editorial.Find(editorial.IdEditorial);
             if (existing == null)
                 return false;
 
-            existing.MDPI = editorial.MDPI;
-            existing.INSIGHTS = editorial.INSIGHTS;
-            existing.BEALLSLIST = editorial.BEALLSLIST;
+            existing.Mdpi = editorial.Mdpi;
+            existing.Insights = editorial.Insights;
+            existing.BeallSList = editorial.BeallSList;
             existing.IdRevista = editorial.IdRevista;
 
-            _context.Editoriales.Update(existing);
+            _context.Editorial.Update(existing);
             _context.SaveChanges();
             return true;
         }
 
         public async Task<bool> UpdateAsync(Editorial editorial)
         {
-            var existing = await _context.Editoriales.FindAsync(editorial.IdEditorial);
+            var existing = await _context.Editorial.FindAsync(editorial.IdEditorial);
             if (existing == null)
                 return false;
 
-            existing.MDPI = editorial.MDPI;
-            existing.INSIGHTS = editorial.INSIGHTS;
-            existing.BEALLSLIST = editorial.BEALLSLIST;
+            existing.Mdpi = editorial.Mdpi;
+            existing.Insights = editorial.Insights;
+            existing.BeallSList = editorial.BeallSList;
             existing.IdRevista = editorial.IdRevista;
 
-            _context.Editoriales.Update(existing);
+            _context.Editorial.Update(existing);
             await _context.SaveChangesAsync();
             return true;
         }
 
-        // Eliminar
-
+        // Delete
         public bool Delete(int id)
         {
-            var editorial = _context.Editoriales.Find(id);
+            var editorial = _context.Editorial.Find(id);
             if (editorial != null)
             {
-                _context.Editoriales.Remove(editorial);
+                _context.Editorial.Remove(editorial);
                 _context.SaveChanges();
                 return true;
             }
@@ -106,15 +102,14 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var editorial = await _context.Editoriales.FindAsync(id);
+            var editorial = await _context.Editorial.FindAsync(id);
             if (editorial != null)
             {
-                _context.Editoriales.Remove(editorial);
+                _context.Editorial.Remove(editorial);
                 await _context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
-
     }
 }
