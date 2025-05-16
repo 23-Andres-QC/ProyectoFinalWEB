@@ -1,5 +1,9 @@
 ﻿using System;
-using ProyectoVDI.Core.Entities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ProyectoVDI.CORE.Entities;
 using ProyectoVDI.CORE.Infrastructure.Data;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
