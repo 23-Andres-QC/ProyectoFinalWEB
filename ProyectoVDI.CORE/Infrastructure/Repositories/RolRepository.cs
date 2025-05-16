@@ -3,11 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
+using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
-    public class RolRepository
+    public class RolRepository : IRolRepository
     {
         private readonly vdiContext _context;
 

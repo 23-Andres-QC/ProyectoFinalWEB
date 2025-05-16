@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ProyectoVDI.CORE.Core.Entities;
 
-public partial class Editorial
+public partial class Editorial 
 {
     public int IdEditorial { get; set; }
 
