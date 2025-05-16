@@ -14,4 +14,9 @@ public partial class Autoria
     public string? PosiciónDelAutor { get; set; }
 
     public virtual Revista? IdRevistaNavigation { get; set; }
+
+
+    /// hola mundo      
+
+
 }
