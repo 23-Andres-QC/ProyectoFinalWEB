@@ -9,5 +9,7 @@ public partial class Categorias
 
     public string? Descripcion { get; set; }
 
+    public int? Estado { get; set; }
+
     public virtual ICollection<Profesores> Profesores { get; set; } = new List<Profesores>();
 }

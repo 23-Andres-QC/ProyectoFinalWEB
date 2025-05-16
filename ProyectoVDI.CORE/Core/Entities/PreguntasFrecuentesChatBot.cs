@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ProyectoVDI.CORE.Core.Entities;
 
-public partial class PreguntasFrecuentes
+public partial class PreguntasFrecuentesChatBot
 {
     public int IdPregunta { get; set; }
 
@@ -15,11 +15,9 @@ public partial class PreguntasFrecuentes
 
     public string? Estado { get; set; }
 
-    public int? Usuario { get; set; }
+    public int? IdUsuario { get; set; }
 
     public DateOnly? FechaCreacion { get; set; }
 
-    public int? VecesUsada { get; set; }
-
-    public virtual Usuario? UsuarioNavigation { get; set; }
+    public virtual Usuario? IdUsuarioNavigation { get; set; }
 }

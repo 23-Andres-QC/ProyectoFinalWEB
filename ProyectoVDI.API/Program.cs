@@ -8,9 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var _config = builder.Configuration;
 var _connectionstring = _config.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<vdiContext>(options =>
-    options.UseSqlServer(_connectionstring));
-
-builder.Services.AddControllers();
+    builder.Services.AddControllers());
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

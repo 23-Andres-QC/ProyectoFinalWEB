@@ -9,37 +9,37 @@ public partial class RevistaIndexacion
 
     public int? IdRevista { get; set; }
 
-    public bool? Scopus { get; set; }
+    public string? Scopus { get; set; }
 
     public string? WoSQ { get; set; }
 
-    public string? WoSS { get; set; }
+    public int? WoSS { get; set; }
 
-    public bool? WoSEsci { get; set; }
+    public string? WoSEsci { get; set; }
 
     public string? EsciQ { get; set; }
 
-    public bool? ScopusExiste { get; set; }
+    public string? Scielo { get; set; }
 
-    public bool? WoSEsciExiste { get; set; }
+    public string? WoSLatam { get; set; }
 
-    public bool? WoSTopExiste { get; set; }
+    public int? WoSTopExiste { get; set; }
 
-    public bool? SoloScieloExiste { get; set; }
+    public int? WoSEsciExiste { get; set; }
 
-    public bool? LatamSinEsciExiste { get; set; }
+    public int? ScopusExiste { get; set; }
 
-    public bool? EsciScieloSinScupus { get; set; }
+    public int? SoloScieloExiste { get; set; }
 
-    public bool? Scielo { get; set; }
+    public int? LatamSinEsciExiste { get; set; }
 
-    public bool? WoSLatam { get; set; }
+    public int? EsciScieloSinScupus { get; set; }
 
-    public bool? MultidisciplinaryWos { get; set; }
+    public int? MultidisciplinaryWos { get; set; }
 
-    public bool? MultidisciplinaryScopus { get; set; }
+    public int? MultidisciplinaryScopus { get; set; }
 
-    public bool? MultidisciplinaryWosOScopys { get; set; }
+    public int? MultidisciplinaryWosOScopys { get; set; }
 
     public virtual Revista? IdRevistaNavigation { get; set; }
 }

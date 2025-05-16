@@ -9,11 +9,11 @@ public partial class Editorial
 
     public int? IdRevista { get; set; }
 
-    public bool? Mdpi { get; set; }
+    public string? Mdpi { get; set; }
 
-    public bool? Insights { get; set; }
+    public string? Insights { get; set; }
 
-    public bool? BeallSList { get; set; }
+    public string? BeallSList { get; set; }
 
     public virtual Revista? IdRevistaNavigation { get; set; }
 }

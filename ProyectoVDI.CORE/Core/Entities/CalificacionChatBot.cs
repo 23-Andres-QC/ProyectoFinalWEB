@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace ProyectoVDI.CORE.Core.Entities;
 
-public partial class ChatInstitucional
+public partial class CalificacionChatBot
 {
-    public int IdChat { get; set; }
+    public int IdFeedback { get; set; }
 
     public int? IdUsuario { get; set; }
 
-    public virtual ICollection<Feedback> Feedback { get; set; } = new List<Feedback>();
+    public int? Calificacion { get; set; }
+
+    public DateTime? FechaHora { get; set; }
 
     public virtual Usuario? IdUsuarioNavigation { get; set; }
 }

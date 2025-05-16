@@ -9,7 +9,7 @@ public partial class Autoria
 
     public int? IdRevista { get; set; }
 
-    public bool? CoautoriaEsan { get; set; }
+    public string? CoautoriaEsan { get; set; }
 
     public string? PosiciónDelAutor { get; set; }
 

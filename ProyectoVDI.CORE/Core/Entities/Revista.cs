@@ -7,7 +7,7 @@ public partial class Revista
 {
     public int IdRevista { get; set; }
 
-    public string Issn { get; set; } = null!;
+    public string? Issn { get; set; }
 
     public string? Nombre { get; set; }
 

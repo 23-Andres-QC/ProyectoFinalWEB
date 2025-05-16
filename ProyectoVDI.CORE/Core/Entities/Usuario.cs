@@ -5,7 +5,7 @@ namespace ProyectoVDI.CORE.Core.Entities;
 
 public partial class Usuario
 {
-    public int UsuarioId { get; set; }
+    public int IdUsuario { get; set; }
 
     public string? Correo { get; set; }
 
@@ -13,17 +13,17 @@ public partial class Usuario
 
     public int? IdRol { get; set; }
 
-    public string? Estado { get; set; }
+    public int? Estado { get; set; }
 
     public DateOnly? FechaCreacion { get; set; }
 
     public DateOnly? FechaModificacion { get; set; }
 
-    public virtual ICollection<ChatInstitucional> ChatInstitucional { get; set; } = new List<ChatInstitucional>();
+    public virtual ICollection<CalificacionChatBot> CalificacionChatBot { get; set; } = new List<CalificacionChatBot>();
 
     public virtual Rol? IdRolNavigation { get; set; }
 
-    public virtual ICollection<PreguntasFrecuentes> PreguntasFrecuentes { get; set; } = new List<PreguntasFrecuentes>();
+    public virtual ICollection<PreguntasFrecuentesChatBot> PreguntasFrecuentesChatBot { get; set; } = new List<PreguntasFrecuentesChatBot>();
 
     public virtual ICollection<Profesores> Profesores { get; set; } = new List<Profesores>();
 

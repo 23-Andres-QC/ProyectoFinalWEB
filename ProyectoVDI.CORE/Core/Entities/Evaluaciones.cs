@@ -9,25 +9,25 @@ public partial class Evaluaciones
 
     public int? IdRevista { get; set; }
 
-    public bool? Ajg4 { get; set; }
+    public string? Ajg4 { get; set; }
 
     public string? Ajg { get; set; }
 
-    public string? AjgS { get; set; }
+    public int? AjgS { get; set; }
 
     public string? Cnrs { get; set; }
 
-    public string? CnrsS { get; set; }
+    public int? CnrsS { get; set; }
 
     public string? Abdc { get; set; }
 
-    public string? AbdcS { get; set; }
+    public int? AbdcS { get; set; }
 
-    public bool? AjgExiste { get; set; }
+    public int? AjgExiste { get; set; }
 
-    public bool? CnrsExiste { get; set; }
+    public int? CnrsExiste { get; set; }
 
-    public bool? AbdcExiste { get; set; }
+    public int? AbdcExiste { get; set; }
 
     public virtual Revista? IdRevistaNavigation { get; set; }
 }
