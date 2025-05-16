@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.CORE.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,8 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 var _config = builder.Configuration;
 var _connectionstring = _config.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<vdiContext>(options =>
-    builder.Services.AddControllers());
+    options.UseSqlServer(_connectionstring)
+);
+
+//Interface
+
+builder.Services.AddTransient<IEditorialRepository, EditorialRepository>();
+builder.Services.AddTransient<IRevistasIndexacionRepository, RevistasIndexacionRepository>();
+builder.Services.AddTransient<IRolRepository, RolRepository>();
+
 
 builder.Services.AddControllers();
 
