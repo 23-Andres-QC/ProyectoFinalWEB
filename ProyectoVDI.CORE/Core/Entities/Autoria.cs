@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace ProyectoVDI.CORE.Core.Entities;
 
+// bienvenido a autoria
+
 public partial class Autoria
 {
     public int IdAutoria { get; set; }
