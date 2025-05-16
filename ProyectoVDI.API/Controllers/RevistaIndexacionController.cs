@@ -46,7 +46,7 @@ namespace ProyectoVDI.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, RevistaIndexacion item)
         {
-            if (id != item.IdRevistaIndexacion)
+            if (id != item.IdIndexacion)
                 return BadRequest("ID mismatch");
 
             var updated = await _repository.UpdateAsync(item);
