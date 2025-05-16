@@ -18,7 +18,7 @@ public partial class Autoria
     public virtual Revista? IdRevistaNavigation { get; set; }
 
 
-    /// hola mundo      
+    // hola mundo      
 
 
 }
