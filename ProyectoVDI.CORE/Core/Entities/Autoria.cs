@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ProyectoVDI.CORE.Core.Entities;
 
 // bienvenido a autoria//
-// ESTE COMENTARIO ES PARA MI BRANCH DE PRUEBAS
+// ESTE COMENTARIO ES PARA MI BRANCH DE PRUEBAS remota
 
 public partial class Autoria
 {
