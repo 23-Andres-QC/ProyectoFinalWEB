@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
-
+//a
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
     public class EditorialRepository : IEditorialRepository
