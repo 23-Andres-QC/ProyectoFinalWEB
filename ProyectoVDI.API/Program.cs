@@ -9,17 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 var _config = builder.Configuration;
 var _connectionstring = _config.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<vdiContext>(options =>
-    options.UseSqlServer(_connectionstring));
-
-// ADD INTERFACES PONER TODOS LOS INTERFACES CREADOS AQUI
-
-builder.Services.AddScoped<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
-
-
-
-
-
+    options.UseSqlServer(_connectionstring)
+);
 
 
 
