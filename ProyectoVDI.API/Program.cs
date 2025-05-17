@@ -20,6 +20,10 @@ builder.Services.AddScoped<IRegistroISSNRepository, RegistroISSNRepository>();
 
 
 
+// add interface
+
+builder.Services.AddTransient<IRolRepository, RolRepository>();
+
 
 builder.Services.AddControllers();
 
