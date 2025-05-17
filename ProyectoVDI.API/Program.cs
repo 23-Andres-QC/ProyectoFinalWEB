@@ -15,6 +15,10 @@ builder.Services.AddDbContext<vdiContext>(options =>
 );
 
 
+// add interface
+
+builder.Services.AddTransient<IRolRepository, RolRepository>();
+
 
 builder.Services.AddControllers();
 
