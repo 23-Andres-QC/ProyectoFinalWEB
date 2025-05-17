@@ -14,11 +14,6 @@ builder.Services.AddDbContext<vdiContext>(options =>
     options.UseSqlServer(_connectionstring)
 );
 
-//Interface
-
-builder.Services.AddTransient<IEditorialRepository, EditorialRepository>();
-builder.Services.AddTransient<IRevistasIndexacionRepository, RevistasIndexacionRepository>();
-builder.Services.AddTransient<IRolRepository, RolRepository>();
 
 
 builder.Services.AddControllers();
