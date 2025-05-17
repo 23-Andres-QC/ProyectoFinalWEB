@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.CORE.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +10,21 @@ var builder = WebApplication.CreateBuilder(args);
 var _config = builder.Configuration;
 var _connectionstring = _config.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<vdiContext>(options =>
-    builder.Services.AddControllers());
+    options.UseSqlServer(_connectionstring));
+
+// ADD INTERFACES PONER TODOS LOS INTERFACES CREADOS AQUI
+
+builder.Services.AddScoped<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
+
+
+
+
+
+
+
+
+builder.Services.AddControllers();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

@@ -1,0 +1,14 @@
+﻿using ProyectoVDI.CORE.Core.Entities;
+
+namespace ProyectoVDI.CORE.Core.Interfaces
+{
+    public interface ICalificacionChatBotRepository
+    {
+        Task CreateAsync(CalificacionChatBot calificacionChatBot);
+        Task<List<CalificacionChatBot>> GetAllAsync();
+        Task UpdateAsync(CalificacionChatBot calificacionChatBot);
+        Task DeleteAsync(int id);
+        Task<CalificacionChatBot> GetByIdAsync(int id);
+
+    }
+}
