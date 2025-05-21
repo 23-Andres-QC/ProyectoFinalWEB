@@ -22,6 +22,8 @@ namespace ProyectoVDI.API.Controllers
         }
 
         // GET: api/PresenciaEnLista
+        //QUIERO VER SI HAY PRESENCIA DE USUARIOS
+        // EN UNA LISTA DE REVISTAS
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PresenciaEnListas>>> GetPresenciaEnListas()
         {
