@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
@@ -17,36 +17,30 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             _context = context;
         }
 
-        // GET ALL
-        public IEnumerable<RevistaIndexacion> GetAll()
+        // Obtener todas las indexaciones
+        public async Task<List<RevistaIndexacion>> GetAllAsync()
         {
-            return _context.RevistaIndexacion.ToList();
+            return await _context.RevistaIndexacion
+                .Include(r => r.IdRevistaNavigation) // si necesitas incluir los datos de la revista
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<RevistaIndexacion>> GetAllAsync()
-        {
-            return await _context.RevistaIndexacion.ToListAsync();
-        }
-
-        // GET BY ID
-        public RevistaIndexacion GetById(int id)
-        {
-            return _context.RevistaIndexacion.FirstOrDefault(r => r.IdIndexacion == id);
-        }
-
+        // Obtener indexación por ID
         public async Task<RevistaIndexacion> GetByIdAsync(int id)
         {
-            return await _context.RevistaIndexacion.FindAsync(id);
+            var indexacion = await _context.RevistaIndexacion
+                .Include(r => r.IdRevistaNavigation)
+                .FirstOrDefaultAsync(r => r.IdIndexacion == id);
+
+            if (indexacion == null)
+            {
+                throw new InvalidOperationException($"No se encontró la indexación con ID {id}.");
+            }
+
+            return indexacion;
         }
 
-        // CREATE
-        public int Create(RevistaIndexacion item)
-        {
-            _context.RevistaIndexacion.Add(item);
-            _context.SaveChanges();
-            return item.IdIndexacion;
-        }
-
+        // Crear nueva indexación
         public async Task<int> CreateAsync(RevistaIndexacion item)
         {
             await _context.RevistaIndexacion.AddAsync(item);
@@ -54,50 +48,30 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return item.IdIndexacion;
         }
 
-        // UPDATE
-        public bool Update(RevistaIndexacion item)
-        {
-            var existing = _context.RevistaIndexacion.Find(item.IdIndexacion);
-            if (existing == null) return false;
-
-            _context.Entry(existing).CurrentValues.SetValues(item);
-            _context.SaveChanges();
-            return true;
-        }
-
-        public async Task<bool> UpdateAsync(RevistaIndexacion item)
+        // Actualizar indexación existente
+        public async Task UpdateAsync(RevistaIndexacion item)
         {
             var existing = await _context.RevistaIndexacion.FindAsync(item.IdIndexacion);
-            if (existing == null) return false;
+            if (existing == null)
+            {
+                throw new InvalidOperationException($"No se encontró la indexación con ID {item.IdIndexacion} para actualizar.");
+            }
 
             _context.Entry(existing).CurrentValues.SetValues(item);
             await _context.SaveChangesAsync();
-            return true;
         }
 
-        // DELETE
-        public bool Delete(int id)
-        {
-            var item = _context.RevistaIndexacion.Find(id);
-            if (item != null)
-            {
-                _context.RevistaIndexacion.Remove(item);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
+        // Eliminar indexación por ID
+        public async Task DeleteAsync(int id)
         {
             var item = await _context.RevistaIndexacion.FindAsync(id);
-            if (item != null)
+            if (item == null)
             {
-                _context.RevistaIndexacion.Remove(item);
-                await _context.SaveChangesAsync();
-                return true;
+                throw new InvalidOperationException($"No se encontró la indexación con ID {id} para eliminar.");
             }
-            return false;
+
+            _context.RevistaIndexacion.Remove(item);
+            await _context.SaveChangesAsync();
         }
     }
 }

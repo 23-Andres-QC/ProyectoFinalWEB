@@ -21,20 +21,20 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         // Crear nueva pregunta frecuente
         public async Task CreateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
         {
-
+            // Asignar la fecha actual si no se especifica
             preguntasFrecuentesChatBot.FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
 
             await _context.PreguntasFrecuentesChatBot.AddAsync(preguntasFrecuentesChatBot);
             await _context.SaveChangesAsync();
         }
 
-        // Obtener todas
+        // Obtener todas las preguntas frecuentes
         public async Task<List<PreguntasFrecuentesChatBot>> GetAllAsync()
         {
             return await _context.PreguntasFrecuentesChatBot.ToListAsync();
         }
 
-        // Update
+        // Obtener por ID (lanzando excepción si no se encuentra)
         public async Task<PreguntasFrecuentesChatBot> GetByIdAsync(int id)
         {
             var result = await _context.PreguntasFrecuentesChatBot.FindAsync(id);
@@ -45,21 +45,15 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return result;
         }
 
-        // Obtener por pregunta (ignorando mayúsculas/minúsculas)
-        public async Task<PreguntasFrecuentesChatBot?> GetByPreguntaAsync(string pregunta)
-        {
-            return await _context.PreguntasFrecuentesChatBot
-                .FirstOrDefaultAsync(p => p.Pregunta.ToLower() == pregunta.ToLower());
-        }
 
-        // Actualizar pregunta
+        // Actualizar una pregunta existente
         public async Task UpdateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
         {
             _context.PreguntasFrecuentesChatBot.Update(preguntasFrecuentesChatBot);
             await _context.SaveChangesAsync();
         }
 
-        // Eliminar por ID
+        // Eliminar por ID (si existe)
         public async Task DeleteAsync(int id)
         {
             var pregunta = await _context.PreguntasFrecuentesChatBot.FindAsync(id);

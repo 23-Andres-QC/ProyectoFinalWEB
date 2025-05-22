@@ -1,75 +1,74 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegistroIssnController : ControllerBase
+    public class RegistroISSNController : ControllerBase
     {
-        private readonly IRegistroISSNRepository _registroISSNRepository;
+        private readonly IRegistroISSNRepository _repository;
 
-        public RegistroIssnController(IRegistroISSNRepository registroISSNRepository)
+        public RegistroISSNController(IRegistroISSNRepository repository)
         {
-            _registroISSNRepository = registroISSNRepository;
+            _repository = repository;
         }
 
-        // GET: api/RegistroIssn
-        // Devuelve la lista completa de registros ISSN
+        // GET: api/RegistroISSN
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RegistroIssn>>> GetAll()
         {
-            var registros = await _registroISSNRepository.GetAllAsync();
-            return Ok(registros);
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
-        // GET: api/RegistroIssn/5
-        // Devuelve un solo registro por ID
+        // GET: api/RegistroISSN/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RegistroIssn>> GetById(int id)
         {
-            var registro = await _registroISSNRepository.GetByIdAsync(id);
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound();
 
-            if (registro == null)
-                return NotFound(); // Si no existe, devuelve 404
-
-            return Ok(registro);
+            return Ok(entity);
         }
 
-        // POST: api/RegistroIssn
-        // Crea un nuevo registro ISSN
+        // POST: api/RegistroISSN
         [HttpPost]
-        public async Task<ActionResult<RegistroIssn>> Create(RegistroIssn registro)
+        public async Task<ActionResult<RegistroIssn>> Create(RegistroIssn entity)
         {
-            await _registroISSNRepository.CreateAsync(registro);
-
-            // Devuelve 201 con la ubicación del nuevo recurso
-            return CreatedAtAction(nameof(GetById), new { id = registro.IdRegistroIssn }, registro);
+            await _repository.CreateAsync(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.IdRegistroIssn }, entity);
         }
 
-        // PUT: api/RegistroIssn/5
-        // Actualiza un registro existente
+        // PUT: api/RegistroISSN/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, RegistroIssn registro)
+        public async Task<IActionResult> Update(int id, RegistroIssn entity)
         {
-            if (id != registro.IdRegistroIssn)
-                return BadRequest("El ID no coincide."); // Evita actualizar otro registro por error
+            if (id != entity.IdRegistroIssn)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
 
-            await _registroISSNRepository.UpdateAsync(registro);
-            return NoContent(); // Devuelve 204 cuando la actualización fue exitosa
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.UpdateAsync(entity);
+            return NoContent();
         }
 
-        // DELETE: api/RegistroIssn/5
-        // Elimina un registro por su ID
+        // DELETE: api/RegistroISSN/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _registroISSNRepository.DeleteAsync(id);
-            return NoContent(); // Devuelve 204 al eliminar correctamente
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.DeleteAsync(id);
+            return NoContent();
         }
-
-
     }
 }

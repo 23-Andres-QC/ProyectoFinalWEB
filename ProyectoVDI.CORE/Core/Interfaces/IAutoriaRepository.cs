@@ -4,15 +4,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IAutoriaRepository
     {
-        int Create(Autoria item);
-        Task<int> CreateAsync(Autoria item);
-        bool Delete(int id);
-        Task<bool> DeleteAsync(int id);
-        IEnumerable<Autoria> GetAll();
-        Task<IEnumerable<Autoria>> GetAllAsync();
-        Autoria GetById(int id);
+        Task<int> CreateAsync(Autoria autoria);
+        Task DeleteAsync(int id);
+        Task<List<Autoria>> GetAllAsync();
         Task<Autoria> GetByIdAsync(int id);
-        bool Update(Autoria item);
-        Task<bool> UpdateAsync(Autoria item);
+        Task UpdateAsync(Autoria autoria);
     }
 }

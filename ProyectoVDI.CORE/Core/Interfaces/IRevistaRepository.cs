@@ -2,12 +2,12 @@
 
 namespace ProyectoVDI.CORE.Core.Interfaces
 {
-    internal interface IRevistaRepository
+    public interface IRevistaRepository
     {
-        Task AddRevistaAsync(Revista revista);
-        Task DeleteRevistaAsync(int id);
-        Task<IEnumerable<Revista>> GetAllRevistasAsync();
-        Task<Revista?> GetRevistaById(int id);
-        Task UpdateRevistaAsync(Revista revista);
+        Task CreateAsync(Revista revista);
+        Task DeleteAsync(int id);
+        Task<List<Revista>> GetAllAsync();
+        Task<Revista> GetByIdAsync(int id);
+        Task UpdateAsync(Revista revista);
     }
 }

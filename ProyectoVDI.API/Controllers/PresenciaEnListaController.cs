@@ -1,111 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
-using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PresenciaEnListaController : ControllerBase
+    public class PresenciaEnListasController : ControllerBase
     {
-        private readonly vdiContext _context;
+        private readonly IPresenciaEnListasRepository _repository;
 
-        public PresenciaEnListaController(vdiContext context)
+        public PresenciaEnListasController(IPresenciaEnListasRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        // GET: api/PresenciaEnLista
-        //QUIERO VER SI HAY PRESENCIA DE USUARIOS
-        // EN UNA LISTA DE REVISTAS
-        //HOLAAAAA MUNDOOOO
+        // GET: api/PresenciaEnListas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PresenciaEnListas>>> GetPresenciaEnListas()
+        public async Task<ActionResult<IEnumerable<PresenciaEnListas>>> GetAll()
         {
-            return await _context.PresenciaEnListas.ToListAsync();
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
-        // GET: api/PresenciaEnLista/5
+        // GET: api/PresenciaEnListas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PresenciaEnListas>> GetPresenciaEnListas(int id)
+        public async Task<ActionResult<PresenciaEnListas>> GetById(int id)
         {
-            var presenciaEnListas = await _context.PresenciaEnListas.FindAsync(id);
-
-            if (presenciaEnListas == null)
-            {
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
                 return NotFound();
-            }
 
-            return presenciaEnListas;
+            return Ok(entity);
         }
 
-        // PUT: api/PresenciaEnLista/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPresenciaEnListas(int id, PresenciaEnListas presenciaEnListas)
-        {
-            if (id != presenciaEnListas.IdLista)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(presenciaEnListas).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PresenciaEnListasExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/PresenciaEnLista
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/PresenciaEnListas
         [HttpPost]
-        public async Task<ActionResult<PresenciaEnListas>> PostPresenciaEnListas(PresenciaEnListas presenciaEnListas)
+        public async Task<ActionResult<PresenciaEnListas>> Create(PresenciaEnListas entity)
         {
-            _context.PresenciaEnListas.Add(presenciaEnListas);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPresenciaEnListas", new { id = presenciaEnListas.IdLista }, presenciaEnListas);
+            var newId = await _repository.CreateAsync(entity);
+            entity.IdLista = newId;
+            return CreatedAtAction(nameof(GetById), new { id = newId }, entity);
         }
 
-        // DELETE: api/PresenciaEnLista/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePresenciaEnListas(int id)
+        // PUT: api/PresenciaEnListas/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, PresenciaEnListas entity)
         {
-            var presenciaEnListas = await _context.PresenciaEnListas.FindAsync(id);
-            if (presenciaEnListas == null)
-            {
+            if (id != entity.IdLista)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
+
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
-            }
 
-            _context.PresenciaEnListas.Remove(presenciaEnListas);
-            await _context.SaveChangesAsync();
-
+            await _repository.UpdateAsync(entity);
             return NoContent();
         }
 
-        private bool PresenciaEnListasExists(int id)
+        // DELETE: api/PresenciaEnListas/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            return _context.PresenciaEnListas.Any(e => e.IdLista == id);
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

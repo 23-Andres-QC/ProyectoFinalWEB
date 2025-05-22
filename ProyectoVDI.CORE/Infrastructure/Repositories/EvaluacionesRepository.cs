@@ -1,59 +1,70 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
     public class EvaluacionesRepository : IEvaluacionesRepository
     {
         private readonly vdiContext _context;
+
         public EvaluacionesRepository(vdiContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Evaluaciones>> GetAllEvaluacionesAsync()
+        // Obtener todas las evaluaciones
+        public async Task<List<Evaluaciones>> GetAllAsync()
         {
             return await _context.Evaluaciones.ToListAsync();
         }
-        public async Task<Evaluaciones?> GetEvaluacionById(int id)
+
+        // Obtener evaluación por ID
+        public async Task<Evaluaciones> GetByIdAsync(int id)
         {
-            return await _context.Evaluaciones.FindAsync(id);
+            var evaluacion = await _context.Evaluaciones.FindAsync(id);
+            if (evaluacion == null)
+            {
+                throw new InvalidOperationException($"No se encontró la evaluación con ID {id}.");
+            }
+            return evaluacion;
         }
 
-        public async Task AddEvaluacionAsync(Evaluaciones evaluacion)
+        // Crear nueva evaluación
+        public async Task CreateAsync(Evaluaciones evaluacion)
         {
             await _context.Evaluaciones.AddAsync(evaluacion);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEvaluacionAsync(Evaluaciones evaluacion)
+        // Actualizar evaluación
+        public async Task UpdateAsync(Evaluaciones evaluacion)
         {
-            _context.Evaluaciones.Update(evaluacion);
+            var existing = await _context.Evaluaciones.FindAsync(evaluacion.IdEvaluacion);
+            if (existing == null)
+            {
+                throw new InvalidOperationException($"No se encontró la evaluación con ID {evaluacion.IdEvaluacion} para actualizar.");
+            }
+
+            _context.Entry(existing).CurrentValues.SetValues(evaluacion);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteEvaluacionAsync(int id)
+        // Eliminar evaluación
+        public async Task DeleteAsync(int id)
         {
-            var evaluacion = await GetEvaluacionById(id);
-            if (evaluacion != null)
+            var evaluacion = await _context.Evaluaciones.FindAsync(id);
+            if (evaluacion == null)
             {
-                _context.Evaluaciones.Remove(evaluacion);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"No se encontró la evaluación con ID {id} para eliminar.");
             }
+
+            _context.Evaluaciones.Remove(evaluacion);
+            await _context.SaveChangesAsync();
         }
-
-
-        public async Task<IEnumerable<Evaluaciones>> GetEvaluacionesByOrdenAsync(int idRevista)
-        {
-            return await _context.Evaluaciones.Where(e => e.IdRevista == idRevista).ToListAsync();
-        }
-
     }
 }

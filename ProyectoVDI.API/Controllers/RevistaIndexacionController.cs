@@ -1,69 +1,74 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RevistaIndexacionController : ControllerBase
+    public class RevistasIndexacionController : ControllerBase
     {
         private readonly IRevistasIndexacionRepository _repository;
 
-        public RevistaIndexacionController(IRevistasIndexacionRepository repository)
+        public RevistasIndexacionController(IRevistasIndexacionRepository repository)
         {
             _repository = repository;
         }
 
-        // GET: api/revistaindexacion
+        // GET: api/RevistasIndexacion
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RevistaIndexacion>>> GetAll()
         {
-            var revistas = await _repository.GetAllAsync();
-            return Ok(revistas);
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
-        // GET: api/revistaindexacion/5
+        // GET: api/RevistasIndexacion/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RevistaIndexacion>> GetById(int id)
         {
-            var revista = await _repository.GetByIdAsync(id);
-            if (revista == null)
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
                 return NotFound();
 
-            return Ok(revista);
+            return Ok(entity);
         }
 
-        // POST: api/revistaindexacion
+        // POST: api/RevistasIndexacion
         [HttpPost]
-        public async Task<ActionResult> Create(RevistaIndexacion item)
+        public async Task<ActionResult<RevistaIndexacion>> Create(RevistaIndexacion entity)
         {
-            var id = await _repository.CreateAsync(item);
-            return CreatedAtAction(nameof(GetById), new { id = id }, item);
+            var newId = await _repository.CreateAsync(entity);
+            entity.IdIndexacion = newId;
+            return CreatedAtAction(nameof(GetById), new { id = newId }, entity);
         }
 
-        // PUT: api/revistaindexacion/5
+        // PUT: api/RevistasIndexacion/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, RevistaIndexacion item)
+        public async Task<IActionResult> Update(int id, RevistaIndexacion entity)
         {
-            if (id != item.IdIndexacion)
-                return BadRequest("ID mismatch");
+            if (id != entity.IdIndexacion)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
 
-            var updated = await _repository.UpdateAsync(item);
-            if (!updated)
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
 
+            await _repository.UpdateAsync(entity);
             return NoContent();
         }
 
-        // DELETE: api/revistaindexacion/5
+        // DELETE: api/RevistasIndexacion/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _repository.DeleteAsync(id);
-            if (!deleted)
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
 
+            await _repository.DeleteAsync(id);
             return NoContent();
         }
     }

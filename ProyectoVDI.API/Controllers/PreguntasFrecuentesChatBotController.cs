@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -9,138 +10,65 @@ namespace ProyectoVDI.API.Controllers
     [ApiController]
     public class PreguntasFrecuentesChatBotController : ControllerBase
     {
+        private readonly IPreguntasFrecuentesChatBotRepository _repository;
 
-        private readonly IPreguntasFrecuentesChatBotRepository _preguntasFrecuentesChatBotRepository;
-
-        public PreguntasFrecuentesChatBotController(IPreguntasFrecuentesChatBotRepository preguntasFrecuentesChatBotRepository)
+        public PreguntasFrecuentesChatBotController(IPreguntasFrecuentesChatBotRepository repository)
         {
-            _preguntasFrecuentesChatBotRepository = preguntasFrecuentesChatBotRepository;
+            _repository = repository;
         }
 
-        // POST: crear una pregunta frecuente
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
-        {
-            if (preguntasFrecuentesChatBot == null)
-            {
-                return BadRequest(false); // Devuelve false si el objeto es nulo
-            }
-
-            try
-            {
-                await _preguntasFrecuentesChatBotRepository.CreateAsync(preguntasFrecuentesChatBot);
-                return Ok(true); // Todo bien, devuelve true
-            }
-            catch (Exception)
-            {
-                return BadRequest(false); // Ocurrió un error, devuelve false
-            }
-        }
-
-
-        // GET: obtener todas las preguntas frecuentes
+        // GET: api/PreguntasFrecuentesChatBot
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<PreguntasFrecuentesChatBot>>> GetAll()
         {
-            try
-            {
-                var preguntasFrecuentesChatBot = await _preguntasFrecuentesChatBotRepository.GetAllAsync();
-                return Ok(preguntasFrecuentesChatBot);
-            }
-            catch (Exception)
-            {
-                return BadRequest(false); // Ocurrió un error, devuelve false
-            }
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
-        // Get: obtener una pregunta frecuente por id
+        // GET: api/PreguntasFrecuentesChatBot/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<PreguntasFrecuentesChatBot>> GetById(int id)
         {
-            try
-            {
-                var preguntasFrecuentesChatBot = await _preguntasFrecuentesChatBotRepository.GetByIdAsync(id);
-                if (preguntasFrecuentesChatBot == null)
-                {
-                    return NotFound(); // Devuelve 404 si no se encuentra la pregunta frecuente
-                }
-                return Ok(preguntasFrecuentesChatBot);
-            }
-            catch (Exception)
-            {
-                return BadRequest(false); // Ocurrió un error, devuelve false
-            }
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound();
+
+            return Ok(entity);
         }
 
-        //GET: obtener una pregunta frecuente por pregunta
-        [HttpGet("pregunta/{pregunta}")]
-        public async Task<IActionResult> GetByPregunta(string pregunta)
+        // POST: api/PreguntasFrecuentesChatBot
+        [HttpPost]
+        public async Task<ActionResult<PreguntasFrecuentesChatBot>> Create(PreguntasFrecuentesChatBot entity)
         {
-            try
-            {
-                var preguntasFrecuentesChatBot = await _preguntasFrecuentesChatBotRepository.GetByPreguntaAsync(pregunta);
-                if (preguntasFrecuentesChatBot == null)
-                {
-                    return NotFound(); // Devuelve 404 si no se encuentra la pregunta frecuente
-                }
-                return Ok(preguntasFrecuentesChatBot);
-            }
-            catch (Exception)
-            {
-                return BadRequest(false); // Ocurrió un error, devuelve false
-            }
+            await _repository.CreateAsync(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.IdPregunta }, entity);
         }
-        // PUT: actualizar una pregunta frecuente
+
+        // PUT: api/PreguntasFrecuentesChatBot/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
+        public async Task<IActionResult> Update(int id, PreguntasFrecuentesChatBot entity)
         {
-            if (preguntasFrecuentesChatBot == null || id != preguntasFrecuentesChatBot.IdPregunta)
-            {
-                return BadRequest("Datos inválidos");
-            }
+            if (id != entity.IdPregunta)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
 
-            var existente = await _preguntasFrecuentesChatBotRepository.GetByIdAsync(id);
-            if (existente == null)
-            {
-                return NotFound("No se encontró el registro");
-            }
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
 
-            try
-            {
-                // Aquí puedes actualizar las propiedades necesarias (si quieres)
-                // o simplemente pasar el objeto completo:
-                await _preguntasFrecuentesChatBotRepository.UpdateAsync(preguntasFrecuentesChatBot);
-                return Ok(true); // o NoContent() si prefieres no devolver nada
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                return StatusCode(500, "Error al actualizar: " + ex.Message);
-            }
+            await _repository.UpdateAsync(entity);
+            return NoContent();
         }
 
-        //DELETE: eliminar una pregunta frecuente
+        // DELETE: api/PreguntasFrecuentesChatBot/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var existente = await _preguntasFrecuentesChatBotRepository.GetByIdAsync(id);
-                if (existente == null)
-                {
-                    return NotFound("No se encontró el registro");
-                }
-                await _preguntasFrecuentesChatBotRepository.DeleteAsync(id);
-                return Ok(true); // o NoContent() si prefieres no devolver nada
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores
-                return StatusCode(500, "Error al eliminar: " + ex.Message);
-            }
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.DeleteAsync(id);
+            return NoContent();
         }
-
-
-
     }
 }

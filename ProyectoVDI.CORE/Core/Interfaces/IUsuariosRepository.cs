@@ -2,12 +2,12 @@
 
 namespace ProyectoVDI.CORE.Core.Interfaces
 {
-    internal interface IUsuariosRepository
+    public interface IUsuariosRepository
     {
-        Task AddUsuarioAsync(Usuario usuario);
-        Task DeleteUsuarioAsync(int id);
-        Task<IEnumerable<Usuario>> GetAllUsuariosAsync();
-        Task<Usuario?> GetUsuarioById(int id);
-        Task UpdateUsuarioAsync(Usuario usuario);
+        Task<int> CreateAsync(Usuario usuario);
+        Task DeleteAsync(int id);
+        Task<List<Usuario>> GetAllAsync();
+        Task<Usuario> GetByIdAsync(int id);
+        Task UpdateAsync(Usuario usuario);
     }
 }

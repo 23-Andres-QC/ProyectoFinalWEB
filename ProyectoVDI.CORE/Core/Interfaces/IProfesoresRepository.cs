@@ -2,12 +2,12 @@
 
 namespace ProyectoVDI.CORE.Core.Interfaces
 {
-    internal interface IProfesoresRepository
+    public interface IProfesoresRepository
     {
-        Task AddProfesorAsync(Profesores profesor);
-        Task DeleteProfesorAsync(int id);
-        Task<IEnumerable<Profesores>> GetAllProfesoresAsync();
-        Task<Profesores?> GetProfesorById(int id);
-        Task UpdateProfesorAsync(Profesores profesor);
+        Task CreateAsync(Profesores profesor);
+        Task DeleteAsync(int id);
+        Task<List<Profesores>> GetAllAsync();
+        Task<Profesores> GetByIdAsync(int id);
+        Task UpdateAsync(Profesores profesor);
     }
 }

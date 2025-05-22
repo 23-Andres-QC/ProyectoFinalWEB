@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -8,62 +10,65 @@ namespace ProyectoVDI.API.Controllers
     [ApiController]
     public class EditorialController : ControllerBase
     {
-        private readonly IEditorialRepository _editorialRepository;
+        private readonly IEditorialRepository _repository;
 
-        public EditorialController(IEditorialRepository editorialRepository)
+        public EditorialController(IEditorialRepository repository)
         {
-            _editorialRepository = editorialRepository;
+            _repository = repository;
         }
 
-        // GET: api/editorial
+        // GET: api/Editorial
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Editorial>>> GetAll()
         {
-            var editoriales = await _editorialRepository.GetAllAsync();
-            return Ok(editoriales);
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
-        // GET: api/editorial/5
+        // GET: api/Editorial/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Editorial>> GetById(int id)
         {
-            var editorial = await _editorialRepository.GetByIdAsync(id);
-            if (editorial == null)
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
                 return NotFound();
 
-            return Ok(editorial);
+            return Ok(entity);
         }
 
-        // POST: api/editorial
+        // POST: api/Editorial
         [HttpPost]
-        public async Task<ActionResult> Create(Editorial editorial)
+        public async Task<ActionResult<Editorial>> Create(Editorial entity)
         {
-            var id = await _editorialRepository.CreateAsync(editorial);
-            return CreatedAtAction(nameof(GetById), new { id = id }, editorial);
+            int newId = await _repository.CreateAsync(entity);
+            entity.IdEditorial = newId; // Asegúrate que esta propiedad exista en la clase
+            return CreatedAtAction(nameof(GetById), new { id = newId }, entity);
         }
 
-        // PUT: api/editorial/5
+        // PUT: api/Editorial/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, Editorial editorial)
+        public async Task<IActionResult> Update(int id, Editorial entity)
         {
-            if (id != editorial.IdEditorial)
-                return BadRequest("ID mismatch");
+            if (id != entity.IdEditorial) // Ajusta el nombre del ID si es distinto
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
 
-            var updated = await _editorialRepository.UpdateAsync(editorial);
-            if (!updated)
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
 
+            await _repository.UpdateAsync(entity);
             return NoContent();
         }
 
-        // DELETE: api/editorial/5
+        // DELETE: api/Editorial/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _editorialRepository.DeleteAsync(id);
-            if (!deleted)
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
 
+            await _repository.DeleteAsync(id);
             return NoContent();
         }
     }

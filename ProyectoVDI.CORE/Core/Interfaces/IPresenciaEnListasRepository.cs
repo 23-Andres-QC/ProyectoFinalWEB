@@ -2,12 +2,12 @@
 
 namespace ProyectoVDI.CORE.Core.Interfaces
 {
-    internal interface IPresenciaEnListasRepository
+    public interface IPresenciaEnListasRepository
     {
-        Task AddPresenciaEnListasAsync(PresenciaEnListas presencia);
-        Task DeletePresenciaEnListasAsync(int id);
-        Task<IEnumerable<PresenciaEnListas>> GetAllPresenciaEnListasAsync();
-        Task<PresenciaEnListas?> GetPresenciaEnListasById(int id);
-        Task UpdatePresenciaEnListasAsync(PresenciaEnListas presencia);
+        Task<int> CreateAsync(PresenciaEnListas presencia);
+        Task DeleteAsync(int id);
+        Task<List<PresenciaEnListas>> GetAllAsync();
+        Task<PresenciaEnListas> GetByIdAsync(int id);
+        Task UpdateAsync(PresenciaEnListas presencia);
     }
 }

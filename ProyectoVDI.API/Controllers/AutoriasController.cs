@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
-using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.CORE.Core.Interfaces;
+using ProyectoVDI.CORE.Infrastructure.Repositories;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -14,95 +11,65 @@ namespace ProyectoVDI.API.Controllers
     [ApiController]
     public class AutoriasController : ControllerBase
     {
-        private readonly vdiContext _context;
+        private readonly IAutoriaRepository _repository;
 
-        public AutoriasController(vdiContext context)
+        public AutoriasController(IAutoriaRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Autorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Autoria>>> GetAutoria()
+        public async Task<ActionResult<IEnumerable<Autoria>>> GetAll()
         {
-            return await _context.Autoria.ToListAsync();
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
         // GET: api/Autorias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Autoria>> GetAutoria(int id)
+        public async Task<ActionResult<Autoria>> GetById(int id)
         {
-            var autoria = await _context.Autoria.FindAsync(id);
-
-            if (autoria == null)
-            {
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
                 return NotFound();
-            }
 
-            return autoria;
-        }
-
-        // PUT: api/Autorias/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAutoria(int id, Autoria autoria)
-        {
-            if (id != autoria.IdAutoria)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(autoria).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AutoriaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(entity);
         }
 
         // POST: api/Autorias
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Autoria>> PostAutoria(Autoria autoria)
+        public async Task<ActionResult<Autoria>> Create(Autoria entity)
         {
-            _context.Autoria.Add(autoria);
-            await _context.SaveChangesAsync();
+            await _repository.CreateAsync(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.IdAutoria }, entity);
+        }
 
-            return CreatedAtAction("GetAutoria", new { id = autoria.IdAutoria }, autoria);
+        // PUT: api/Autorias/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Autoria entity)
+        {
+            if (id != entity.IdAutoria)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
+
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.UpdateAsync(entity);
+            return NoContent();
         }
 
         // DELETE: api/Autorias/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAutoria(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var autoria = await _context.Autoria.FindAsync(id);
-            if (autoria == null)
-            {
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
-            }
 
-            _context.Autoria.Remove(autoria);
-            await _context.SaveChangesAsync();
-
+            await _repository.DeleteAsync(id);
             return NoContent();
-        }
-
-        private bool AutoriaExists(int id)
-        {
-            return _context.Autoria.Any(e => e.IdAutoria == id);
         }
     }
 }

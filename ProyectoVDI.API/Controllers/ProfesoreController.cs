@@ -1,114 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
-using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProfesoreController : ControllerBase
+    public class ProfesoresController : ControllerBase
     {
-        private readonly vdiContext _context;
+        private readonly IProfesoresRepository _repository;
 
-        public ProfesoreController(vdiContext context)
+        public ProfesoresController(IProfesoresRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        // GET: api/Profesore
+        // GET: api/Profesores
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Profesores>>> GetProfesores()
+        public async Task<ActionResult<IEnumerable<Profesores>>> GetAll()
         {
-            return await _context.Profesores.ToListAsync();
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
-        // GET: api/Profesore/5
+        // GET: api/Profesores/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profesores>> GetProfesores(int id)
+        public async Task<ActionResult<Profesores>> GetById(int id)
         {
-            var profesores = await _context.Profesores.FindAsync(id);
-
-            if (profesores == null)
-            {
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
                 return NotFound();
-            }
 
-            return profesores;
+            return Ok(entity);
         }
 
-
-
-
-
-
-
-        // PUT: api/Profesore/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfesores(int id, Profesores profesores)
-        {
-            if (id != profesores.IdProfesor)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(profesores).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProfesoresExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Profesore
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/Profesores
         [HttpPost]
-        public async Task<ActionResult<Profesores>> PostProfesores(Profesores profesores)
+        public async Task<ActionResult<Profesores>> Create(Profesores entity)
         {
-            _context.Profesores.Add(profesores);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProfesores", new { id = profesores.IdProfesor }, profesores);
+            await _repository.CreateAsync(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.IdProfesor }, entity); // Asegúrate que esta propiedad exista
         }
 
-        // DELETE: api/Profesore/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProfesores(int id)
+        // PUT: api/Profesores/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Profesores entity)
         {
-            var profesores = await _context.Profesores.FindAsync(id);
-            if (profesores == null)
-            {
+            if (id != entity.IdProfesor)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
+
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
-            }
 
-            _context.Profesores.Remove(profesores);
-            await _context.SaveChangesAsync();
-
+            await _repository.UpdateAsync(entity);
             return NoContent();
         }
 
-        private bool ProfesoresExists(int id)
+        // DELETE: api/Profesores/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            return _context.Profesores.Any(e => e.IdProfesor == id);
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

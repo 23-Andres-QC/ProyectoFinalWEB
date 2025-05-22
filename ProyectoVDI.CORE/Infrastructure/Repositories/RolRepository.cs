@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
@@ -17,87 +17,46 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             _context = context;
         }
 
-        // GET ALL
-        public IEnumerable<Rol> GetAll()
+        // Crear nuevo rol
+        public async Task CreateAsync(Rol rol)
         {
-            return _context.Rol.ToList();
+            await _context.Rol.AddAsync(rol);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Rol>> GetAllAsync()
+        // Obtener todos los roles
+        public async Task<List<Rol>> GetAllAsync()
         {
             return await _context.Rol.ToListAsync();
         }
 
-        // GET BY ID
-        public Rol GetById(int id)
-        {
-            return _context.Rol.FirstOrDefault(r => r.IdRol == id);
-        }
-
+        // Obtener rol por ID (lanzando excepción si no existe)
         public async Task<Rol> GetByIdAsync(int id)
         {
-            return await _context.Rol.FindAsync(id);
-        }
-
-        // CREATE
-        public int Create(Rol item)
-        {
-            _context.Rol.Add(item);
-            _context.SaveChanges();
-            return item.IdRol;
-        }
-
-        public async Task<int> CreateAsync(Rol item)
-        {
-            await _context.Rol.AddAsync(item);
-            await _context.SaveChangesAsync();
-            return item.IdRol;
-        }
-
-        // UPDATE
-        public bool Update(Rol item)
-        {
-            var existing = _context.Rol.Find(item.IdRol);
-            if (existing == null) return false;
-
-            _context.Entry(existing).CurrentValues.SetValues(item);
-            _context.SaveChanges();
-            return true;
-        }
-
-        public async Task<bool> UpdateAsync(Rol item)
-        {
-            var existing = await _context.Rol.FindAsync(item.IdRol);
-            if (existing == null) return false;
-
-            _context.Entry(existing).CurrentValues.SetValues(item);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
-        // DELETE
-        public bool Delete(int id)
-        {
-            var item = _context.Rol.Find(id);
-            if (item != null)
+            var result = await _context.Rol.FindAsync(id);
+            if (result == null)
             {
-                _context.Rol.Remove(item);
-                _context.SaveChanges();
-                return true;
+                throw new InvalidOperationException($"No se encontró un rol con el ID {id}.");
             }
-            return false;
+            return result;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        // Actualizar rol
+        public async Task UpdateAsync(Rol rol)
         {
-            var item = await _context.Rol.FindAsync(id);
-            if (item != null)
+            _context.Rol.Update(rol);
+            await _context.SaveChangesAsync();
+        }
+
+        // Eliminar rol por ID
+        public async Task DeleteAsync(int id)
+        {
+            var rol = await _context.Rol.FindAsync(id);
+            if (rol != null)
             {
-                _context.Rol.Remove(item);
+                _context.Rol.Remove(rol);
                 await _context.SaveChangesAsync();
-                return true;
             }
-            return false;
         }
     }
 }

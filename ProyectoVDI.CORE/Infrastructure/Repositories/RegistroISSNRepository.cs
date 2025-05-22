@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
@@ -18,41 +16,55 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         {
             _context = context;
         }
-        // CREATE registro ISSN
+
+        // Crear nuevo registro ISSN
         public async Task CreateAsync(RegistroIssn registroISSN)
         {
             await _context.RegistroIssn.AddAsync(registroISSN);
             await _context.SaveChangesAsync();
         }
 
-        // GET all registro ISSN
+        // Obtener todos los registros ISSN
         public async Task<List<RegistroIssn>> GetAllAsync()
         {
             return await _context.RegistroIssn.ToListAsync();
         }
 
-        // GET registro ISSN by id
+        // Obtener registro ISSN por ID
         public async Task<RegistroIssn> GetByIdAsync(int id)
         {
-            return await _context.RegistroIssn.FindAsync(id);
+            var registro = await _context.RegistroIssn.FindAsync(id);
+            if (registro == null)
+            {
+                throw new InvalidOperationException($"No se encontró un registro ISSN con el ID {id}.");
+            }
+            return registro;
         }
-        // UPDATE registro ISSN
+
+        // Actualizar un registro ISSN existente
         public async Task UpdateAsync(RegistroIssn registroISSN)
         {
-            _context.RegistroIssn.Update(registroISSN);
+            var existing = await _context.RegistroIssn.FindAsync(registroISSN.IdRegistroIssn);
+            if (existing == null)
+            {
+                throw new InvalidOperationException($"No se encontró el registro ISSN con ID {registroISSN.IdRegistroIssn} para actualizar.");
+            }
+
+            _context.Entry(existing).CurrentValues.SetValues(registroISSN);
             await _context.SaveChangesAsync();
         }
-        // DELETE registro ISSN
+
+        // Eliminar registro ISSN por ID
         public async Task DeleteAsync(int id)
         {
-            var registroISSN = await _context.RegistroIssn.FindAsync(id);
-            if (registroISSN != null)
+            var registro = await _context.RegistroIssn.FindAsync(id);
+            if (registro == null)
             {
-                _context.RegistroIssn.Remove(registroISSN);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"No se encontró el registro ISSN con ID {id} para eliminar.");
             }
+
+            _context.RegistroIssn.Remove(registro);
+            await _context.SaveChangesAsync();
         }
-
-
     }
 }

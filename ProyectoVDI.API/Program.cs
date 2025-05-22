@@ -14,11 +14,6 @@ builder.Services.AddDbContext<vdiContext>(options =>
     options.UseSqlServer(_connectionstring)
 );
 
-//agregar todos los controladoress
-
-builder.Services.AddScoped<IRegistroISSNRepository, RegistroISSNRepository>();
-
-
 
 // add interface
 

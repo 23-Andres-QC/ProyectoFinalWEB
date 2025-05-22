@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
-using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -14,95 +10,65 @@ namespace ProyectoVDI.API.Controllers
     [ApiController]
     public class RevistaController : ControllerBase
     {
-        private readonly vdiContext _context;
+        private readonly IRevistaRepository _repository;
 
-        public RevistaController(vdiContext context)
+        public RevistaController(IRevistaRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Revista
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Revista>>> GetRevista()
+        public async Task<ActionResult<IEnumerable<Revista>>> GetAll()
         {
-            return await _context.Revista.ToListAsync();
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
         // GET: api/Revista/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Revista>> GetRevista(int id)
+        public async Task<ActionResult<Revista>> GetById(int id)
         {
-            var revista = await _context.Revista.FindAsync(id);
-
-            if (revista == null)
-            {
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
                 return NotFound();
-            }
 
-            return revista;
-        }
-
-        // PUT: api/Revista/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRevista(int id, Revista revista)
-        {
-            if (id != revista.IdRevista)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(revista).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RevistaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(entity);
         }
 
         // POST: api/Revista
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Revista>> PostRevista(Revista revista)
+        public async Task<ActionResult<Revista>> Create(Revista entity)
         {
-            _context.Revista.Add(revista);
-            await _context.SaveChangesAsync();
+            await _repository.CreateAsync(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.IdRevista }, entity); // Asegúrate que esta propiedad exista
+        }
 
-            return CreatedAtAction("GetRevista", new { id = revista.IdRevista }, revista);
+        // PUT: api/Revista/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Revista entity)
+        {
+            if (id != entity.IdRevista)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
+
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.UpdateAsync(entity);
+            return NoContent();
         }
 
         // DELETE: api/Revista/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRevista(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var revista = await _context.Revista.FindAsync(id);
-            if (revista == null)
-            {
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
-            }
 
-            _context.Revista.Remove(revista);
-            await _context.SaveChangesAsync();
-
+            await _repository.DeleteAsync(id);
             return NoContent();
-        }
-
-        private bool RevistaExists(int id)
-        {
-            return _context.Revista.Any(e => e.IdRevista == id);
         }
     }
 }

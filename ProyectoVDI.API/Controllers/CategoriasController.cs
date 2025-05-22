@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
-using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.CORE.Core.Interfaces;
+using ProyectoVDI.CORE.Infrastructure.Repositories;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -14,95 +11,65 @@ namespace ProyectoVDI.API.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly vdiContext _context;
+        private readonly ICategoriaRepository _repository;
 
-        public CategoriasController(vdiContext context)
+        public CategoriasController(ICategoriaRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: api/Categorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categorias>>> GetCategorias()
+        public async Task<ActionResult<IEnumerable<Categorias>>> GetAll()
         {
-            return await _context.Categorias.ToListAsync();
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
         // GET: api/Categorias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categorias>> GetCategorias(int id)
+        public async Task<ActionResult<Categorias>> GetById(int id)
         {
-            var categorias = await _context.Categorias.FindAsync(id);
-
-            if (categorias == null)
-            {
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
                 return NotFound();
-            }
 
-            return categorias;
-        }
-
-        // PUT: api/Categorias/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategorias(int id, Categorias categorias)
-        {
-            if (id != categorias.IdCategoria)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(categorias).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoriasExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(entity);
         }
 
         // POST: api/Categorias
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Categorias>> PostCategorias(Categorias categorias)
+        public async Task<ActionResult<Categorias>> Create(Categorias entity)
         {
-            _context.Categorias.Add(categorias);
-            await _context.SaveChangesAsync();
+            await _repository.CreateAsync(entity);
+            return CreatedAtAction(nameof(GetById), new { id = entity.IdCategoria }, entity);
+        }
 
-            return CreatedAtAction("GetCategorias", new { id = categorias.IdCategoria }, categorias);
+        // PUT: api/Categorias/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, Categorias entity)
+        {
+            if (id != entity.IdCategoria)
+                return BadRequest("El ID proporcionado no coincide con el objeto.");
+
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
+                return NotFound();
+
+            await _repository.UpdateAsync(entity);
+            return NoContent();
         }
 
         // DELETE: api/Categorias/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategorias(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var categorias = await _context.Categorias.FindAsync(id);
-            if (categorias == null)
-            {
+            var existing = await _repository.GetByIdAsync(id);
+            if (existing == null)
                 return NotFound();
-            }
 
-            _context.Categorias.Remove(categorias);
-            await _context.SaveChangesAsync();
-
+            await _repository.DeleteAsync(id);
             return NoContent();
-        }
-
-        private bool CategoriasExists(int id)
-        {
-            return _context.Categorias.Any(e => e.IdCategoria == id);
         }
     }
 }
