@@ -17,7 +17,21 @@ builder.Services.AddDbContext<vdiContext>(options =>
 
 // add interface
 
+builder.Services.AddTransient<IAutoriaRepository, AutoriaRepository>();
+builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>();
+builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddTransient<IDetRegistroISSNRepository, DetRegistroISSNRepository>();
+builder.Services.AddTransient<IEditorialRepository, EditorialRepository>();
+builder.Services.AddTransient<IEvaluacionesRepository, EvaluacionesRepository>();
+builder.Services.AddTransient<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
+builder.Services.AddTransient<IPresenciaEnListasRepository, PresenciaEnListasRepository>();
+builder.Services.AddTransient<IProfesoresRepository, ProfesoresRepository>();
+builder.Services.AddTransient<IRegistroISSNRepository, RegistroISSNRepository>();
+builder.Services.AddTransient<IRevistaRepository, RevistaRepository>();
+builder.Services.AddTransient<IRevistasIndexacionRepository, RevistasIndexacionRepository>();
 builder.Services.AddTransient<IRolRepository, RolRepository>();
+builder.Services.AddTransient<IUsuariosRepository, UsuariosRepository>();
+
 
 
 builder.Services.AddControllers();
