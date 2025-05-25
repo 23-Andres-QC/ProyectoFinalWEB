@@ -7,7 +7,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateAsync(Usuario usuario);
         Task DeleteAsync(int id);
         Task<List<Usuario>> GetAllAsync();
-        Task<Usuario> GetByIdAsync(int id);
+        Task<Usuario?> GetByIdAsync(int id);
         Task UpdateAsync(Usuario usuario);
     }
 }

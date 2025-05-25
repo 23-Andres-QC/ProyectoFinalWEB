@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
@@ -17,24 +16,20 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             _context = context;
         }
 
-        // Obtener todos los usuarios
         public async Task<List<Usuario>> GetAllAsync()
         {
-            return await _context.Usuario.ToListAsync();
+            return await _context.Usuario
+                .Where(u => u.Estado == 1)
+                .ToListAsync();
         }
 
-        // Obtener usuario por ID
-        public async Task<Usuario> GetByIdAsync(int id)
+        public async Task<Usuario?> GetByIdAsync(int id)
         {
-            var usuario = await _context.Usuario.FindAsync(id);
-            if (usuario == null)
-            {
-                throw new InvalidOperationException($"No se encontró el usuario con ID {id}.");
-            }
-            return usuario;
+            return await _context.Usuario
+                .Where(u => u.IdUsuario == id && u.Estado == 1)
+                .FirstOrDefaultAsync();
         }
 
-        // Crear nuevo usuario
         public async Task<int> CreateAsync(Usuario usuario)
         {
             await _context.Usuario.AddAsync(usuario);
@@ -42,30 +37,33 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return usuario.IdUsuario;
         }
 
-        // Actualizar usuario existente
         public async Task UpdateAsync(Usuario usuario)
         {
-            var existing = await _context.Usuario.FindAsync(usuario.IdUsuario);
-            if (existing == null)
+            var existingUsuario = await _context.Usuario.FindAsync(usuario.IdUsuario);
+            if (existingUsuario != null)
             {
-                throw new InvalidOperationException($"No se encontró el usuario con ID {usuario.IdUsuario} para actualizar.");
-            }
+                existingUsuario.Correo = usuario.Correo;
+                existingUsuario.Contraseña = usuario.Contraseña;
+                existingUsuario.IdRol = usuario.IdRol;
+                existingUsuario.Estado = usuario.Estado;
+                existingUsuario.FechaModificacion = usuario.FechaModificacion;
 
-            _context.Entry(existing).CurrentValues.SetValues(usuario);
-            await _context.SaveChangesAsync();
+                _context.Usuario.Update(existingUsuario);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        // Eliminar usuario por ID
         public async Task DeleteAsync(int id)
         {
             var usuario = await _context.Usuario.FindAsync(id);
-            if (usuario == null)
+            if (usuario != null)
             {
-                throw new InvalidOperationException($"No se encontró el usuario con ID {id} para eliminar.");
-            }
+                usuario.Estado = 0; // Soft delete
+                usuario.FechaModificacion = DateOnly.FromDateTime(DateTime.Now);
 
-            _context.Usuario.Remove(usuario);
-            await _context.SaveChangesAsync();
+                _context.Usuario.Update(usuario);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

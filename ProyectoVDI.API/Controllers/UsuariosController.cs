@@ -4,71 +4,84 @@ using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+
 namespace ProyectoVDI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class UsuariosController : ControllerBase
     {
-        private readonly IUsuariosRepository _repository;
+        private readonly IUsuariosRepository _usuariosRepository;
 
-        public UsuariosController(IUsuariosRepository repository)
+        public UsuariosController(IUsuariosRepository usuariosRepository)
         {
-            _repository = repository;
+            _usuariosRepository = usuariosRepository;
         }
 
         // GET: api/Usuarios
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetAll()
+        public async Task<IActionResult> GetAllUsuarios()
         {
-            var usuarios = await _repository.GetAllAsync();
+            var usuarios = await _usuariosRepository.GetAllAsync();
             return Ok(usuarios);
         }
 
         // GET: api/Usuarios/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetById(int id)
+        public async Task<IActionResult> GetUsuarioById(int id)
         {
-            var usuario = await _repository.GetByIdAsync(id);
+            var usuario = await _usuariosRepository.GetByIdAsync(id);
             if (usuario == null)
+            {
                 return NotFound();
-
+            }
             return Ok(usuario);
         }
 
         // POST: api/Usuarios
         [HttpPost]
-        public async Task<ActionResult<Usuario>> Create(Usuario usuario)
+        public async Task<IActionResult> CreateUsuario([FromBody] Usuario usuario)
         {
-            var newId = await _repository.CreateAsync(usuario);
-            usuario.IdUsuario = newId;
-            return CreatedAtAction(nameof(GetById), new { id = newId }, usuario);
+            if (usuario == null)
+            {
+                return BadRequest("Usuario is null");
+            }
+
+            var newUsuarioId = await _usuariosRepository.CreateAsync(usuario);
+            return Ok(newUsuarioId);
         }
 
         // PUT: api/Usuarios/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Usuario usuario)
+        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] Usuario usuario)
         {
-            if (id != usuario.IdUsuario)
-                return BadRequest("El ID proporcionado no coincide con el objeto.");
+            if (usuario == null || id != usuario.IdUsuario)
+            {
+                return BadRequest("Usuario is null or ID mismatch");
+            }
 
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
+            var existingUsuario = await _usuariosRepository.GetByIdAsync(id);
+            if (existingUsuario == null)
+            {
                 return NotFound();
+            }
 
-            await _repository.UpdateAsync(usuario);
-            return NoContent();
+            await _usuariosRepository.UpdateAsync(usuario);
+            return Ok("Usuario actualizado correctamente");
         }
 
         // DELETE: api/Usuarios/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
+            var existingUsuario = await _usuariosRepository.GetByIdAsync(id);
+            if (existingUsuario == null)
+            {
                 return NotFound();
+            }
 
-            await _repository.DeleteAsync(id);
+            await _usuariosRepository.DeleteAsync(id);
             return NoContent();
         }
     }
