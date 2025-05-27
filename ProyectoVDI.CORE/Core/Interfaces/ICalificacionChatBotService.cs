@@ -1,15 +1,14 @@
 using ProyectoVDI.CORE.Core.DTOs;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface ICalificacionChatBotService
     {
-        Task<IEnumerable<CalificacionChatBotListDTO>> GetCalificacionChatBots();
-        Task<CalificacionChatBotDTO?> GetCalificacionChatBotById(int id);
-        Task<int> CreateCalificacionChatBot(CalificacionChatBotCreateDTO dto);
-        Task<bool> UpdateCalificacionChatBot(CalificacionChatBotUpdateDTO dto);
-        Task DeleteCalificacionChatBot(int id);
+        Task<int> CreateAsync(CreateCalificacionChatBotDTO dto);
+        Task<bool> UpdateAsync(UpdateCalificacionChatBotDTO dto);
+
+        Task<bool> DeleteAsync(int id);
+
+        Task<IEnumerable<ListCalificacionChatBotDTO>> GetAllAsync();
     }
 }

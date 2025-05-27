@@ -20,8 +20,14 @@ builder.Services.AddDbContext<vdiContext>(options =>
 
 // add interface
 
+
+
+builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>(); //jehu
+builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>(); // jehu
+
 builder.Services.AddTransient<IAutoriaRepository, AutoriaRepository>();
-builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>();
+
+
 builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddTransient<IDetRegistroISSNRepository, DetRegistroISSNRepository>();
 builder.Services.AddTransient<IEditorialRepository, EditorialRepository>();

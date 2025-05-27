@@ -2,7 +2,31 @@ using System;
 
 namespace ProyectoVDI.CORE.Core.DTOs
 {
-    public class CalificacionChatBotDTO
+
+
+    public class CreateCalificacionChatBotDTO
+    {
+        public int? IdUsuario { get; set; }
+        public int? Calificacion { get; set; }
+
+    }
+
+    public class UpdateCalificacionChatBotDTO
+    {
+        public int IdFeedback { get; set; }
+        public int? IdUsuario { get; set; }
+        public int? Calificacion { get; set; }
+        
+    }
+    
+    public class DeleteCalificacionChatBotDTO
+    {
+        public int IdFeedback { get; set; }
+    }
+
+
+
+    public class ListCalificacionChatBotDTO
     {
         public int IdFeedback { get; set; }
         public int? IdUsuario { get; set; }
@@ -10,24 +34,4 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public DateTime? FechaHora { get; set; }
     }
 
-    public class CalificacionChatBotListDTO
-    {
-        public int IdFeedback { get; set; }
-        public int? IdUsuario { get; set; }
-    }
-
-    public class CalificacionChatBotCreateDTO
-    {
-        public int? IdUsuario { get; set; }
-        public int? Calificacion { get; set; }
-        public DateTime? FechaHora { get; set; }
-    }
-
-    public class CalificacionChatBotUpdateDTO
-    {
-        public int IdFeedback { get; set; }
-        public int? IdUsuario { get; set; }
-        public int? Calificacion { get; set; }
-        public DateTime? FechaHora { get; set; }
-    }
 }
