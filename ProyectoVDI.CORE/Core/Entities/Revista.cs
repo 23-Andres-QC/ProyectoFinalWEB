@@ -17,13 +17,13 @@ public partial class Revista
 
     public int? N { get; set; }
 
+    public int? Estado { get; set; }
+
     public virtual ICollection<Autoria> Autoria { get; set; } = new List<Autoria>();
 
-    public virtual ICollection<Editorial> Editorial { get; set; } = new List<Editorial>();
+    public virtual Evaluaciones? Evaluaciones { get; set; }
 
-    public virtual ICollection<Evaluaciones> Evaluaciones { get; set; } = new List<Evaluaciones>();
+    public virtual PresenciaEnListas? PresenciaEnListas { get; set; }
 
-    public virtual ICollection<PresenciaEnListas> PresenciaEnListas { get; set; } = new List<PresenciaEnListas>();
-
-    public virtual ICollection<RevistaIndexacion> RevistaIndexacion { get; set; } = new List<RevistaIndexacion>();
+    public virtual RevistaIndexacion? RevistaIndexacion { get; set; }
 }

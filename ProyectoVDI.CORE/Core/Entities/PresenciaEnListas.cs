@@ -21,5 +21,11 @@ public partial class PresenciaEnListas
 
     public int? MultyYAlMenosUnaLista { get; set; }
 
+    public string? BeallSList { get; set; }
+
+    public string? Mdpi { get; set; }
+
+    public string? Insights { get; set; }
+
     public virtual Revista? IdRevistaNavigation { get; set; }
 }

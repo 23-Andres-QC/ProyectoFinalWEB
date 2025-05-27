@@ -50,7 +50,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
                 throw new InvalidOperationException("No se encontró el detalle del registro ISSN para actualizar.");
             }
 
-            existing.IdTipo = detalle.IdTipo;
+            existing.TipoRevista = detalle.TipoRevista;
             await _context.SaveChangesAsync();
         }
 

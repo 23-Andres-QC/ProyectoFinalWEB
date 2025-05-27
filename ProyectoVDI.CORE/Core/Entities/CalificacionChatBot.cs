@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 namespace ProyectoVDI.CORE.Core.Entities;
 
-//HolaSas
-
 public partial class CalificacionChatBot
 {
     public int IdFeedback { get; set; }
