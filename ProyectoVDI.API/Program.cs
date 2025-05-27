@@ -14,6 +14,8 @@ builder.Services.AddDbContext<vdiContext>(options =>
     options.UseSqlServer(_connectionstring)
 );
 
+// Register the DbContext with dependency injection
+
 
 // add interface
 
