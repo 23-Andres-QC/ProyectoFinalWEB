@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Interfaces;
+using ProyectoVDI.CORE.Core.Services;
 using ProyectoVDI.CORE.Infrastructure.Data;
 using ProyectoVDI.CORE.Infrastructure.Repositories;
 
@@ -20,7 +21,12 @@ builder.Services.AddDbContext<vdiContext>(options =>
 // add interface
 
 builder.Services.AddTransient<IAutoriaRepository, AutoriaRepository>();
-builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>();
+
+builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>(); //jehu
+builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>(); // jehu
+
+
+
 builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddTransient<IDetRegistroISSNRepository, DetRegistroISSNRepository>();
 builder.Services.AddTransient<IEditorialRepository, EditorialRepository>();

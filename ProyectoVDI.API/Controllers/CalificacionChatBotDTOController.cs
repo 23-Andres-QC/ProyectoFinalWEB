@@ -19,27 +19,11 @@ namespace ProyectoVDI.API.Controllers
             _service = service;
         }
 
-        // GET: api/CalificacionChatBotDTO
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var calificaciones = await _service.GetCalificacionChatBots();
-            return Ok(calificaciones);
-        }
+        //crear una nueva calificación de chatbots
+        // POST: api/CalificacionChatBot/CreateCalificacionChatBot
 
-        // GET: api/CalificacionChatBotDTO/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var cal = await _service.GetCalificacionChatBotById(id);
-            if (cal == null)
-                return NotFound();
-            return Ok(cal);
-        }
-
-        // POST: api/CalificacionChatBotDTO
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CalificacionChatBotCreateDTO dto)
+        [HttpPost("CreateCalificacionChatBot")]
+        public async Task<IActionResult> CreateCalificacionChatBot([FromBody] CreateCalificacionChatBotDTO dto)
         {
             if (dto == null)
                 return BadRequest("El objeto CalificacionChatBotCreateDTO es nulo.");
@@ -47,32 +31,18 @@ namespace ProyectoVDI.API.Controllers
                 return BadRequest("El campo 'IdUsuario' es obligatorio.");
             if (dto.Calificacion == null)
                 return BadRequest("El campo 'Calificacion' es obligatorio.");
-            var newId = await _service.CreateCalificacionChatBot(dto);
+            var newId = await _service.CreateAsync(dto);
             return Ok(newId);
         }
-
-        // PUT: api/CalificacionChatBotDTO/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CalificacionChatBotUpdateDTO dto)
+        // GET: api/CalificacionChatBot/GetCalificacionChatBots
+        // obtener todas las calificaciones de chatbots
+        [HttpGet]
+        public async Task<IActionResult> GetCalificacionChatBots()
         {
-            if (dto == null || dto.IdFeedback != id)
-                return BadRequest("El objeto es nulo o el ID no coincide.");
-            if (dto.IdUsuario == null)
-                return BadRequest("El campo 'IdUsuario' es obligatorio.");
-            if (dto.Calificacion == null)
-                return BadRequest("El campo 'Calificacion' es obligatorio.");
-            var result = await _service.UpdateCalificacionChatBot(dto);
-            if (!result)
-                return NotFound();
-            return Ok("Calificación actualizada correctamente.");
+            var calificaciones = await _service.GetAllAsync();
+            return Ok(calificaciones);
         }
 
-        // DELETE: api/CalificacionChatBotDTO/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _service.DeleteCalificacionChatBot(id);
-            return NoContent();
-        }
+
     }
 }
