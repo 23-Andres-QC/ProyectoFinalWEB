@@ -9,7 +9,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<IEnumerable<EditorialListDTO>> GetEditoriales();
         Task<EditorialDTO?> GetEditorialById(int id);
         Task<int> CreateEditorial(EditorialCreateDTO dto);
-        Task<bool> UpdateEditorial(EditorialUpdateDTO dto);
+        Task<bool> UpdateEditorial(int id, EditorialUpdateDTO dto);
         Task DeleteEditorial(int id);
     }
 }

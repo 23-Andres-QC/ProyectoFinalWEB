@@ -56,14 +56,16 @@ namespace ProyectoVDI.CORE.Core.Services
             return await _editorialRepository.CreateAsync(editorial);
         }
 
-        public async Task<bool> UpdateEditorial(EditorialUpdateDTO dto)
+        public async Task<bool> UpdateEditorial(int id, EditorialUpdateDTO dto)
         {
-            var editorial = await _editorialRepository.GetByIdAsync(dto.IdEditorial);
+            var editorial = await _editorialRepository.GetByIdAsync(id);
             if (editorial == null) return false;
+
             editorial.IdRevista = dto.IdRevista;
             editorial.Mdpi = dto.Mdpi;
             editorial.Insights = dto.Insights;
             editorial.BeallSList = dto.BeallSList;
+
             await _editorialRepository.UpdateAsync(editorial);
             return true;
         }

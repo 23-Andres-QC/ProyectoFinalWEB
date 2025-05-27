@@ -38,9 +38,9 @@ namespace ProyectoVDI.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] EditorialUpdateDTO dto)
+        public async Task<IActionResult> Update(int id, [FromBody] EditorialUpdateDTO dto)
         {
-            var updated = await _service.UpdateEditorial(dto);
+            var updated = await _service.UpdateEditorial(id,dto);
             if (!updated) return NotFound();
             return NoContent();
         }

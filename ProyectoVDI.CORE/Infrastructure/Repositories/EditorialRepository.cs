@@ -26,6 +26,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         // Obtener editorial por ID
         public async Task<Editorial?> GetByIdAsync(int id)
         {
+            var existe = await _context.Editorial.FindAsync(id);
+            if (existe == null)
+            {
+                throw new InvalidOperationException($"No se encontró la editorial con ID {id} para vizualizar.");
+            }
             return await _context.Editorial.FindAsync(id);
         }
 
@@ -63,9 +68,10 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             {
                 throw new InvalidOperationException($"No se encontró la editorial con ID {id} para eliminar.");
             }
+            else
+            {
 
-            _context.Editorial.Remove(editorial);
-            await _context.SaveChangesAsync();
+            }
         }
     }
 }
