@@ -47,8 +47,10 @@ builder.Services.AddTransient<IPresenciaEnListasService, PresenciaEnListasServic
 builder.Services.AddTransient<IProfesoresService, ProfesoresService>();
 builder.Services.AddTransient<IRevistaService, RevistaService>();
 builder.Services.AddTransient<IRevistaIndexacionService, RevistaIndexacionService>();
-
-
+builder.Services.AddTransient<IRegistroIssnService, RegistroIssnService>();
+builder.Services.AddTransient<IRolService,RolService>();
+builder.Services.AddTransient<IUsuarioService, UsuarioService>();
+builder.Services.AddTransient<IRegistroIssnService, RegistroIssnService>();
 
 
 builder.Services.AddControllers();
