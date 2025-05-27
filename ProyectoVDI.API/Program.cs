@@ -7,7 +7,7 @@ using ProyectoVDI.CORE.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+ 
 var _config = builder.Configuration;
 var _connectionstring = _config.GetConnectionString("DefaultConnection");
 
@@ -19,12 +19,10 @@ builder.Services.AddDbContext<vdiContext>(options =>
 
 
 // add interface
-
 builder.Services.AddTransient<IAutoriaRepository, AutoriaRepository>();
 builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>();
 builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddTransient<IDetRegistroISSNRepository, DetRegistroISSNRepository>();
-builder.Services.AddTransient<IEditorialRepository, EditorialRepository>();
 builder.Services.AddTransient<IEvaluacionesRepository, EvaluacionesRepository>();
 builder.Services.AddTransient<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
 builder.Services.AddTransient<IPresenciaEnListasRepository, PresenciaEnListasRepository>();
@@ -40,7 +38,6 @@ builder.Services.AddTransient<IAutoriaService, AutoriaService>();
 builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>();
 builder.Services.AddTransient<ICategoriaService, CategoriaService>();
 builder.Services.AddTransient<IDetRegistroIssnService, DetRegistroIssnService>();
-builder.Services.AddTransient<IEditorialService, EditorialService>();
 builder.Services.AddTransient<IEvaluacionesService, EvaluacionesService>();
 builder.Services.AddTransient<IPreguntasFrecuentesChatBotService, PreguntasFrecuentesChatBotService>();
 builder.Services.AddTransient<IPresenciaEnListasService, PresenciaEnListasService>();

@@ -39,7 +39,7 @@ namespace ProyectoVDI.CORE.Core.Services
             {
                 IdRegistroIssn = det.IdRegistroIssn,
                 IdRevista = det.IdRevista,
-                IdTipo = det.IdTipo
+                TipoRevista = det.TipoRevista
             };
         }
 
@@ -49,7 +49,7 @@ namespace ProyectoVDI.CORE.Core.Services
             {
                 IdRegistroIssn = dto.IdRegistroIssn,
                 IdRevista = dto.IdRevista,
-                IdTipo = dto.IdTipo
+                TipoRevista = dto.TipoRevista
             };
             await _repository.CreateAsync(det);
             return det.IdRegistroIssn ?? 0;
@@ -60,7 +60,7 @@ namespace ProyectoVDI.CORE.Core.Services
             var detalles = await _repository.GetAllAsync();
             var det = detalles.Find(x => x.IdRegistroIssn == dto.IdRegistroIssn && x.IdRevista == dto.IdRevista);
             if (det == null) return false;
-            det.IdTipo = dto.IdTipo;
+            det.TipoRevista = dto.TipoRevista;
             await _repository.UpdateAsync(det);
             return true;
         }
