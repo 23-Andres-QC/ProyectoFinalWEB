@@ -1,73 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Entities;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ProyectoVDI.CORE.Core.DTOs;
 
 namespace ProyectoVDI.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CalificacionChatBotController : ControllerBase
     {
-        private readonly ICalificacionChatBotRepository _repository;
+        private readonly ICalificacionChatBotService _service;
 
-        public CalificacionChatBotController(ICalificacionChatBotRepository repository)
+        public CalificacionChatBotController(ICalificacionChatBotService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
-        // GET: api/CalificacionChatBot
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CalificacionChatBot>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _repository.GetAllAsync();
+            var result = await _service.GetCalificacionChatBots();
             return Ok(result);
         }
 
-        // GET: api/CalificacionChatBot/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CalificacionChatBot>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound();
-
-            return Ok(entity);
+            var result = await _service.GetCalificacionChatBotById(id);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
-        // POST: api/CalificacionChatBot
         [HttpPost]
-        public async Task<ActionResult<CalificacionChatBot>> Create(CalificacionChatBot entity)
+        public async Task<IActionResult> Create([FromBody] CalificacionChatBotCreateDTO dto)
         {
-            await _repository.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = entity.IdFeedback }, entity);
+            var id = await _service.CreateCalificacionChatBot(dto);
+            return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
-        // PUT: api/CalificacionChatBot/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, CalificacionChatBot entity)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] CalificacionChatBotUpdateDTO dto)
         {
-            if (id != entity.IdFeedback)
-                return BadRequest("El ID proporcionado no coincide con el objeto.");
-
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.UpdateAsync(entity);
+            var updated = await _service.UpdateCalificacionChatBot(dto);
+            if (!updated) return NotFound();
             return NoContent();
         }
 
-        // DELETE: api/CalificacionChatBot/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.DeleteAsync(id);
+            await _service.DeleteCalificacionChatBot(id);
             return NoContent();
         }
     }

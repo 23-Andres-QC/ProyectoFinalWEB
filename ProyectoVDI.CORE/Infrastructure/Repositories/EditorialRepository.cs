@@ -24,14 +24,9 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Obtener editorial por ID
-        public async Task<Editorial> GetByIdAsync(int id)
+        public async Task<Editorial?> GetByIdAsync(int id)
         {
-            var editorial = await _context.Editorial.FindAsync(id);
-            if (editorial == null)
-            {
-                throw new InvalidOperationException($"No se encontró la editorial con ID {id}.");
-            }
-            return editorial;
+            return await _context.Editorial.FindAsync(id);
         }
 
         // Crear nueva editorial

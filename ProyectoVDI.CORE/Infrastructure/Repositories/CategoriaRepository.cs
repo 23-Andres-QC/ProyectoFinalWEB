@@ -20,23 +20,19 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         // Obtener todas las categorías
         public async Task<List<Categorias>> GetAllAsync()
         {
-            return await _context.Categorias.ToListAsync();
+            return await _context.Categorias.Where(c => c.Estado == 1).ToListAsync();
         }
 
-        // Obtener categoría por ID (con excepción si no existe)
-        public async Task<Categorias> GetByIdAsync(int id)
+        // Obtener categoría por ID
+        public async Task<Categorias?> GetByIdAsync(int id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria == null)
-            {
-                throw new InvalidOperationException($"No se encontró una categoría con el ID {id}.");
-            }
-            return categoria;
+            return await _context.Categorias.Where(c => c.IdCategoria == id && c.Estado == 1).FirstOrDefaultAsync();
         }
 
         // Crear nueva categoría
         public async Task<int> CreateAsync(Categorias categoria)
         {
+            categoria.Estado = 1;
             await _context.Categorias.AddAsync(categoria);
             await _context.SaveChangesAsync();
             return categoria.IdCategoria;
@@ -52,7 +48,9 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             }
 
             existing.Descripcion = categoria.Descripcion;
-            existing.Estado = categoria.Estado;
+            // Estado solo se cambia explícitamente
+            if (categoria.Estado.HasValue)
+                existing.Estado = categoria.Estado;
 
             _context.Categorias.Update(existing);
             await _context.SaveChangesAsync();
@@ -67,7 +65,8 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
                 throw new InvalidOperationException($"No se encontró la categoría con ID {id} para eliminar.");
             }
 
-            _context.Categorias.Remove(categoria);
+            categoria.Estado = 0;
+            _context.Categorias.Update(categoria);
             await _context.SaveChangesAsync();
         }
     }

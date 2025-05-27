@@ -6,10 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IDetRegistroIssnService
     {
-        Task<int> CreateDetRegistroIssn(DetRegistroIssnCreateDTO dto);
-        Task DeleteDetRegistroIssn(int idRegistroIssn, int idRevista);
-        Task<DetRegistroIssnDTO?> GetDetRegistroIssnById(int idRegistroIssn, int idRevista);
         Task<IEnumerable<DetRegistroIssnListDTO>> GetDetRegistroIssn();
+        Task<DetRegistroIssnDTO?> GetDetRegistroIssnById(int idRegistroIssn, int idRevista);
+        Task<int> CreateDetRegistroIssn(DetRegistroIssnCreateDTO dto);
         Task<bool> UpdateDetRegistroIssn(DetRegistroIssnUpdateDTO dto);
+        Task DeleteDetRegistroIssn(int idRegistroIssn, int idRevista);
     }
 }

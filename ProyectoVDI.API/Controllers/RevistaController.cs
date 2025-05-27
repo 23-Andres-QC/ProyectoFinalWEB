@@ -1,73 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Entities;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ProyectoVDI.CORE.Core.DTOs;
 
 namespace ProyectoVDI.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RevistaController : ControllerBase
     {
-        private readonly IRevistaRepository _repository;
+        private readonly IRevistaService _service;
 
-        public RevistaController(IRevistaRepository repository)
+        public RevistaController(IRevistaService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
-        // GET: api/Revista
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Revista>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _repository.GetAllAsync();
+            var result = await _service.GetRevistas();
             return Ok(result);
         }
 
-        // GET: api/Revista/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Revista>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound();
-
-            return Ok(entity);
+            var result = await _service.GetRevistaById(id);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
-        // POST: api/Revista
         [HttpPost]
-        public async Task<ActionResult<Revista>> Create(Revista entity)
+        public async Task<IActionResult> Create([FromBody] RevistaCreateDTO dto)
         {
-            await _repository.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = entity.IdRevista }, entity); // Asegúrate que esta propiedad exista
+            var id = await _service.CreateRevista(dto);
+            return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
-        // PUT: api/Revista/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Revista entity)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] RevistaUpdateDTO dto)
         {
-            if (id != entity.IdRevista)
-                return BadRequest("El ID proporcionado no coincide con el objeto.");
-
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.UpdateAsync(entity);
+            var updated = await _service.UpdateRevista(dto);
+            if (!updated) return NotFound();
             return NoContent();
         }
 
-        // DELETE: api/Revista/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.DeleteAsync(id);
+            await _service.DeleteRevista(id);
             return NoContent();
         }
     }

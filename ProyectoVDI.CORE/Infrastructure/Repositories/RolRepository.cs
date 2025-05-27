@@ -18,10 +18,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Crear nuevo rol
-        public async Task CreateAsync(Rol rol)
+        public async Task<int> CreateAsync(Rol rol)
         {
             await _context.Rol.AddAsync(rol);
             await _context.SaveChangesAsync();
+            return rol.IdRol;
         }
 
         // Obtener todos los roles
@@ -30,21 +31,22 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return await _context.Rol.ToListAsync();
         }
 
-        // Obtener rol por ID (lanzando excepción si no existe)
-        public async Task<Rol> GetByIdAsync(int id)
+        // Obtener rol por ID (devuelve null si no existe)
+        public async Task<Rol?> GetByIdAsync(int id)
         {
-            var result = await _context.Rol.FindAsync(id);
-            if (result == null)
-            {
-                throw new InvalidOperationException($"No se encontró un rol con el ID {id}.");
-            }
-            return result;
+            return await _context.Rol.FindAsync(id);
         }
 
         // Actualizar rol
         public async Task UpdateAsync(Rol rol)
         {
-            _context.Rol.Update(rol);
+            var existing = await _context.Rol.FindAsync(rol.IdRol);
+            if (existing == null)
+            {
+                throw new InvalidOperationException($"No se encontró el rol con ID {rol.IdRol} para actualizar.");
+            }
+            existing.Descripcion = rol.Descripcion;
+            _context.Rol.Update(existing);
             await _context.SaveChangesAsync();
         }
 
@@ -52,11 +54,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task DeleteAsync(int id)
         {
             var rol = await _context.Rol.FindAsync(id);
-            if (rol != null)
+            if (rol == null)
             {
-                _context.Rol.Remove(rol);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"No se encontró el rol con ID {id} para eliminar.");
             }
+            _context.Rol.Remove(rol);
+            await _context.SaveChangesAsync();
         }
     }
 }

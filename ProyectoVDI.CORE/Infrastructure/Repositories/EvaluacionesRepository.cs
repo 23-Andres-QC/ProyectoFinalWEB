@@ -24,21 +24,17 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Obtener evaluación por ID
-        public async Task<Evaluaciones> GetByIdAsync(int id)
+        public async Task<Evaluaciones?> GetByIdAsync(int id)
         {
-            var evaluacion = await _context.Evaluaciones.FindAsync(id);
-            if (evaluacion == null)
-            {
-                throw new InvalidOperationException($"No se encontró la evaluación con ID {id}.");
-            }
-            return evaluacion;
+            return await _context.Evaluaciones.FindAsync(id);
         }
 
         // Crear nueva evaluación
-        public async Task CreateAsync(Evaluaciones evaluacion)
+        public async Task<int> CreateAsync(Evaluaciones evaluacion)
         {
             await _context.Evaluaciones.AddAsync(evaluacion);
             await _context.SaveChangesAsync();
+            return evaluacion.IdEvaluacion;
         }
 
         // Actualizar evaluación

@@ -23,20 +23,16 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return await _context.Autoria.ToListAsync();
         }
 
-        // Obtener autoría por ID
-        public async Task<Autoria> GetByIdAsync(int id)
+        // Updated method to handle possible null return value
+        public async Task<Autoria?> GetByIdAsync(int id)
         {
-            var autoria = await _context.Autoria.FindAsync(id);
-            if (autoria == null)
-            {
-                throw new InvalidOperationException($"No se encontró una autoría con ID {id}.");
-            }
-            return autoria;
+            return await _context.Autoria.FindAsync(id);
         }
 
         // Crear nueva autoría
         public async Task<int> CreateAsync(Autoria autoria)
         {
+            // No hay Estado ni Fecha en Autoria
             await _context.Autoria.AddAsync(autoria);
             await _context.SaveChangesAsync();
             return autoria.IdAutoria;

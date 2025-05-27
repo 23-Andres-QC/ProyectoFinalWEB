@@ -1,73 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Entities;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ProyectoVDI.CORE.Core.DTOs;
 
 namespace ProyectoVDI.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class EvaluacionesController : ControllerBase
     {
-        private readonly IEvaluacionesRepository _repository;
+        private readonly IEvaluacionesService _service;
 
-        public EvaluacionesController(IEvaluacionesRepository repository)
+        public EvaluacionesController(IEvaluacionesService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
-        // GET: api/Evaluaciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Evaluaciones>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _repository.GetAllAsync();
+            var result = await _service.GetEvaluaciones();
             return Ok(result);
         }
 
-        // GET: api/Evaluaciones/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Evaluaciones>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound();
-
-            return Ok(entity);
+            var result = await _service.GetEvaluacionesById(id);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
-        // POST: api/Evaluaciones
         [HttpPost]
-        public async Task<ActionResult<Evaluaciones>> Create(Evaluaciones entity)
+        public async Task<IActionResult> Create([FromBody] EvaluacionesCreateDTO dto)
         {
-            await _repository.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = entity.IdEvaluacion }, entity); // Ajusta si el nombre del ID es diferente
+            var id = await _service.CreateEvaluaciones(dto);
+            return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
-        // PUT: api/Evaluaciones/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Evaluaciones entity)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] EvaluacionesUpdateDTO dto)
         {
-            if (id != entity.IdEvaluacion)
-                return BadRequest("El ID proporcionado no coincide con el objeto.");
-
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.UpdateAsync(entity);
+            var updated = await _service.UpdateEvaluaciones(dto);
+            if (!updated) return NotFound();
             return NoContent();
         }
 
-        // DELETE: api/Evaluaciones/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.DeleteAsync(id);
+            await _service.DeleteEvaluaciones(id);
             return NoContent();
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class RegistroIssnService : IRegistroIssnService
+    public class RegistroIssnService
     {
         private readonly IRegistroISSNRepository _repository;
 

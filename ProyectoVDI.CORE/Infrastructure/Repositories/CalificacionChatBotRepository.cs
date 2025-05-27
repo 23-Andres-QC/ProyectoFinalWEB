@@ -19,13 +19,14 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Crear una nueva calificación con fecha automática
-        public async Task CreateAsync(CalificacionChatBot calificacionChatBot)
+        public async Task<int> CreateAsync(CalificacionChatBot calificacionChatBot)
         {
             // Asigna automáticamente fecha
             calificacionChatBot.FechaHora = DateTime.Now;
 
             await _context.CalificacionChatBot.AddAsync(calificacionChatBot);
             await _context.SaveChangesAsync();
+            return calificacionChatBot.IdFeedback;
         }
 
         // Obtener todas las calificaciones
@@ -34,21 +35,21 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return await _context.CalificacionChatBot.ToListAsync();
         }
 
-        // Obtener una por ID
-        public async Task<CalificacionChatBot> GetByIdAsync(int id)
+        // Updated method to handle possible null return value
+        public async Task<CalificacionChatBot?> GetByIdAsync(int id)
         {
-            var calificacion = await _context.CalificacionChatBot.FindAsync(id);
-            if (calificacion == null)
-            {
-                throw new InvalidOperationException($"No se encontró una calificación con el ID {id}.");
-            }
-            return calificacion;
+            return await _context.CalificacionChatBot.FindAsync(id);
         }
 
         // Actualizar
         public async Task UpdateAsync(CalificacionChatBot calificacionChatBot)
         {
-            _context.CalificacionChatBot.Update(calificacionChatBot);
+            var existing = await _context.CalificacionChatBot.FindAsync(calificacionChatBot.IdFeedback);
+            if (existing == null)
+            {
+                throw new InvalidOperationException($"No se encontró la calificación con ID {calificacionChatBot.IdFeedback} para actualizar.");
+            }
+            _context.Entry(existing).CurrentValues.SetValues(calificacionChatBot);
             await _context.SaveChangesAsync();
         }
 
@@ -56,11 +57,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task DeleteAsync(int id)
         {
             var calificacion = await _context.CalificacionChatBot.FindAsync(id);
-            if (calificacion != null)
+            if (calificacion == null)
             {
-                _context.CalificacionChatBot.Remove(calificacion);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"No se encontró la calificación con ID {id} para eliminar.");
             }
+            _context.CalificacionChatBot.Remove(calificacion);
+            await _context.SaveChangesAsync();
         }
     }
 }

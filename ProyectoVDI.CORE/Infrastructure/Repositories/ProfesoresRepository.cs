@@ -24,21 +24,17 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Obtener profesor por ID
-        public async Task<Profesores> GetByIdAsync(int id)
+        public async Task<Profesores?> GetByIdAsync(int id)
         {
-            var profesor = await _context.Profesores.FindAsync(id);
-            if (profesor == null)
-            {
-                throw new InvalidOperationException($"No se encontró un profesor con el ID {id}.");
-            }
-            return profesor;
+            return await _context.Profesores.FindAsync(id);
         }
 
         // Crear nuevo profesor
-        public async Task CreateAsync(Profesores profesor)
+        public async Task<int> CreateAsync(Profesores profesor)
         {
             await _context.Profesores.AddAsync(profesor);
             await _context.SaveChangesAsync();
+            return profesor.IdProfesor;
         }
 
         // Actualizar profesor existente

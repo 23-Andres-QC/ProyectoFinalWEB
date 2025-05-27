@@ -6,10 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface ICategoriaService
     {
-        Task<int> CreateCategoria(CategoriaCreateDTO dto);
-        Task DeleteCategoria(int id);
-        Task<CategoriaDTO?> GetCategoriaById(int id);
         Task<IEnumerable<CategoriaListDTO>> GetCategorias();
+        Task<CategoriaDTO?> GetCategoriaById(int id);
+        Task<int> CreateCategoria(CategoriaCreateDTO dto);
         Task<bool> UpdateCategoria(CategoriaUpdateDTO dto);
+        Task DeleteCategoria(int id);
     }
 }

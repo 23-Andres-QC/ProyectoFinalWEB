@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class PresenciaEnListasService : IPresenciaEnListasService
+    public class PresenciaEnListasService 
     {
         private readonly IPresenciaEnListasRepository _presenciaEnListasRepository;
 

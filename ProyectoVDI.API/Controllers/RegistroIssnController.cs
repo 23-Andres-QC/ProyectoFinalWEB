@@ -1,73 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Entities;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ProyectoVDI.CORE.Core.DTOs;
 
 namespace ProyectoVDI.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class RegistroISSNController : ControllerBase
+    [Route("api/[controller]")]
+    public class RegistroIssnController : ControllerBase
     {
-        private readonly IRegistroISSNRepository _repository;
+        private readonly IRegistroIssnService _service;
 
-        public RegistroISSNController(IRegistroISSNRepository repository)
+        public RegistroIssnController(IRegistroIssnService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
-        // GET: api/RegistroISSN
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RegistroIssn>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _repository.GetAllAsync();
+            var result = await _service.GetRegistroIssns();
             return Ok(result);
         }
 
-        // GET: api/RegistroISSN/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<RegistroIssn>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound();
-
-            return Ok(entity);
+            var result = await _service.GetRegistroIssnById(id);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
-        // POST: api/RegistroISSN
         [HttpPost]
-        public async Task<ActionResult<RegistroIssn>> Create(RegistroIssn entity)
+        public async Task<IActionResult> Create([FromBody] RegistroIssnCreateDTO dto)
         {
-            await _repository.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = entity.IdRegistroIssn }, entity);
+            var id = await _service.CreateRegistroIssn(dto);
+            return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
-        // PUT: api/RegistroISSN/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, RegistroIssn entity)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] RegistroIssnUpdateDTO dto)
         {
-            if (id != entity.IdRegistroIssn)
-                return BadRequest("El ID proporcionado no coincide con el objeto.");
-
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.UpdateAsync(entity);
+            var updated = await _service.UpdateRegistroIssn(dto);
+            if (!updated) return NotFound();
             return NoContent();
         }
 
-        // DELETE: api/RegistroISSN/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.DeleteAsync(id);
+            await _service.DeleteRegistroIssn(id);
             return NoContent();
         }
     }

@@ -6,10 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IEvaluacionesService
     {
-        Task<int> CreateEvaluaciones(EvaluacionesCreateDTO dto);
-        Task DeleteEvaluaciones(int id);
-        Task<EvaluacionesDTO?> GetEvaluacionesById(int id);
         Task<IEnumerable<EvaluacionesListDTO>> GetEvaluaciones();
+        Task<EvaluacionesDTO?> GetEvaluacionesById(int id);
+        Task<int> CreateEvaluaciones(EvaluacionesCreateDTO dto);
         Task<bool> UpdateEvaluaciones(EvaluacionesUpdateDTO dto);
+        Task DeleteEvaluaciones(int id);
     }
 }

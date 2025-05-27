@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class CalificacionChatBotService : ICalificacionChatBotService
+    public class CalificacionChatBotService
     {
         private readonly ICalificacionChatBotRepository _repository;
 

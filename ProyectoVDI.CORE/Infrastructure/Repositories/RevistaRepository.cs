@@ -24,21 +24,17 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Obtener revista por ID
-        public async Task<Revista> GetByIdAsync(int id)
+        public async Task<Revista?> GetByIdAsync(int id)
         {
-            var revista = await _context.Revista.FindAsync(id);
-            if (revista == null)
-            {
-                throw new InvalidOperationException($"No se encontró una revista con el ID {id}.");
-            }
-            return revista;
+            return await _context.Revista.FindAsync(id);
         }
 
         // Crear nueva revista
-        public async Task CreateAsync(Revista revista)
+        public async Task<int> CreateAsync(Revista revista)
         {
             await _context.Revista.AddAsync(revista);
             await _context.SaveChangesAsync();
+            return revista.IdRevista;
         }
 
         // Actualizar revista existente

@@ -24,14 +24,9 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Obtener presencia por ID
-        public async Task<PresenciaEnListas> GetByIdAsync(int id)
+        public async Task<PresenciaEnListas?> GetByIdAsync(int id)
         {
-            var presencia = await _context.PresenciaEnListas.FindAsync(id);
-            if (presencia == null)
-            {
-                throw new InvalidOperationException($"No se encontró la presencia en listas con ID {id}.");
-            }
-            return presencia;
+            return await _context.PresenciaEnListas.FindAsync(id);
         }
 
         // Crear nueva presencia en listas
@@ -50,7 +45,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             {
                 throw new InvalidOperationException($"No se encontró la presencia en listas con ID {presencia.IdLista} para actualizar.");
             }
-
             _context.Entry(existing).CurrentValues.SetValues(presencia);
             await _context.SaveChangesAsync();
         }
@@ -63,7 +57,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             {
                 throw new InvalidOperationException($"No se encontró la presencia en listas con ID {id} para eliminar.");
             }
-
             _context.PresenciaEnListas.Remove(presencia);
             await _context.SaveChangesAsync();
         }

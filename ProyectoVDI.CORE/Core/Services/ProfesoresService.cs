@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class ProfesoresService : IProfesoresService
+    public class ProfesoresService 
     {
         private readonly IProfesoresRepository _profesoresRepository;
 

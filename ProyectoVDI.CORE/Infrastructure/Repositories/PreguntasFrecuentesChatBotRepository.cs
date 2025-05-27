@@ -19,13 +19,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Crear nueva pregunta frecuente
-        public async Task CreateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
+        public async Task<int> CreateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
         {
-            // Asignar la fecha actual si no se especifica
             preguntasFrecuentesChatBot.FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
-
             await _context.PreguntasFrecuentesChatBot.AddAsync(preguntasFrecuentesChatBot);
             await _context.SaveChangesAsync();
+            return preguntasFrecuentesChatBot.IdPregunta;
         }
 
         // Obtener todas las preguntas frecuentes
@@ -34,22 +33,21 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return await _context.PreguntasFrecuentesChatBot.ToListAsync();
         }
 
-        // Obtener por ID (lanzando excepción si no se encuentra)
-        public async Task<PreguntasFrecuentesChatBot> GetByIdAsync(int id)
+        // Obtener por ID (devuelve null si no se encuentra)
+        public async Task<PreguntasFrecuentesChatBot?> GetByIdAsync(int id)
         {
-            var result = await _context.PreguntasFrecuentesChatBot.FindAsync(id);
-            if (result == null)
-            {
-                throw new InvalidOperationException($"No se encontró una pregunta frecuente con el ID {id}.");
-            }
-            return result;
+            return await _context.PreguntasFrecuentesChatBot.FindAsync(id);
         }
-
 
         // Actualizar una pregunta existente
         public async Task UpdateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
         {
-            _context.PreguntasFrecuentesChatBot.Update(preguntasFrecuentesChatBot);
+            var existing = await _context.PreguntasFrecuentesChatBot.FindAsync(preguntasFrecuentesChatBot.IdPregunta);
+            if (existing == null)
+            {
+                throw new InvalidOperationException($"No se encontró la pregunta frecuente con ID {preguntasFrecuentesChatBot.IdPregunta} para actualizar.");
+            }
+            _context.Entry(existing).CurrentValues.SetValues(preguntasFrecuentesChatBot);
             await _context.SaveChangesAsync();
         }
 
@@ -57,11 +55,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task DeleteAsync(int id)
         {
             var pregunta = await _context.PreguntasFrecuentesChatBot.FindAsync(id);
-            if (pregunta != null)
+            if (pregunta == null)
             {
-                _context.PreguntasFrecuentesChatBot.Remove(pregunta);
-                await _context.SaveChangesAsync();
+                throw new InvalidOperationException($"No se encontró la pregunta frecuente con ID {id} para eliminar.");
             }
+            _context.PreguntasFrecuentesChatBot.Remove(pregunta);
+            await _context.SaveChangesAsync();
         }
     }
 }

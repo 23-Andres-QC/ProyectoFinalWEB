@@ -1,13 +1,15 @@
-﻿using ProyectoVDI.CORE.Core.Entities;
+using ProyectoVDI.CORE.Core.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface ICategoriaRepository
     {
-        Task<int> CreateAsync(Categorias categoria);
-        Task DeleteAsync(int id);
         Task<List<Categorias>> GetAllAsync();
-        Task<Categorias> GetByIdAsync(int id);
+        Task<Categorias?> GetByIdAsync(int id);
+        Task<int> CreateAsync(Categorias categoria);
         Task UpdateAsync(Categorias categoria);
+        Task DeleteAsync(int id);
     }
 }

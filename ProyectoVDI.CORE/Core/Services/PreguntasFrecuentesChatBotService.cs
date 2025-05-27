@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class PreguntasFrecuentesChatBotService : IPreguntasFrecuentesChatBotService
+    public class PreguntasFrecuentesChatBotService 
     {
         private readonly IPreguntasFrecuentesChatBotRepository _repository;
 

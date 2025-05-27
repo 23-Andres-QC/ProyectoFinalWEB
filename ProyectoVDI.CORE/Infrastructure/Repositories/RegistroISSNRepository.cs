@@ -18,10 +18,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Crear nuevo registro ISSN
-        public async Task CreateAsync(RegistroIssn registroISSN)
+        public async Task<int> CreateAsync(RegistroIssn registroISSN)
         {
             await _context.RegistroIssn.AddAsync(registroISSN);
             await _context.SaveChangesAsync();
+            return registroISSN.IdRegistroIssn;
         }
 
         // Obtener todos los registros ISSN
@@ -31,14 +32,9 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Obtener registro ISSN por ID
-        public async Task<RegistroIssn> GetByIdAsync(int id)
+        public async Task<RegistroIssn?> GetByIdAsync(int id)
         {
-            var registro = await _context.RegistroIssn.FindAsync(id);
-            if (registro == null)
-            {
-                throw new InvalidOperationException($"No se encontró un registro ISSN con el ID {id}.");
-            }
-            return registro;
+            return await _context.RegistroIssn.FindAsync(id);
         }
 
         // Actualizar un registro ISSN existente

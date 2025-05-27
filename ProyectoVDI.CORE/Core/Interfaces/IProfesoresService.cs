@@ -6,10 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IProfesoresService
     {
-        Task<int> CreateProfesores(ProfesoresCreateDTO dto);
-        Task DeleteProfesores(int id);
-        Task<ProfesoresDTO?> GetProfesoresById(int id);
         Task<IEnumerable<ProfesoresListDTO>> GetProfesores();
+        Task<ProfesoresDTO?> GetProfesoresById(int id);
+        Task<int> CreateProfesores(ProfesoresCreateDTO dto);
         Task<bool> UpdateProfesores(ProfesoresUpdateDTO dto);
+        Task DeleteProfesores(int id);
     }
 }

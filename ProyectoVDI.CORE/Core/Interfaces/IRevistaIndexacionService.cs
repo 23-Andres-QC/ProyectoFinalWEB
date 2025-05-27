@@ -6,10 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IRevistaIndexacionService
     {
-        Task<int> CreateRevistaIndexacion(RevistaIndexacionCreateDTO dto);
-        Task DeleteRevistaIndexacion(int id);
-        Task<RevistaIndexacionDTO?> GetRevistaIndexacionById(int id);
         Task<IEnumerable<RevistaIndexacionListDTO>> GetRevistaIndexaciones();
+        Task<RevistaIndexacionDTO?> GetRevistaIndexacionById(int id);
+        Task<int> CreateRevistaIndexacion(RevistaIndexacionCreateDTO dto);
         Task<bool> UpdateRevistaIndexacion(RevistaIndexacionUpdateDTO dto);
+        Task DeleteRevistaIndexacion(int id);
     }
 }

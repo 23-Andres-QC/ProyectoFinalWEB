@@ -26,18 +26,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Obtener indexación por ID
-        public async Task<RevistaIndexacion> GetByIdAsync(int id)
+        public async Task<RevistaIndexacion?> GetByIdAsync(int id)
         {
-            var indexacion = await _context.RevistaIndexacion
+            return await _context.RevistaIndexacion
                 .Include(r => r.IdRevistaNavigation)
                 .FirstOrDefaultAsync(r => r.IdIndexacion == id);
-
-            if (indexacion == null)
-            {
-                throw new InvalidOperationException($"No se encontró la indexación con ID {id}.");
-            }
-
-            return indexacion;
         }
 
         // Crear nueva indexación

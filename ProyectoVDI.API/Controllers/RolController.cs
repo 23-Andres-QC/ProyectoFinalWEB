@@ -1,73 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Entities;
-using ProyectoVDI.CORE.Core.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using ProyectoVDI.CORE.Core.DTOs;
+using ProyectoVDI.CORE.Core.Services;
 
 namespace ProyectoVDI.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class RolController : ControllerBase
     {
-        private readonly IRolRepository _repository;
+        private readonly RolService _rolService;
 
-        public RolController(IRolRepository repository)
+        public RolController(RolService rolService)
         {
-            _repository = repository;
+            _rolService = rolService;
         }
 
-        // GET: api/Rol
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rol>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = await _repository.GetAllAsync();
+            var result = await _rolService.GetRoles();
             return Ok(result);
         }
 
-        // GET: api/Rol/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Rol>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity == null)
-                return NotFound();
-
-            return Ok(entity);
+            var result = await _rolService.GetRolById(id);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
-        // POST: api/Rol
         [HttpPost]
-        public async Task<ActionResult<Rol>> Create(Rol entity)
+        public async Task<IActionResult> Create([FromBody] RolCreateDTO dto)
         {
-            await _repository.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = entity.IdRol }, entity);
+            var id = await _rolService.CreateRol(dto);
+            return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
-        // PUT: api/Rol/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Rol entity)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] RolUpdateDTO dto)
         {
-            if (id != entity.IdRol)
-                return BadRequest("El ID proporcionado no coincide con el objeto.");
-
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.UpdateAsync(entity);
+            var updated = await _rolService.UpdateRol(dto);
+            if (!updated) return NotFound();
             return NoContent();
         }
 
-        // DELETE: api/Rol/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var existing = await _repository.GetByIdAsync(id);
-            if (existing == null)
-                return NotFound();
-
-            await _repository.DeleteAsync(id);
+            await _rolService.DeleteRol(id);
             return NoContent();
         }
     }

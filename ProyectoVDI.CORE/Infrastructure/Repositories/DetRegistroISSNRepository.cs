@@ -18,10 +18,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Crear nuevo detalle de registro ISSN
-        public async Task CreateAsync(DetRegistroIssn detalle)
+        public async Task<(int? IdRegistroIssn, int? IdRevista)> CreateAsync(DetRegistroIssn detalle)
         {
             await _context.DetRegistroIssn.AddAsync(detalle);
             await _context.SaveChangesAsync();
+            return (detalle.IdRegistroIssn, detalle.IdRevista);
         }
 
         // Obtener todos los detalles
