@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class RevistaService 
+    public class RevistaService : IRevistaService
     {
         private readonly IRevistaRepository _revistaRepository;
 

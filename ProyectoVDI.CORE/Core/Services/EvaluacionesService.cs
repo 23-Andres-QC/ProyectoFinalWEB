@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class EvaluacionesService 
+    public class EvaluacionesService : IEvaluacionesService
     {
         private readonly IEvaluacionesRepository _evaluacionesRepository;
 

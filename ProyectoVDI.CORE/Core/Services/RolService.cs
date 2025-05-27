@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class RolService 
+    public class RolService : IRolService
     {
         private readonly IRolRepository _rolRepository;
 

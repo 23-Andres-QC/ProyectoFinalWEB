@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.DTOs;
-using ProyectoVDI.CORE.Core.Services;
+using ProyectoVDI.CORE.Core.Interfaces;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -8,9 +8,9 @@ namespace ProyectoVDI.API.Controllers
     [Route("api/[controller]")]
     public class RolController : ControllerBase
     {
-        private readonly RolService _rolService;
+        private readonly IRolService _rolService;
 
-        public RolController(RolService rolService)
+        public RolController(IRolService rolService)
         {
             _rolService = rolService;
         }

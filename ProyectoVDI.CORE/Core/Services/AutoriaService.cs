@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    public class AutoriaService 
+    public class AutoriaService : IAutoriaService
     {
         private readonly IAutoriaRepository _autoriaRepository;
 

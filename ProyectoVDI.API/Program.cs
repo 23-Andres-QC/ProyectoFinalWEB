@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Interfaces;
+using ProyectoVDI.CORE.Core.Services;
 using ProyectoVDI.CORE.Infrastructure.Data;
 using ProyectoVDI.CORE.Infrastructure.Repositories;
 
@@ -33,6 +34,20 @@ builder.Services.AddTransient<IRevistaRepository, RevistaRepository>();
 builder.Services.AddTransient<IRevistasIndexacionRepository, RevistasIndexacionRepository>();
 builder.Services.AddTransient<IRolRepository, RolRepository>();
 builder.Services.AddTransient<IUsuariosRepository, UsuariosRepository>();
+
+
+builder.Services.AddTransient<IAutoriaService, AutoriaService>();
+builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>();
+builder.Services.AddTransient<ICategoriaService, CategoriaService>();
+builder.Services.AddTransient<IDetRegistroIssnService, DetRegistroIssnService>();
+builder.Services.AddTransient<IEditorialService, EditorialService>();
+builder.Services.AddTransient<IEvaluacionesService, EvaluacionesService>();
+builder.Services.AddTransient<IPreguntasFrecuentesChatBotService, PreguntasFrecuentesChatBotService>();
+builder.Services.AddTransient<IPresenciaEnListasService, PresenciaEnListasService>();
+builder.Services.AddTransient<IProfesoresService, ProfesoresService>();
+builder.Services.AddTransient<IRevistaService, RevistaService>();
+builder.Services.AddTransient<IRevistaIndexacionService, RevistaIndexacionService>();
+
 
 
 

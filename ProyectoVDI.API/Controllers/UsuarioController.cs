@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.DTOs;
-using ProyectoVDI.CORE.Core.Services;
+using ProyectoVDI.CORE.Core.Interfaces;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -8,9 +8,9 @@ namespace ProyectoVDI.API.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly UsuarioService _usuarioService;
+        private readonly IUsuarioService _usuarioService;
 
-        public UsuarioController(UsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
         }
