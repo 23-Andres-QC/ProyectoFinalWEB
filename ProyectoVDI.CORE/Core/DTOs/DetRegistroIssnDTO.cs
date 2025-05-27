@@ -21,7 +21,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public int? IdRevista { get; set; }
         public string? TipoRevista { get; set; }
     }
-
+    //a
     public class DetRegistroIssnUpdateDTO
     {
         public int? IdRegistroIssn { get; set; }
