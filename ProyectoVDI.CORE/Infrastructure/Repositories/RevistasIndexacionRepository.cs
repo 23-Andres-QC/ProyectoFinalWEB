@@ -11,6 +11,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
     public class RevistasIndexacionRepository : IRevistasIndexacionRepository
     {
         private readonly vdiContext _context;
+        //firt
 
         public RevistasIndexacionRepository(vdiContext context)
         {
