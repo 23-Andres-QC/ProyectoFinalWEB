@@ -6,15 +6,19 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
+    // Servicio para la lógica de negocio relacionada con evaluaciones
     public class EvaluacionesService : IEvaluacionesService
     {
+        // Repositorio de evaluaciones inyectado
         private readonly IEvaluacionesRepository _evaluacionesRepository;
 
+        // Constructor que recibe el repositorio
         public EvaluacionesService(IEvaluacionesRepository evaluacionesRepository)
         {
             _evaluacionesRepository = evaluacionesRepository;
         }
 
+        // Obtiene la lista de evaluaciones y la transforma a DTO para la vista/listado
         public async Task<IEnumerable<EvaluacionesListDTO>> GetEvaluaciones()
         {
             var evaluaciones = await _evaluacionesRepository.GetAllAsync();
@@ -30,6 +34,7 @@ namespace ProyectoVDI.CORE.Core.Services
             return list;
         }
 
+        // Obtiene una evaluación por su ID y la transforma a DTO detallado
         public async Task<EvaluacionesDTO?> GetEvaluacionesById(int id)
         {
             var evaluacion = await _evaluacionesRepository.GetByIdAsync(id);
@@ -51,48 +56,6 @@ namespace ProyectoVDI.CORE.Core.Services
             };
         }
 
+        // Crea una nueva evaluación a partir de un DTO de creación
         public async Task<int> CreateEvaluaciones(EvaluacionesCreateDTO dto)
-        {
-            var evaluacion = new Evaluaciones
-            {
-                IdRevista = dto.IdRevista,
-                Ajg4 = dto.Ajg4,
-                Ajg = dto.Ajg,
-                AjgS = dto.AjgS,
-                Cnrs = dto.Cnrs,
-                CnrsS = dto.CnrsS,
-                Abdc = dto.Abdc,
-                AbdcS = dto.AbdcS,
-                AjgExiste = dto.AjgExiste,
-                CnrsExiste = dto.CnrsExiste,
-                AbdcExiste = dto.AbdcExiste
-            };
-            await _evaluacionesRepository.CreateAsync(evaluacion);
-            return evaluacion.IdEvaluacion;
-        }
-
-        public async Task<bool> UpdateEvaluaciones(EvaluacionesUpdateDTO dto)
-        {
-            var evaluacion = await _evaluacionesRepository.GetByIdAsync(dto.IdEvaluacion);
-            if (evaluacion == null) return false;
-            evaluacion.IdRevista = dto.IdRevista;
-            evaluacion.Ajg4 = dto.Ajg4;
-            evaluacion.Ajg = dto.Ajg;
-            evaluacion.AjgS = dto.AjgS;
-            evaluacion.Cnrs = dto.Cnrs;
-            evaluacion.CnrsS = dto.CnrsS;
-            evaluacion.Abdc = dto.Abdc;
-            evaluacion.AbdcS = dto.AbdcS;
-            evaluacion.AjgExiste = dto.AjgExiste;
-            evaluacion.CnrsExiste = dto.CnrsExiste;
-            evaluacion.AbdcExiste = dto.AbdcExiste;
-            await _evaluacionesRepository.UpdateAsync(evaluacion);
-            return true;
-        }
-
-        public async Task DeleteEvaluaciones(int id)
-        {
-            await _evaluacionesRepository.DeleteAsync(id);
-        }
-    }
-}
+       

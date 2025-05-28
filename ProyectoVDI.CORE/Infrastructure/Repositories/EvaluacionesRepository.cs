@@ -8,10 +8,13 @@ using ProyectoVDI.CORE.Infrastructure.Data;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
+    // Repositorio para la entidad Evaluaciones, implementa IEvaluacionesRepository
     public class EvaluacionesRepository : IEvaluacionesRepository
     {
+        // Contexto de base de datos inyectado
         private readonly vdiContext _context;
 
+        // Constructor que recibe el contexto
         public EvaluacionesRepository(vdiContext context)
         {
             _context = context;
@@ -37,7 +40,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return evaluacion.IdEvaluacion;
         }
 
-        // Actualizar evaluación
+        // Actualizar evaluación existente
         public async Task UpdateAsync(Evaluaciones evaluacion)
         {
             var existing = await _context.Evaluaciones.FindAsync(evaluacion.IdEvaluacion);
@@ -50,7 +53,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        // Eliminar evaluación
+        // Eliminar evaluación (borrado físico)
         public async Task DeleteAsync(int id)
         {
             var evaluacion = await _context.Evaluaciones.FindAsync(id);

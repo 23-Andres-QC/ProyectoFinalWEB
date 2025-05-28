@@ -6,15 +6,19 @@ namespace ProyectoVDI.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    // Controlador para la gestión de usuarios
     public class UsuarioController : ControllerBase
     {
+        // Servicio de usuario inyectado
         private readonly IUsuarioService _usuarioService;
 
+        // Constructor que recibe el servicio
         public UsuarioController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
         }
 
+        // Obtiene todos los usuarios
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -22,6 +26,7 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        // Obtiene un usuario por su ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -30,21 +35,28 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        // Crea un nuevo usuario
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UsuarioCreateDTO dto)
         {
+            // Validación de modelo
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var id = await _usuarioService.CreateUsuario(dto);
             return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
+        // Actualiza un usuario existente
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UsuarioUpdateDTO dto)
         {
+            // Validación de modelo
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var updated = await _usuarioService.UpdateUsuario(dto);
             if (!updated) return NotFound();
             return NoContent();
         }
 
+        // Elimina (soft delete) un usuario por su ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

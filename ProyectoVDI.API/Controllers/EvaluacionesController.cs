@@ -6,15 +6,19 @@ namespace ProyectoVDI.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    // Controlador para la gestión de evaluaciones
     public class EvaluacionesController : ControllerBase
     {
+        // Servicio de evaluaciones inyectado
         private readonly IEvaluacionesService _service;
 
+        // Constructor que recibe el servicio
         public EvaluacionesController(IEvaluacionesService service)
         {
             _service = service;
         }
 
+        // Obtiene todas las evaluaciones
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -22,6 +26,7 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        // Obtiene una evaluación por su ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -30,21 +35,28 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        // Crea una nueva evaluación
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] EvaluacionesCreateDTO dto)
         {
+            // Validación de modelo
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var id = await _service.CreateEvaluaciones(dto);
             return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
+        // Actualiza una evaluación existente
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] EvaluacionesUpdateDTO dto)
         {
+            // Validación de modelo
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var updated = await _service.UpdateEvaluaciones(dto);
             if (!updated) return NotFound();
             return NoContent();
         }
 
+        // Elimina una evaluación por su ID (si decides mantenerlo)
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

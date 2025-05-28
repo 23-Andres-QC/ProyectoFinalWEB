@@ -7,15 +7,19 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
+    // Repositorio para la entidad Usuario, implementa IUsuariosRepository
     public class UsuariosRepository : IUsuariosRepository
     {
+        // Contexto de base de datos inyectado
         private readonly vdiContext _context;
 
+        // Constructor que recibe el contexto
         public UsuariosRepository(vdiContext context)
         {
             _context = context;
         }
 
+        // Obtiene todos los usuarios activos (Estado == 1)
         public async Task<List<Usuario>> GetAllAsync()
         {
             return await _context.Usuario
@@ -23,6 +27,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        // Obtiene un usuario activo por su ID
         public async Task<Usuario?> GetByIdAsync(int id)
         {
             return await _context.Usuario
@@ -30,6 +35,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        // Crea un nuevo usuario, lo marca como activo y asigna la fecha de creación
         public async Task<int> CreateAsync(Usuario usuario)
         {
             usuario.Estado = 1;
@@ -40,6 +46,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return usuario.IdUsuario;
         }
 
+        // Actualiza los datos de un usuario existente y asigna la fecha de modificación
         public async Task UpdateAsync(Usuario usuario)
         {
             var existingUsuario = await _context.Usuario.FindAsync(usuario.IdUsuario);
@@ -56,6 +63,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        // Realiza un "soft delete" cambiando Estado a 0 y actualiza la fecha de modificación
         public async Task DeleteAsync(int id)
         {
             var usuario = await _context.Usuario.FindAsync(id);
