@@ -23,6 +23,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 Pregunta = dto.Pregunta,
                 Respuesta = dto.Respuesta,
                 Categoria = dto.Categoria,
+                IdUsuario = dto.IdUsuario,
                 Estado = "Activo", // Asignar estado por defecto 
                 FechaCreacion = DateOnly.FromDateTime(DateTime.Now)
 

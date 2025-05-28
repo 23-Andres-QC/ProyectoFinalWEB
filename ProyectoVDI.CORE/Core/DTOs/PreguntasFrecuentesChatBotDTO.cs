@@ -40,6 +40,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public string? Pregunta { get; set; }
         public string? Respuesta { get; set; }
         public string? Categoria { get; set; }
+        public int? IdUsuario { get; set; }
         public string? Estado { get; set; }
 
     }
