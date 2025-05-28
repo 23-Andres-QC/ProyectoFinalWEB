@@ -2,7 +2,9 @@ using System;
 
 namespace ProyectoVDI.CORE.Core.DTOs
 {
-    public class PreguntasFrecuentesChatBotDTO
+    //get all PreguntasFrecuentesChatBot
+
+    public class listPreguntasFrecuentesChatBotDTO
     {
         public int IdPregunta { get; set; }
         public string? Pregunta { get; set; }
@@ -13,28 +15,54 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public DateOnly? FechaCreacion { get; set; }
     }
 
-    public class PreguntasFrecuentesChatBotListDTO
+    //get by id PreguntasFrecuentesChatBot
+    public class GetByIdPreguntasFrecuentesChatBotDTO
     {
-        public int IdPregunta { get; set; }
+        
         public string? Pregunta { get; set; }
+        public string? Respuesta { get; set; }
+        
     }
 
-    public class PreguntasFrecuentesChatBotCreateDTO
+    //get all  PreguntasFrecuentesChatBot and answer
+    public class GetPreguntasFrecuentesChatBotDTO
+    {
+
+        public string? Pregunta { get; set; }
+        public string? Respuesta { get; set; }
+
+    }
+
+    // create PreguntasFrecuentesChatBot
+
+    public class createPreguntasFrecuentesChatBotDTO
     {
         public string? Pregunta { get; set; }
         public string? Respuesta { get; set; }
         public string? Categoria { get; set; }
         public string? Estado { get; set; }
-        public int? IdUsuario { get; set; }
+
     }
 
-    public class PreguntasFrecuentesChatBotUpdateDTO
+    // update PreguntasFrecuentesChatBot
+    public class updatePreguntasFrecuentesChatBotDTO
     {
         public int IdPregunta { get; set; }
         public string? Pregunta { get; set; }
         public string? Respuesta { get; set; }
         public string? Categoria { get; set; }
-        public string? Estado { get; set; }
+
         public int? IdUsuario { get; set; }
+        
+
+
     }
+    // upda Estado PreguntasFrecuentesChatBot
+    public class updateEstadoPreguntasFrecuentesChatBotDTO
+    {
+        public int IdPregunta { get; set; }
+        public string? Estado { get; set; }
+    }
+
+    
 }

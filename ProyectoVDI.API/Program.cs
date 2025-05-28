@@ -18,7 +18,7 @@ builder.Services.AddDbContext<vdiContext>(options =>
 // Register the DbContext with dependency injection
 
 
-// add interface
+// add  all interface
 
 
 //calificacion chat bot /jehu
@@ -29,6 +29,10 @@ builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotSe
 builder.Services.AddTransient<IRegistroISSNRepository, RegistroISSNRepository>();
 builder.Services.AddTransient<IRegistroIssnService, RegistroIssnService>();
 
+//preguntas frecuentes chat bot /jehu
+builder.Services.AddTransient<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
+builder.Services.AddTransient<IPreguntasFrecuentesChatBotService, PreguntasFrecuentesChatBotService>();
+
 
 
 builder.Services.AddTransient<IAutoriaRepository, AutoriaRepository>();
@@ -36,7 +40,6 @@ builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddTransient<IDetRegistroISSNRepository, DetRegistroISSNRepository>();
 builder.Services.AddTransient<IEditorialRepository, EditorialRepository>();
 builder.Services.AddTransient<IEvaluacionesRepository, EvaluacionesRepository>();
-builder.Services.AddTransient<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
 builder.Services.AddTransient<IPresenciaEnListasRepository, PresenciaEnListasRepository>();
 builder.Services.AddTransient<IProfesoresRepository, ProfesoresRepository>();
 

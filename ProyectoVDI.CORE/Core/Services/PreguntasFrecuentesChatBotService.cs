@@ -14,69 +14,95 @@ namespace ProyectoVDI.CORE.Core.Services
         {
             _repository = repository;
         }
+        /// Crear nueva pregunta frecuente
 
-        public async Task<IEnumerable<PreguntasFrecuentesChatBotListDTO>> GetPreguntasFrecuentesChatBot()
+        public async Task<int> CreateAsync(createPreguntasFrecuentesChatBotDTO dto)
         {
-            var preguntas = await _repository.GetAllAsync();
-            var list = new List<PreguntasFrecuentesChatBotListDTO>();
-            foreach (var pregunta in preguntas)
-            {
-                list.Add(new PreguntasFrecuentesChatBotListDTO
-                {
-                    IdPregunta = pregunta.IdPregunta,
-                    Pregunta = pregunta.Pregunta
-                });
-            }
-            return list;
-        }
-
-        public async Task<PreguntasFrecuentesChatBotDTO?> GetPreguntasFrecuentesChatBotById(int id)
-        {
-            var pregunta = await _repository.GetByIdAsync(id);
-            if (pregunta == null) return null;
-            return new PreguntasFrecuentesChatBotDTO
-            {
-                IdPregunta = pregunta.IdPregunta,
-                Pregunta = pregunta.Pregunta,
-                Respuesta = pregunta.Respuesta,
-                Categoria = pregunta.Categoria,
-                Estado = pregunta.Estado,
-                IdUsuario = pregunta.IdUsuario,
-                FechaCreacion = pregunta.FechaCreacion
-            };
-        }
-
-        public async Task<int> CreatePreguntasFrecuentesChatBot(PreguntasFrecuentesChatBotCreateDTO dto)
-        {
-            var pregunta = new PreguntasFrecuentesChatBot
+            var entity = new PreguntasFrecuentesChatBot
             {
                 Pregunta = dto.Pregunta,
                 Respuesta = dto.Respuesta,
                 Categoria = dto.Categoria,
-                Estado = dto.Estado,
-                IdUsuario = dto.IdUsuario,
+                Estado = "Activo", // Asignar estado por defecto 
                 FechaCreacion = DateOnly.FromDateTime(DateTime.Now)
+
             };
-            await _repository.CreateAsync(pregunta);
-            return pregunta.IdPregunta;
+            return await _repository.CreateAsync(entity);
         }
 
-        public async Task<bool> UpdatePreguntasFrecuentesChatBot(PreguntasFrecuentesChatBotUpdateDTO dto)
+        /// Obtener todas las preguntas frecuentes
+        public async Task<List<listPreguntasFrecuentesChatBotDTO>> GetAllAsync()
         {
-            var pregunta = await _repository.GetByIdAsync(dto.IdPregunta);
-            if (pregunta == null) return false;
-            pregunta.Pregunta = dto.Pregunta;
-            pregunta.Respuesta = dto.Respuesta;
-            pregunta.Categoria = dto.Categoria;
-            pregunta.Estado = dto.Estado;
-            pregunta.IdUsuario = dto.IdUsuario;
-            await _repository.UpdateAsync(pregunta);
-            return true;
+            var entities = await _repository.GetAllAsync();
+            return entities.ConvertAll(e => new listPreguntasFrecuentesChatBotDTO
+            {
+                IdPregunta = e.IdPregunta,
+                Pregunta = e.Pregunta,
+                Respuesta = e.Respuesta,
+                Categoria = e.Categoria,
+                Estado = e.Estado,
+                IdUsuario = e.IdUsuario,
+                FechaCreacion = e.FechaCreacion
+            });
         }
 
-        public async Task DeletePreguntasFrecuentesChatBot(int id)
+        // obtener pregunta frecuente por id
+        public async Task<GetByIdPreguntasFrecuentesChatBotDTO> GetByIdAsync(int id)
         {
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
+            {
+                return null;
+            }
+            return new GetByIdPreguntasFrecuentesChatBotDTO
+            {
+                Pregunta = entity.Pregunta,
+                Respuesta = entity.Respuesta
+            };
+        }
+
+        /// Actualizar una pregunta frecuente existente
+        public async Task UpdateAsync(updatePreguntasFrecuentesChatBotDTO dto)
+        {
+            var entity = new PreguntasFrecuentesChatBot
+            {
+                IdPregunta = dto.IdPregunta,
+                Pregunta = dto.Pregunta,
+                Respuesta = dto.Respuesta,
+                Categoria = dto.Categoria,
+                IdUsuario = dto.IdUsuario,
+
+                Estado = "Activo",
+                FechaCreacion = DateOnly.FromDateTime(DateTime.Now)
+
+            };
+            await _repository.UpdateAsync(entity);
+        }
+
+        /// Actualizar el estado de una pregunta frecuente
+        public async Task UpdateEstadoAsync(updateEstadoPreguntasFrecuentesChatBotDTO dto)
+        {
+            var entity = await _repository.GetByIdAsync(dto.IdPregunta);
+            if (entity == null)
+            {
+                throw new InvalidOperationException($"No se encontró la pregunta frecuente con ID {dto.IdPregunta} para actualizar el estado.");
+            }
+            entity.Estado = dto.Estado;
+            await _repository.UpdateAsync(entity);
+        }
+
+
+        /// Eliminar una pregunta frecuente por ID
+        public async Task DeleteAsync(int id)
+        {
+            var entity = await _repository.GetByIdAsync(id);
+            if (entity == null)
+            {
+                throw new InvalidOperationException($"No se encontró la pregunta frecuente con ID {id} para eliminar.");
+            }
             await _repository.DeleteAsync(id);
+
+
         }
     }
 }

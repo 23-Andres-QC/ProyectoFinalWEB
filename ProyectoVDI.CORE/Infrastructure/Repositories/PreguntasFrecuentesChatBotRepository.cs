@@ -51,6 +51,19 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        // Actualizar el estado de una pregunta frecuente
+        public async Task UpdateEstadoAsync(int id, string estado)
+        {
+            var pregunta = await _context.PreguntasFrecuentesChatBot.FindAsync(id);
+            if (pregunta == null)
+            {
+                throw new InvalidOperationException($"No se encontró la pregunta frecuente con ID {id} para actualizar el estado.");
+            }
+            pregunta.Estado = estado;
+            _context.PreguntasFrecuentesChatBot.Update(pregunta);
+            await _context.SaveChangesAsync();
+        }
+
         // Eliminar por ID (si existe)
         public async Task DeleteAsync(int id)
         {

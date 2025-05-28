@@ -10,6 +10,8 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<List<PreguntasFrecuentesChatBot>> GetAllAsync();
         Task<PreguntasFrecuentesChatBot?> GetByIdAsync(int id);
         Task UpdateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot);
+
+        Task UpdateEstadoAsync(int id, string estado);
         Task DeleteAsync(int id);
     }
 }
