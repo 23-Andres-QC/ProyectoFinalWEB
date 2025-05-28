@@ -18,49 +18,103 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Crear nuevo registro ISSN
-        public async Task<int> CreateAsync(RegistroIssn registroISSN)
+        public async Task<bool> CreateAsync(RegistroIssn registroISSN)
         {
-            await _context.RegistroIssn.AddAsync(registroISSN);
-            await _context.SaveChangesAsync();
-            return registroISSN.IdRegistroIssn;
+            try
+            {
+                _context.RegistroIssn.Add(registroISSN);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Error en CreateAsync: {ex.Message}");
+                return false;
+            }
         }
 
         // Obtener todos los registros ISSN
         public async Task<List<RegistroIssn>> GetAllAsync()
         {
-            return await _context.RegistroIssn.ToListAsync();
+            try
+            {
+                return await _context.RegistroIssn.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en GetAllAsync: {ex.Message}");
+                return new List<RegistroIssn>();
+            }
         }
 
         // Obtener registro ISSN por ID
         public async Task<RegistroIssn?> GetByIdAsync(int id)
         {
-            return await _context.RegistroIssn.FindAsync(id);
+            try
+            {
+                return await _context.RegistroIssn.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en GetByIdAsync: {ex.Message}");
+                return null;
+            }
         }
+
+
+        // Obtener registro ISSN por fecha
+        public async Task<List<RegistroIssn>> GetByFechaAsync(DateOnly fecha)
+        {
+            try
+            {
+                var registros = await _context.RegistroIssn
+                    .Where(r => r.FechaRegistro != null && r.FechaRegistro == fecha)
+                    .ToListAsync();
+
+                return registros;
+            }
+            catch (Exception ex)
+            {
+                // Manejo del error o log
+                return new List<RegistroIssn>();
+            }
+        }
+
+
 
         // Actualizar un registro ISSN existente
-        public async Task UpdateAsync(RegistroIssn registroISSN)
+        public async Task<bool> UpdateAsync(RegistroIssn registroISSN)
         {
-            var existing = await _context.RegistroIssn.FindAsync(registroISSN.IdRegistroIssn);
-            if (existing == null)
+            try
             {
-                throw new InvalidOperationException($"No se encontró el registro ISSN con ID {registroISSN.IdRegistroIssn} para actualizar.");
+                _context.RegistroIssn.Update(registroISSN);
+                return await _context.SaveChangesAsync() > 0;
             }
-
-            _context.Entry(existing).CurrentValues.SetValues(registroISSN);
-            await _context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en UpdateAsync: {ex.Message}");
+                return false;
+            }
         }
 
-        // Eliminar registro ISSN por ID
-        public async Task DeleteAsync(int id)
-        {
-            var registro = await _context.RegistroIssn.FindAsync(id);
-            if (registro == null)
-            {
-                throw new InvalidOperationException($"No se encontró el registro ISSN con ID {id} para eliminar.");
-            }
 
-            _context.RegistroIssn.Remove(registro);
-            await _context.SaveChangesAsync();
+
+        // Eliminar un registro ISSN por ID
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var entity = await _context.RegistroIssn.FindAsync(id);
+                if (entity == null) return false;
+
+                _context.RegistroIssn.Remove(entity);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en DeleteAsync: {ex.Message}");
+                return false;
+            }
         }
     }
 }

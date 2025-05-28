@@ -6,10 +6,12 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IRegistroISSNRepository
     {
-        Task<int> CreateAsync(RegistroIssn registroISSN);
+        Task<bool> CreateAsync(RegistroIssn registroISSN);
         Task<List<RegistroIssn>> GetAllAsync();
         Task<RegistroIssn?> GetByIdAsync(int id);
-        Task UpdateAsync(RegistroIssn registroISSN);
-        Task DeleteAsync(int id);
+        Task<List<RegistroIssn>> GetByFechaAsync(DateOnly fecha);
+
+        Task<bool> UpdateAsync(RegistroIssn registroISSN);
+        Task<bool> DeleteAsync(int id);
     }
 }

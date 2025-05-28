@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
@@ -15,57 +16,91 @@ namespace ProyectoVDI.CORE.Core.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<RegistroIssnListDTO>> GetRegistroIssns()
-        {
-            var registros = await _repository.GetAllAsync();
-            var list = new List<RegistroIssnListDTO>();
-            foreach (var reg in registros)
-            {
-                list.Add(new RegistroIssnListDTO
-                {
-                    IdRegistroIssn = reg.IdRegistroIssn,
-                    IdUsuario = reg.IdUsuario
-                });
-            }
-            return list;
-        }
 
-        public async Task<RegistroIssnDTO?> GetRegistroIssnById(int id)
-        {
-            var reg = await _repository.GetByIdAsync(id);
-            if (reg == null) return null;
-            return new RegistroIssnDTO
-            {
-                IdRegistroIssn = reg.IdRegistroIssn,
-                IdUsuario = reg.IdUsuario,
-                FechaRegistro = reg.FechaRegistro
-            };
-        }
 
-        public async Task<int> CreateRegistroIssn(RegistroIssnCreateDTO dto)
+        //create un Registro ISSN
+        // POST api/RegistroIssn/CreateRegistroIssn
+
+        public async Task<bool> CreateRegistroIssnAsync(CreateRegistroIssnDTO dto)
         {
-            var reg = new RegistroIssn
+            var entity = new RegistroIssn
             {
                 IdUsuario = dto.IdUsuario,
-                FechaRegistro = dto.FechaRegistro
+                FechaRegistro = DateOnly.FromDateTime(DateTime.Now)
             };
-            await _repository.CreateAsync(reg);
-            return reg.IdRegistroIssn;
+
+            return await _repository.CreateAsync(entity);
         }
 
-        public async Task<bool> UpdateRegistroIssn(RegistroIssnUpdateDTO dto)
+        // Obtener todos los registros ISSN
+        // GET api/RegistroIssn/GetAllRegistroIssns
+        public async Task<IEnumerable<ListAllRegistroIssnDTO>> GetAllRegistroIssnsAsync()
         {
-            var reg = await _repository.GetByIdAsync(dto.IdRegistroIssn);
-            if (reg == null) return false;
-            reg.IdUsuario = dto.IdUsuario;
-            reg.FechaRegistro = dto.FechaRegistro;
-            await _repository.UpdateAsync(reg);
-            return true;
+            var entities = await _repository.GetAllAsync();
+
+            return entities.Select(r => new ListAllRegistroIssnDTO
+            {
+                IdRegistroIssn = r.IdRegistroIssn,
+                IdUsuario = r.IdUsuario,
+                FechaRegistro = r.FechaRegistro
+            });
         }
 
-        public async Task DeleteRegistroIssn(int id)
+
+        // Obtener un registro ISSN por ID
+        // GET api/RegistroIssn/GetRegistroIssnById/{id}
+        public async Task<RegistroIssnDTO> GetRegistroIssnByIdAsync(int id)
         {
-            await _repository.DeleteAsync(id);
+            var entity = await _repository.GetByIdAsync(id);
+
+            if (entity == null)
+                return null;
+
+            return new RegistroIssnDTO
+            {
+                IdRegistroIssn = entity.IdRegistroIssn,
+                IdUsuario = entity.IdUsuario,
+                FechaRegistro = entity.FechaRegistro
+            };
         }
+
+
+        // Método adicional para obtener por fecha 
+        // GET api/RegistroIssn/GetRegistroIssnByFecha/{fecha}
+        public async Task<IEnumerable<ListAllRegistroIssnDTO>> GetRegistroIssnByFechaAsync(DateOnly fecha)
+        {
+            var registros = await _repository.GetByFechaAsync(fecha);
+
+            return registros.Select(r => new ListAllRegistroIssnDTO
+            {
+                IdRegistroIssn = r.IdRegistroIssn,
+                IdUsuario = r.IdUsuario,
+                FechaRegistro = r.FechaRegistro
+            });
+        }
+
+
+        // Actualizar un registro ISSN
+        // PUT api/RegistroIssn/UpdateRegistroIssn
+        public async Task<bool> UpdateRegistroIssnAsync(UpdateRegistroIssnDTO dto)
+        {
+            var entity = await _repository.GetByIdAsync(dto.IdRegistroIssn);
+            if (entity == null)
+                return false;
+
+            entity.IdUsuario = dto.IdUsuario;
+            entity.FechaRegistro = DateOnly.FromDateTime(DateTime.Now);
+
+            return await _repository.UpdateAsync(entity);
+        }
+
+        // Eliminar un registro ISSN
+        // DELETE api/RegistroIssn/DeleteRegistroIssn/{id}
+        public async Task<bool> DeleteRegistroIssnAsync(int id)
+        {
+            return await _repository.DeleteAsync(id);
+        }
+
+
     }
 }
