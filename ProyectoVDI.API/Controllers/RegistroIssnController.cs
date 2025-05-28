@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
-
+//s
 namespace ProyectoVDI.API.Controllers
 {
     [Route("api/[controller]")]
