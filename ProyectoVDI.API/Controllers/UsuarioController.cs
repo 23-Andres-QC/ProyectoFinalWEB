@@ -79,5 +79,51 @@ namespace ProyectoVDI.API.Controllers
             await _usuarioService.DeleteUsuario(id);
             return NoContent();
         }
+
+        // =====================
+        // Login de usuario
+        // =====================
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UsuarioLoginDTO dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var usuario = await _usuarioService.Login(dto);
+            if (usuario == null) return Unauthorized("Usuario o contraseña incorrectos");
+            return Ok(usuario);
+        }
+
+        // =====================
+        // Recuperación de contraseña
+        // =====================
+        [HttpPost("recuperar")]
+        public async Task<IActionResult> Recuperar([FromBody] UsuarioRecuperarDTO dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var ok = await _usuarioService.RecuperarContraseña(dto);
+            if (!ok) return NotFound("Usuario no encontrado");
+            return Ok("Se ha enviado un correo de recuperación (simulado)");
+        }
+
+        // =====================
+        // Cambio de contraseña
+        // =====================
+        [HttpPost("cambiar-contraseña")]
+        public async Task<IActionResult> CambiarContraseña([FromBody] UsuarioChangePasswordDTO dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var ok = await _usuarioService.CambiarContraseña(dto);
+            if (!ok) return BadRequest("No se pudo cambiar la contraseña. Verifique los datos.");
+            return Ok("Contraseña actualizada correctamente");
+        }
+
+        // =====================
+        // Buscar usuarios
+        // =====================
+        [HttpGet("buscar")]
+        public async Task<IActionResult> Buscar([FromQuery] string query)
+        {
+            var result = await _usuarioService.BuscarUsuarios(query);
+            return Ok(result);
+        }
     }
 }
