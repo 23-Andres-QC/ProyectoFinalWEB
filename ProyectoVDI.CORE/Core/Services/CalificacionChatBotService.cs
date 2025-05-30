@@ -50,6 +50,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdUsuario = dto.IdUsuario,
                 Calificacion = dto.Calificacion,
                 Fecha = dto.Fecha
+
             };
             return await _repository.CreateAsync(cal);
         }

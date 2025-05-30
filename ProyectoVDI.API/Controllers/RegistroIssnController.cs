@@ -15,12 +15,15 @@ namespace ProyectoVDI.API.Controllers
             _service = service;
         }
 
+        //api/RegistroIssn
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetRegistroIssns();
             return Ok(result);
         }
+
+        //api/RegistroIssn/1
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -30,12 +33,15 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+
+        //api/RegistroIssn
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] RegistroIssnCreateDTO dto)
         {
             var id = await _service.CreateRegistroIssn(dto);
             return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
+        // api/RegistroIssn
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] RegistroIssnUpdateDTO dto)
@@ -44,6 +50,7 @@ namespace ProyectoVDI.API.Controllers
             if (!updated) return NotFound();
             return NoContent();
         }
+        // api/RegistroIssn/2
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

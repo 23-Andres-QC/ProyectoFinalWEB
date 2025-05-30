@@ -14,7 +14,7 @@ namespace ProyectoVDI.API.Controllers
         {
             _service = service;
         }
-
+        //api/CalificacionChatBot
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -30,12 +30,15 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        //api/CalificacionChatBot
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CalificacionChatBotCreateDTO dto)
         {
             var id = await _service.CreateCalificacionChatBot(dto);
             return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
+        // api/CalificacionChatBot
 
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] CalificacionChatBotUpdateDTO dto)
@@ -44,6 +47,7 @@ namespace ProyectoVDI.API.Controllers
             if (!updated) return NotFound();
             return NoContent();
         }
+        // api/CalificacionChatBot/2
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
