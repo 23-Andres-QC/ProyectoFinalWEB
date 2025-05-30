@@ -19,31 +19,24 @@ builder.Services.AddDbContext<vdiContext>(options =>
 
 
 // add interface
-builder.Services.AddTransient<IAutoriaRepository, AutoriaRepository>();
+
 builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>();
 builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddTransient<IDetRegistroISSNRepository, DetRegistroISSNRepository>();
-builder.Services.AddTransient<IEvaluacionesRepository, EvaluacionesRepository>();
 builder.Services.AddTransient<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
-builder.Services.AddTransient<IPresenciaEnListasRepository, PresenciaEnListasRepository>();
 builder.Services.AddTransient<IProfesoresRepository, ProfesoresRepository>();
 builder.Services.AddTransient<IRegistroISSNRepository, RegistroISSNRepository>();
 builder.Services.AddTransient<IRevistaRepository, RevistaRepository>();
-builder.Services.AddTransient<IRevistasIndexacionRepository, RevistasIndexacionRepository>();
 builder.Services.AddTransient<IRolRepository, RolRepository>();
 builder.Services.AddTransient<IUsuariosRepository, UsuariosRepository>();
 
 
-builder.Services.AddTransient<IAutoriaService, AutoriaService>();
 builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>();
 builder.Services.AddTransient<ICategoriaService, CategoriaService>();
 builder.Services.AddTransient<IDetRegistroIssnService, DetRegistroIssnService>();
-builder.Services.AddTransient<IEvaluacionesService, EvaluacionesService>();
 builder.Services.AddTransient<IPreguntasFrecuentesChatBotService, PreguntasFrecuentesChatBotService>();
-builder.Services.AddTransient<IPresenciaEnListasService, PresenciaEnListasService>();
 builder.Services.AddTransient<IProfesoresService, ProfesoresService>();
 builder.Services.AddTransient<IRevistaService, RevistaService>();
-builder.Services.AddTransient<IRevistaIndexacionService, RevistaIndexacionService>();
 builder.Services.AddTransient<IRegistroIssnService, RegistroIssnService>();
 builder.Services.AddTransient<IRolService,RolService>();
 builder.Services.AddTransient<IUsuarioService, UsuarioService>();
