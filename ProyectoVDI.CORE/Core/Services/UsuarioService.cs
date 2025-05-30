@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
-    // =====================
     // Servicio para la lógica de negocio relacionada con usuarios
-    // =====================
     public class UsuarioService : IUsuarioService
     {
         // Repositorio de usuarios inyectado
@@ -21,9 +19,7 @@ namespace ProyectoVDI.CORE.Core.Services
             _usuariosRepository = usuariosRepository;
         }
 
-        // =====================
-        // Obtiene la lista de usuarios y la transforma a DTO para la vista/listado (GET)
-        // =====================
+        // Obtiene la lista de usuarios y la transforma a DTO para la vista/listado
         public async Task<IEnumerable<UsuarioListDTO>> GetUsuarios()
         {
             var usuarios = await _usuariosRepository.GetAllAsync();
@@ -34,27 +30,15 @@ namespace ProyectoVDI.CORE.Core.Services
                 usuarioList.Add(new UsuarioListDTO
                 {
                     IdUsuario = usuario.IdUsuario,
-                    IdProfesor = usuario.IdProfesor,
                     Correo = usuario.Correo,
-                    // Contraseña eliminada por seguridad
-                    IdRol = usuario.IdRol,
-                    Estado = usuario.Estado,
-                    FechaCreacion = usuario.FechaCreacion,
-                    FechaModificacion = usuario.FechaModificacion,
-                    NombreUsuario = usuario.IdProfesorNavigation?.NombreyApellido,
-                    Dni = usuario.IdProfesorNavigation?.Dni,
-                    Apellidos = usuario.IdProfesorNavigation?.NombreyApellido != null ? usuario.IdProfesorNavigation.NombreyApellido.Split(' ').Length > 1 ? string.Join(' ', usuario.IdProfesorNavigation.NombreyApellido.Split(' ').Skip(1)) : null : null,
-                    Nombre = usuario.IdProfesorNavigation?.NombreyApellido != null ? usuario.IdProfesorNavigation.NombreyApellido.Split(' ')[0] : null,
-                    Categoria = usuario.IdProfesorNavigation?.IdCategoriaNavigation?.Descripcion
+                    IdProfesor = usuario.IdProfesor
                 });
             }
 
             return usuarioList;
         }
 
-        // =====================
-        // Obtiene un usuario por su ID y lo transforma a DTO detallado (GET)
-        // =====================
+        // Obtiene un usuario por su ID y lo transforma a DTO detallado
         public async Task<UsuarioDTO?> GetUsuarioById(int id)
         {
             var usuario = await _usuariosRepository.GetByIdAsync(id);
@@ -65,18 +49,13 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdUsuario = usuario.IdUsuario,
                 IdProfesor = usuario.IdProfesor,
                 Correo = usuario.Correo,
-                // Contraseña eliminada por seguridad
                 IdRol = usuario.IdRol,
                 Estado = usuario.Estado,
-                FechaCreacion = usuario.FechaCreacion,
-                FechaModificacion = usuario.FechaModificacion,
-                NombreUsuario = usuario.IdProfesorNavigation?.NombreyApellido
+                FechaCreacion = usuario.FechaCreacion
             };
         }
 
-        // =====================
-        // Crea un nuevo usuario a partir de un DTO de creación (POST)
-        // =====================
+        // Crea un nuevo usuario a partir de un DTO de creación
         public async Task<int> CreateUsuario(UsuarioCreateDTO dto)
         {
             var usuario = new Usuario
@@ -85,16 +64,14 @@ namespace ProyectoVDI.CORE.Core.Services
                 Correo = dto.Correo,
                 Contraseña = dto.Contraseña,
                 IdRol = dto.IdRol,
-                Estado = dto.Estado ?? 1, // Usa el estado proporcionado o 1 por defecto
+                Estado = 1,
                 FechaCreacion = DateOnly.FromDateTime(DateTime.Now)
             };
 
             return await _usuariosRepository.CreateAsync(usuario);
         }
 
-        // =====================
-        // Actualiza un usuario existente a partir de un DTO de actualización (PUT)
-        // =====================
+        // Actualiza un usuario existente a partir de un DTO de actualización
         public async Task<bool> UpdateUsuario(UsuarioUpdateDTO dto)
         {
             var usuario = await _usuariosRepository.GetByIdAsync(dto.IdUsuario);
@@ -104,99 +81,17 @@ namespace ProyectoVDI.CORE.Core.Services
             usuario.Correo = dto.Correo;
             usuario.Contraseña = dto.Contraseña;
             usuario.IdRol = dto.IdRol;
-            usuario.Estado = dto.Estado ?? usuario.Estado; // Permite actualizar el estado
+            usuario.Estado = dto.Estado;
             usuario.FechaModificacion = DateOnly.FromDateTime(DateTime.Now);
 
             await _usuariosRepository.UpdateAsync(usuario);
             return true;
         }
 
-        // =====================
         // Elimina (soft delete) un usuario por su ID
-        // =====================
         public async Task DeleteUsuario(int id)
         {
             await _usuariosRepository.DeleteAsync(id);
-        }
-
-        // =====================
-        // Login de usuario
-        // =====================
-        public async Task<UsuarioDTO?> Login(UsuarioLoginDTO dto)
-        {
-            var usuarios = await _usuariosRepository.GetAllAsync();
-            var usuario = usuarios.Find(u => (u.Correo == dto.Correo) && u.Contraseña == dto.Contraseña);
-            if (usuario == null) return null;
-            return new UsuarioDTO
-            {
-                IdUsuario = usuario.IdUsuario,
-                IdProfesor = usuario.IdProfesor,
-                Correo = usuario.Correo,
-                // Contraseña eliminada por seguridad
-                IdRol = usuario.IdRol,
-                Estado = usuario.Estado,
-                FechaCreacion = usuario.FechaCreacion,
-                FechaModificacion = usuario.FechaModificacion,
-                NombreUsuario = usuario.IdProfesorNavigation?.NombreyApellido
-            };
-        }
-
-        // =====================
-        // Recuperación de contraseña (simulado)
-        // =====================
-        public async Task<bool> RecuperarContraseña(UsuarioRecuperarDTO dto)
-        {
-            var usuarios = await _usuariosRepository.GetAllAsync();
-            var usuario = usuarios.Find(u => u.Correo == dto.Correo);
-            return usuario != null;
-        }
-
-        // =====================
-        // Cambio de contraseña
-        // =====================
-        public async Task<bool> CambiarContraseña(UsuarioChangePasswordDTO dto)
-        {
-            var usuario = await _usuariosRepository.GetByIdAsync(dto.IdUsuario);
-            if (usuario == null) return false;
-            if (usuario.Contraseña != dto.ContraseñaActual) return false;
-            if (dto.NuevaContraseña != dto.ConfirmarContraseña) return false;
-            usuario.Contraseña = dto.NuevaContraseña;
-            usuario.FechaModificacion = DateOnly.FromDateTime(DateTime.Now);
-            await _usuariosRepository.UpdateAsync(usuario);
-            return true;
-        }
-
-        // =====================
-        // Buscar usuarios por correo, nombre o apellidos
-        // =====================
-        public async Task<IEnumerable<UsuarioListDTO>> BuscarUsuarios(string query)
-        {
-            var usuarios = await _usuariosRepository.GetAllAsync();
-            var resultado = usuarios.FindAll(u =>
-                (u.Correo != null && u.Correo.Contains(query, StringComparison.OrdinalIgnoreCase)) ||
-                (u.IdProfesorNavigation != null && u.IdProfesorNavigation.NombreyApellido != null && u.IdProfesorNavigation.NombreyApellido.Contains(query, StringComparison.OrdinalIgnoreCase))
-            );
-            var usuarioList = new List<UsuarioListDTO>();
-            foreach (var usuario in resultado)
-            {
-                usuarioList.Add(new UsuarioListDTO
-                {
-                    IdUsuario = usuario.IdUsuario,
-                    IdProfesor = usuario.IdProfesor,
-                    Correo = usuario.Correo,
-                    // Contraseña eliminada por seguridad
-                    IdRol = usuario.IdRol,
-                    Estado = usuario.Estado,
-                    FechaCreacion = usuario.FechaCreacion,
-                    FechaModificacion = usuario.FechaModificacion,
-                    NombreUsuario = usuario.IdProfesorNavigation?.NombreyApellido,
-                    Dni = usuario.IdProfesorNavigation?.Dni,
-                    Apellidos = usuario.IdProfesorNavigation?.NombreyApellido != null ? usuario.IdProfesorNavigation.NombreyApellido.Split(' ').Length > 1 ? string.Join(' ', usuario.IdProfesorNavigation.NombreyApellido.Split(' ').Skip(1)) : null : null,
-                    Nombre = usuario.IdProfesorNavigation?.NombreyApellido != null ? usuario.IdProfesorNavigation.NombreyApellido.Split(' ')[0] : null,
-                    Categoria = usuario.IdProfesorNavigation?.IdCategoriaNavigation?.Descripcion
-                });
-            }
-            return usuarioList;
         }
     }
 }
