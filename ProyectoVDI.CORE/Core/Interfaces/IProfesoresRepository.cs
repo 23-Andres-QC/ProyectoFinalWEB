@@ -15,5 +15,6 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateAsync(Profesores profesor);
         Task UpdateAsync(Profesores profesor);
         Task DeleteAsync(int id);
+
     }
 }
