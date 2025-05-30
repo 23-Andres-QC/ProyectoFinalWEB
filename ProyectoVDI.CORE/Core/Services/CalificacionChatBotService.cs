@@ -49,7 +49,7 @@ namespace ProyectoVDI.CORE.Core.Services
             {
                 IdUsuario = dto.IdUsuario,
                 Calificacion = dto.Calificacion,
-                FechaHora = dto.FechaHora
+                FechaHora = DateTime.Now // Assuming FechaHora is set to current time on creation
             };
             return await _repository.CreateAsync(cal);
         }
@@ -60,7 +60,7 @@ namespace ProyectoVDI.CORE.Core.Services
             if (cal == null) return false;
             cal.IdUsuario = dto.IdUsuario;
             cal.Calificacion = dto.Calificacion;
-            cal.FechaHora = dto.FechaHora;
+            cal.FechaHora = DateTime.Now;
             await _repository.UpdateAsync(cal);
             return true;
         }

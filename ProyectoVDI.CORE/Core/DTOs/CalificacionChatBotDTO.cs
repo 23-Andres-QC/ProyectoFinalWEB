@@ -20,7 +20,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
     {
         public int? IdUsuario { get; set; }
         public int? Calificacion { get; set; }
-        public DateTime? FechaHora { get; set; }
+        //public DateTime? FechaHora { get; set; }
     }
 
     public class CalificacionChatBotUpdateDTO
@@ -28,6 +28,6 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public int IdFeedback { get; set; }
         public int? IdUsuario { get; set; }
         public int? Calificacion { get; set; }
-        public DateTime? FechaHora { get; set; }
+      //  public DateTime? FechaHora { get; set; }
     }
 }
