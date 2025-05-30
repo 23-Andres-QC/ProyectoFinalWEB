@@ -22,6 +22,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public int? Calificacion { get; set; }
 
         //public DateTime? FechaHora { get; set; }
+
         public DateOnly? Fecha { get; set; }
 
     }

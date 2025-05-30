@@ -2,6 +2,7 @@ using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
@@ -39,7 +40,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdFeedback = cal.IdFeedback,
                 IdUsuario = cal.IdUsuario,
                 Calificacion = cal.Calificacion,
-                Fecha = cal.Fecha
+                Fecha = DateOnly.FromDateTime(DateTime.Now)
             };
         }
 
@@ -49,7 +50,8 @@ namespace ProyectoVDI.CORE.Core.Services
             {
                 IdUsuario = dto.IdUsuario,
                 Calificacion = dto.Calificacion,
-                Fecha = dto.Fecha
+                Fecha= DateOnly.FromDateTime(DateTime.Now)
+
 
             };
             return await _repository.CreateAsync(cal);
