@@ -20,18 +20,25 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         // Obtener todas las revistas
         public async Task<List<Revista>> GetAllAsync()
         {
-            return await _context.Revista.ToListAsync();
+            var revistas = await _context.Revista
+                .Where(r => r.Estado == 1)
+                .ToListAsync();
+
+            return revistas;
         }
 
         // Obtener revista por ID
         public async Task<Revista?> GetByIdAsync(int id)
         {
-            return await _context.Revista.FindAsync(id);
+            return await _context.Revista
+                .Where(r => r.IdRevista == id && r.Estado == 1)
+                .FirstOrDefaultAsync();
         }
 
         // Crear nueva revista
         public async Task<int> CreateAsync(Revista revista)
         {
+            revista.Estado = 1;
             await _context.Revista.AddAsync(revista);
             await _context.SaveChangesAsync();
             return revista.IdRevista;
@@ -45,7 +52,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             {
                 throw new InvalidOperationException($"No se encontró la revista con ID {revista.IdRevista} para actualizar.");
             }
-
             _context.Entry(existing).CurrentValues.SetValues(revista);
             await _context.SaveChangesAsync();
         }
@@ -58,8 +64,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             {
                 throw new InvalidOperationException($"No se encontró la revista con ID {id} para eliminar.");
             }
-
-            _context.Revista.Remove(revista);
+            revista.Estado = 0;
             await _context.SaveChangesAsync();
         }
     }

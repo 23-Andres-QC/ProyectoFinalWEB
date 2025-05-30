@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.DTOs;
+using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -52,7 +53,7 @@ namespace ProyectoVDI.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteRevista(id);
-            return NoContent();
+            return Ok(id);
         }
     }
 }
