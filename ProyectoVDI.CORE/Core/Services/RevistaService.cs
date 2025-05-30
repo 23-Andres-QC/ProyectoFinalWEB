@@ -4,16 +4,21 @@ using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
     public class RevistaService : IRevistaService
     {
         private readonly IRevistaRepository _repository;
+        private readonly IRegistroIssnService _registroIssnService;
+        private readonly IDetRegistroIssnService _detRegistroIssnService;
 
-        public RevistaService(IRevistaRepository repository)
+        public RevistaService(IRevistaRepository repository, IRegistroIssnService registroIssnService, IDetRegistroIssnService detRegistroIssnService)
         {
             _repository = repository;
+            _registroIssnService = registroIssnService;
+            _detRegistroIssnService = detRegistroIssnService;
         }
 
         // Simple list
@@ -146,7 +151,7 @@ namespace ProyectoVDI.CORE.Core.Services
             };
         }
 
-        public async Task<int> CreateRevista(ProyectoVDI.CORE.Core.DTOs.RevistaCreateDTO dto)
+        public async Task<int> CreateRevista(RevistaCreateDTO dto)
         {
             var r = new Revista
             {
@@ -197,7 +202,7 @@ namespace ProyectoVDI.CORE.Core.Services
             return r.IdRevista;
         }
 
-        public async Task<bool> UpdateRevista(ProyectoVDI.CORE.Core.DTOs.RevistaUpdateDTO dto)
+        public async Task<bool> UpdateRevista(RevistaUpdateDTO dto)
         {
             var r = await _repository.GetByIdAsync(dto.IdRevista);
             if (r == null) return false;
@@ -360,6 +365,36 @@ namespace ProyectoVDI.CORE.Core.Services
                 }
             }
             return result;
+        }
+
+        public async Task<object> RegistrarRevistasConDetalleAsync(RevistaRegistroRequestDTO request)
+        {
+            // 1. Agregar o actualizar revistas
+            var bulkResult = await BulkUpsertRevistasAsync(request.Revistas);
+
+            // 2. Crear registro principal
+            var registroId = await _registroIssnService.CreateRegistroIssn(new RegistroIssnCreateDTO
+            {
+                IdUsuario = request.Usuario,
+                FechaRegistro = DateOnly.FromDateTime(DateTime.Now)
+            });
+
+            // 3. Crear detalle por cada revista
+            foreach (var revista in request.Revistas)
+            {
+                var revistaEntity = await _repository.GetByIssnAsync(revista.Issn);
+                if (revistaEntity != null)
+                {
+                    await _detRegistroIssnService.CreateDetRegistroIssn(new DetRegistroIssnCreateDTO
+                    {
+                        IdRegistroIssn = registroId,
+                        IdRevista = revistaEntity.IdRevista,
+                        TipoRevista = request.TipoRevista
+                    });
+                }
+            }
+
+            return new { bulkResult, registroId };
         }
     }
 }

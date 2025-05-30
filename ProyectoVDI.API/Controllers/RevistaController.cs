@@ -53,11 +53,20 @@ namespace ProyectoVDI.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BulkRevistaResultDTO>> Create([FromBody] List<RevistaCreateDTO> revistas)
-        {
-            var result = await _service.BulkUpsertRevistasAsync(revistas);
-            return Ok(result);
-        }
+        public async Task<IActionResult> RegistrarRevistasConDetalle(
+            [FromQuery] int usuario,
+            [FromQuery] string tipoRevista,
+            [FromBody] List<RevistaCreateDTO> revistas)
+                {
+                    var request = new RevistaRegistroRequestDTO
+                    {
+                        Usuario = usuario,
+                        TipoRevista = tipoRevista,
+                        Revistas = revistas
+                    };
+                    var result = await _service.RegistrarRevistasConDetalleAsync(request);
+                    return Ok(result);
+         }
 
         [HttpPut("{id}")]
         public async Task<string> Update(int id, [FromBody] RevistaUpdateDTO dto)

@@ -60,10 +60,10 @@ public partial class vdiContext : DbContext
 
         modelBuilder.Entity<DetRegistroIssn>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("DetRegistroISSN");
+            entity.HasKey(e => e.IdDetalle); // Definir la clave primaria
+            entity.ToTable("DetRegistroISSN");
 
+            entity.Property(e => e.IdDetalle).HasColumnName("id_detalle");
             entity.Property(e => e.IdRegistroIssn).HasColumnName("Id_RegistroISSN");
             entity.Property(e => e.IdRevista).HasColumnName("Id_Revista");
             entity.Property(e => e.TipoRevista)
