@@ -48,6 +48,7 @@ namespace ProyectoVDI.CORE.Core.Services
 
         public async Task<int> CreatePreguntasFrecuentesChatBot(PreguntasFrecuentesChatBotCreateDTO dto)
         {
+            //ss
             var pregunta = new PreguntasFrecuentesChatBot
             {
                 Pregunta = dto.Pregunta,
