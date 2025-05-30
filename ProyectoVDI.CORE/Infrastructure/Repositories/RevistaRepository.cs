@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
@@ -17,21 +18,36 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             _context = context;
         }
 
-        // Obtener todas las revistas
+        // Obtener todas las revistas (simple list)
+        public async Task<List<Revista>> GetAllAlgunasAsync()
+        {
+            var revistas = await _context.Revista
+                .Select(r => new Revista {
+                    IdRevista = r.IdRevista,
+                    Nombre = r.Nombre,
+                    Issn = r.Issn,
+                    Estado = r.Estado
+                })
+                .Where(r => r.Estado == 1)
+                .ToListAsync();
+            return revistas;
+        }
+
+        //Obtener todos los campos (full list)
         public async Task<List<Revista>> GetAllAsync()
         {
             var revistas = await _context.Revista
                 .Where(r => r.Estado == 1)
                 .ToListAsync();
-
             return revistas;
         }
 
         // Obtener revista por ID
         public async Task<Revista?> GetByIdAsync(int id)
         {
+            // Quitar el filtro Estado == 1 para permitir encontrar la revista aunque Estado sea 0
             return await _context.Revista
-                .Where(r => r.IdRevista == id && r.Estado == 1)
+                .Where(r => r.IdRevista == id)
                 .FirstOrDefaultAsync();
         }
 
@@ -45,7 +61,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Actualizar revista existente
-        public async Task UpdateAsync(Revista revista)
+        public async Task<int> UpdateAsync(Revista revista)
         {
             var existing = await _context.Revista.FindAsync(revista.IdRevista);
             if (existing == null)
@@ -54,10 +70,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             }
             _context.Entry(existing).CurrentValues.SetValues(revista);
             await _context.SaveChangesAsync();
+            return existing.IdRevista;
         }
 
         // Eliminar revista por ID
-        public async Task DeleteAsync(int id)
+        public async Task<string> DeleteAsync(int id)
         {
             var revista = await _context.Revista.FindAsync(id);
             if (revista == null)
@@ -66,6 +83,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             }
             revista.Estado = 0;
             await _context.SaveChangesAsync();
+            return "Revista inhabilitada";
         }
     }
 }

@@ -2,6 +2,7 @@ using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
@@ -15,9 +16,10 @@ namespace ProyectoVDI.CORE.Core.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<RevistaListDTO>> GetRevistas()
+        // Simple list
+        public async Task<IEnumerable<RevistaListDTO>> GetRevista()
         {
-            var revistas = await _repository.GetAllAsync();
+            var revistas = await _repository.GetAllAlgunasAsync();
             return revistas.Select(r => new RevistaListDTO
             {
                 IdRevista = r.IdRevista,
@@ -26,11 +28,24 @@ namespace ProyectoVDI.CORE.Core.Services
             });
         }
 
+        // Simple by id
         public async Task<RevistaDTO?> GetRevistaById(int id)
         {
             var r = await _repository.GetByIdAsync(id);
             if (r == null) return null;
             return new RevistaDTO
+            {
+                IdRevista = r.IdRevista,
+                Nombre = r.Nombre,
+                Issn = r.Issn
+            };
+        }
+
+        // Full list
+        public async Task<IEnumerable<RevistaFullDTO>> GetRevistas()
+        {
+            var revistas = await _repository.GetAllAsync();
+            return revistas.Select(r => new RevistaFullDTO
             {
                 IdRevista = r.IdRevista,
                 Issn = r.Issn,
@@ -74,11 +89,64 @@ namespace ProyectoVDI.CORE.Core.Services
                 Country = r.Country,
                 MultyYAlMenosUnaLista = r.MultyYAlMenosUnaLista,
                 MultidisciplinaryScopus = r.MultidisciplinaryScopus,
-                MultidisciplinaryWosOScopys = r.MultidisciplinaryWosOScopys,
+                MultidisciplinaryWosOScopys = r.MultidisciplinaryWosOScopys
+            });
+        }
+
+        // Full by id
+        public async Task<RevistaFullDTO?> GetRevistasById(int id)
+        {
+            var r = await _repository.GetByIdAsync(id);
+            if (r == null) return null;
+            return new RevistaFullDTO
+            {
+                IdRevista = r.IdRevista,
+                Issn = r.Issn,
+                Nombre = r.Nombre,
+                Scopus = r.Scopus,
+                WoSQ = r.WoSQ,
+                WoSS = r.WoSS,
+                WoSEsci = r.WoSEsci,
+                EsciQ = r.EsciQ,
+                Ajg4 = r.Ajg4,
+                Ajg = r.Ajg,
+                AjgS = r.AjgS,
+                Cnrs = r.Cnrs,
+                CnrsS = r.CnrsS,
+                Abdc = r.Abdc,
+                AbdcS = r.AbdcS,
+                AlMenosEnUnaLista = r.AlMenosEnUnaLista,
+                SoloEnUnaLista = r.SoloEnUnaLista,
+                Scielo = r.Scielo,
+                WoSLatam = r.WoSLatam,
+                Top50 = r.Top50,
+                N = r.N,
+                BeallSList = r.BeallSList,
+                Mdpi = r.Mdpi,
+                Insights = r.Insights,
+                AjgExiste = r.AjgExiste,
+                CnrsExiste = r.CnrsExiste,
+                AbdcExiste = r.AbdcExiste,
+                WoSTopExiste = r.WoSTopExiste,
+                WoSEsciExiste = r.WoSEsciExiste,
+                ScopusExiste = r.ScopusExiste,
+                SoloScieloExiste = r.SoloScieloExiste,
+                _216bEspecial = r._216bEspecial,
+                LatamSinEsciExiste = r.LatamSinEsciExiste,
+                EsciScieloSinScupus = r.EsciScieloSinScupus,
+                Múltiple = r.Múltiple,
+                MultidisciplinaryWos = r.MultidisciplinaryWos,
+                CoautoriaEsan = r.CoautoriaEsan,
+                PosiciónDelAutor = r.PosiciónDelAutor,
+                Jif = r.Jif,
+                Country = r.Country,
+                MultyYAlMenosUnaLista = r.MultyYAlMenosUnaLista,
+                MultidisciplinaryScopus = r.MultidisciplinaryScopus,
+                MultidisciplinaryWosOScopys = r.MultidisciplinaryWosOScopys
             };
         }
 
-        public async Task<int> CreateRevista(RevistaCreateDTO dto)
+        public async Task<int> CreateRevista(ProyectoVDI.CORE.Core.DTOs.RevistaCreateDTO dto)
         {
             var r = new Revista
             {
@@ -129,7 +197,7 @@ namespace ProyectoVDI.CORE.Core.Services
             return r.IdRevista;
         }
 
-        public async Task<bool> UpdateRevista(RevistaUpdateDTO dto)
+        public async Task<bool> UpdateRevista(ProyectoVDI.CORE.Core.DTOs.RevistaUpdateDTO dto)
         {
             var r = await _repository.GetByIdAsync(dto.IdRevista);
             if (r == null) return false;

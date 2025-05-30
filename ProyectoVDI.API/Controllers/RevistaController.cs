@@ -18,17 +18,36 @@ namespace ProyectoVDI.API.Controllers
             _service = service;
         }
 
+        // Simple list
+        [HttpGet("simple")]
+        public async Task<ActionResult<IEnumerable<RevistaListDTO>>> GetRevista()
+        {
+            var revistas = await _service.GetRevista();
+            return Ok(revistas);
+        }
+
+        // Simple by id
+        [HttpGet("simple/{id}")]
+        public async Task<ActionResult<RevistaDTO>> GetRevistaById(int id)
+        {
+            var revista = await _service.GetRevistaById(id);
+            if (revista == null) return NotFound();
+            return Ok(revista);
+        }
+
+        // Full list
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RevistaListDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<RevistaFullDTO>>> GetRevistas()
         {
             var revistas = await _service.GetRevistas();
             return Ok(revistas);
         }
 
+        // Full by id
         [HttpGet("{id}")]
-        public async Task<ActionResult<RevistaDTO>> GetById(int id)
+        public async Task<ActionResult<RevistaFullDTO>> GetRevistasById(int id)
         {
-            var revista = await _service.GetRevistaById(id);
+            var revista = await _service.GetRevistasById(id);
             if (revista == null) return NotFound();
             return Ok(revista);
         }
@@ -37,16 +56,16 @@ namespace ProyectoVDI.API.Controllers
         public async Task<ActionResult<int>> Create([FromBody] RevistaCreateDTO dto)
         {
             var id = await _service.CreateRevista(dto);
-            return CreatedAtAction(nameof(GetById), new { id }, id);
+            return CreatedAtAction(nameof(GetRevistaById), new { id }, id);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] RevistaUpdateDTO dto)
+        public async Task<String> Update(int id, [FromBody] RevistaUpdateDTO dto)
         {
-            if (id != dto.IdRevista) return BadRequest();
+            dto.IdRevista = id; // Asigna el id de la URL al DTO
             var updated = await _service.UpdateRevista(dto);
-            if (!updated) return NotFound();
-            return NoContent();
+            if (!updated) return "No se puede actualizar";
+            return "Registrado";
         }
 
         [HttpDelete("{id}")]

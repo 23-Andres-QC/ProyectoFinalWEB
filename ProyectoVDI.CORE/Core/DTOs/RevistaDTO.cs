@@ -10,6 +10,14 @@ namespace ProyectoVDI.CORE.Core.DTOs
     public class RevistaDTO
     {
         public int IdRevista { get; set; }
+        public string? Nombre { get; set; }
+        public string? Issn { get; set; }
+    }
+
+    // Detalle completo de revista (para GetRevistas y GetRevistasById)
+    public class RevistaFullDTO
+    {
+        public int IdRevista { get; set; }
         public string? Issn { get; set; }
         public string? Nombre { get; set; }
         public string? Scopus { get; set; }
@@ -145,9 +153,5 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public int? MultidisciplinaryScopus { get; set; }
         public int? MultidisciplinaryWosOScopys { get; set; }
         public int? Estado { get; set; }
-    }
-    public class RevistaEliminarDTO
-    {
-        public int IdRevista { get; set; }
     }
 }
