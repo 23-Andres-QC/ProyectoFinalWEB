@@ -89,8 +89,48 @@ namespace ProyectoVDI.CORE.Core.Services
             var r = new Revista
             {
                 Issn = dto.Issn,
-                Nombre = dto.Nombre
-                // Agrega aquí los campos requeridos para crear
+                Nombre = dto.Nombre,
+                Scopus = dto.Scopus,
+                WoSQ = dto.WoSQ,
+                WoSS = dto.WoSS,
+                WoSEsci = dto.WoSEsci,
+                EsciQ = dto.EsciQ,
+                Ajg4 = dto.Ajg4,
+                Ajg = dto.Ajg,
+                AjgS = dto.AjgS,
+                Cnrs = dto.Cnrs,
+                CnrsS = dto.CnrsS,
+                Abdc = dto.Abdc,
+                AbdcS = dto.AbdcS,
+                AlMenosEnUnaLista = dto.AlMenosEnUnaLista,
+                SoloEnUnaLista = dto.SoloEnUnaLista,
+                Scielo = dto.Scielo,
+                WoSLatam = dto.WoSLatam,
+                Top50 = dto.Top50,
+                N = dto.N,
+                BeallSList = dto.BeallSList,
+                Mdpi = dto.Mdpi,
+                Insights = dto.Insights,
+                AjgExiste = dto.AjgExiste,
+                CnrsExiste = dto.CnrsExiste,
+                AbdcExiste = dto.AbdcExiste,
+                WoSTopExiste = dto.WoSTopExiste,
+                WoSEsciExiste = dto.WoSEsciExiste,
+                ScopusExiste = dto.ScopusExiste,
+                SoloScieloExiste = dto.SoloScieloExiste,
+                _216bEspecial = dto._216bEspecial,
+                LatamSinEsciExiste = dto.LatamSinEsciExiste,
+                EsciScieloSinScupus = dto.EsciScieloSinScupus,
+                Múltiple = dto.Múltiple,
+                MultidisciplinaryWos = dto.MultidisciplinaryWos,
+                CoautoriaEsan = dto.CoautoriaEsan,
+                PosiciónDelAutor = dto.PosiciónDelAutor,
+                Jif = dto.Jif,
+                Country = dto.Country,
+                MultyYAlMenosUnaLista = dto.MultyYAlMenosUnaLista,
+                MultidisciplinaryScopus = dto.MultidisciplinaryScopus,
+                MultidisciplinaryWosOScopys = dto.MultidisciplinaryWosOScopys,
+                Estado = dto.Estado
             };
             await _repository.CreateAsync(r);
             return r.IdRevista;
@@ -102,7 +142,47 @@ namespace ProyectoVDI.CORE.Core.Services
             if (r == null) return false;
             r.Issn = dto.Issn;
             r.Nombre = dto.Nombre;
-            // Agrega aquí los campos requeridos para actualizar
+            r.Scopus = dto.Scopus;
+            r.WoSQ = dto.WoSQ;
+            r.WoSS = dto.WoSS;
+            r.WoSEsci = dto.WoSEsci;
+            r.EsciQ = dto.EsciQ;
+            r.Ajg4 = dto.Ajg4;
+            r.Ajg = dto.Ajg;
+            r.AjgS = dto.AjgS;
+            r.Cnrs = dto.Cnrs;
+            r.CnrsS = dto.CnrsS;
+            r.Abdc = dto.Abdc;
+            r.AbdcS = dto.AbdcS;
+            r.AlMenosEnUnaLista = dto.AlMenosEnUnaLista;
+            r.SoloEnUnaLista = dto.SoloEnUnaLista;
+            r.Scielo = dto.Scielo;
+            r.WoSLatam = dto.WoSLatam;
+            r.Top50 = dto.Top50;
+            r.N = dto.N;
+            r.BeallSList = dto.BeallSList;
+            r.Mdpi = dto.Mdpi;
+            r.Insights = dto.Insights;
+            r.AjgExiste = dto.AjgExiste;
+            r.CnrsExiste = dto.CnrsExiste;
+            r.AbdcExiste = dto.AbdcExiste;
+            r.WoSTopExiste = dto.WoSTopExiste;
+            r.WoSEsciExiste = dto.WoSEsciExiste;
+            r.ScopusExiste = dto.ScopusExiste;
+            r.SoloScieloExiste = dto.SoloScieloExiste;
+            r._216bEspecial = dto._216bEspecial;
+            r.LatamSinEsciExiste = dto.LatamSinEsciExiste;
+            r.EsciScieloSinScupus = dto.EsciScieloSinScupus;
+            r.Múltiple = dto.Múltiple;
+            r.MultidisciplinaryWos = dto.MultidisciplinaryWos;
+            r.CoautoriaEsan = dto.CoautoriaEsan;
+            r.PosiciónDelAutor = dto.PosiciónDelAutor;
+            r.Jif = dto.Jif;
+            r.Country = dto.Country;
+            r.MultyYAlMenosUnaLista = dto.MultyYAlMenosUnaLista;
+            r.MultidisciplinaryScopus = dto.MultidisciplinaryScopus;
+            r.MultidisciplinaryWosOScopys = dto.MultidisciplinaryWosOScopys;
+            r.Estado = dto.Estado;
             await _repository.UpdateAsync(r);
             return true;
         }
