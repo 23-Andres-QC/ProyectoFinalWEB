@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
+    // =====================
     // Servicio para la lógica de negocio relacionada con usuarios
+    // =====================
     public class UsuarioService : IUsuarioService
     {
         // Repositorio de usuarios inyectado
@@ -19,7 +21,9 @@ namespace ProyectoVDI.CORE.Core.Services
             _usuariosRepository = usuariosRepository;
         }
 
-        // Obtiene la lista de usuarios y la transforma a DTO para la vista/listado
+        // =====================
+        // Obtiene la lista de usuarios y la transforma a DTO para la vista/listado (GET)
+        // =====================
         public async Task<IEnumerable<UsuarioListDTO>> GetUsuarios()
         {
             var usuarios = await _usuariosRepository.GetAllAsync();
@@ -30,15 +34,23 @@ namespace ProyectoVDI.CORE.Core.Services
                 usuarioList.Add(new UsuarioListDTO
                 {
                     IdUsuario = usuario.IdUsuario,
+                    IdProfesor = usuario.IdProfesor,
                     Correo = usuario.Correo,
-                    IdProfesor = usuario.IdProfesor
+                    Contraseña = usuario.Contraseña,
+                    IdRol = usuario.IdRol,
+                    Estado = usuario.Estado,
+                    FechaCreacion = usuario.FechaCreacion,
+                    FechaModificacion = usuario.FechaModificacion,
+                    NombreUsuario = usuario.IdProfesorNavigation?.NombreyApellido
                 });
             }
 
             return usuarioList;
         }
 
-        // Obtiene un usuario por su ID y lo transforma a DTO detallado
+        // =====================
+        // Obtiene un usuario por su ID y lo transforma a DTO detallado (GET)
+        // =====================
         public async Task<UsuarioDTO?> GetUsuarioById(int id)
         {
             var usuario = await _usuariosRepository.GetByIdAsync(id);
@@ -49,13 +61,18 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdUsuario = usuario.IdUsuario,
                 IdProfesor = usuario.IdProfesor,
                 Correo = usuario.Correo,
+                Contraseña = usuario.Contraseña,
                 IdRol = usuario.IdRol,
                 Estado = usuario.Estado,
-                FechaCreacion = usuario.FechaCreacion
+                FechaCreacion = usuario.FechaCreacion,
+                FechaModificacion = usuario.FechaModificacion,
+                NombreUsuario = usuario.IdProfesorNavigation?.NombreyApellido
             };
         }
 
-        // Crea un nuevo usuario a partir de un DTO de creación
+        // =====================
+        // Crea un nuevo usuario a partir de un DTO de creación (POST)
+        // =====================
         public async Task<int> CreateUsuario(UsuarioCreateDTO dto)
         {
             var usuario = new Usuario
@@ -64,14 +81,16 @@ namespace ProyectoVDI.CORE.Core.Services
                 Correo = dto.Correo,
                 Contraseña = dto.Contraseña,
                 IdRol = dto.IdRol,
-                Estado = 1,
+                Estado = dto.Estado ?? 1, // Usa el estado proporcionado o 1 por defecto
                 FechaCreacion = DateOnly.FromDateTime(DateTime.Now)
             };
 
             return await _usuariosRepository.CreateAsync(usuario);
         }
 
-        // Actualiza un usuario existente a partir de un DTO de actualización
+        // =====================
+        // Actualiza un usuario existente a partir de un DTO de actualización (PUT)
+        // =====================
         public async Task<bool> UpdateUsuario(UsuarioUpdateDTO dto)
         {
             var usuario = await _usuariosRepository.GetByIdAsync(dto.IdUsuario);
@@ -81,14 +100,16 @@ namespace ProyectoVDI.CORE.Core.Services
             usuario.Correo = dto.Correo;
             usuario.Contraseña = dto.Contraseña;
             usuario.IdRol = dto.IdRol;
-            usuario.Estado = dto.Estado;
+            usuario.Estado = dto.Estado ?? usuario.Estado; // Permite actualizar el estado
             usuario.FechaModificacion = DateOnly.FromDateTime(DateTime.Now);
 
             await _usuariosRepository.UpdateAsync(usuario);
             return true;
         }
 
+        // =====================
         // Elimina (soft delete) un usuario por su ID
+        // =====================
         public async Task DeleteUsuario(int id)
         {
             await _usuariosRepository.DeleteAsync(id);
