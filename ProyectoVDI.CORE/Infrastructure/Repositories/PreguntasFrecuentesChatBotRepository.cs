@@ -22,6 +22,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task<int> CreateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot)
         {
             preguntasFrecuentesChatBot.FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
+            preguntasFrecuentesChatBot.Estado = "Activo";
             await _context.PreguntasFrecuentesChatBot.AddAsync(preguntasFrecuentesChatBot);
             await _context.SaveChangesAsync();
             return preguntasFrecuentesChatBot.IdPregunta;

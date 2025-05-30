@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
+using System.Linq;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
@@ -20,13 +21,17 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         // Obtener todos los profesores
         public async Task<List<Profesores>> GetAllAsync()
         {
-            return await _context.Profesores.ToListAsync();
+            return await _context.Profesores
+                .Include(p => p.Usuario)
+                .ToListAsync();
         }
 
-        // Obtener profesor por ID
+        // Obtener profesor por ID (incluye usuarios asociados)
         public async Task<Profesores?> GetByIdAsync(int id)
         {
-            return await _context.Profesores.FindAsync(id);
+            return await _context.Profesores
+                .Include(p => p.Usuario)
+                .FirstOrDefaultAsync(p => p.IdProfesor == id);
         }
 
         // Crear nuevo profesor

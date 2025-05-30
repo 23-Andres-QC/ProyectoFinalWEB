@@ -53,7 +53,6 @@ namespace ProyectoVDI.CORE.Core.Services
                 Pregunta = dto.Pregunta,
                 Respuesta = dto.Respuesta,
                 Categoria = dto.Categoria,
-                Estado = dto.Estado,
                 IdUsuario = dto.IdUsuario,
                 FechaCreacion = DateOnly.FromDateTime(DateTime.Now)
             };

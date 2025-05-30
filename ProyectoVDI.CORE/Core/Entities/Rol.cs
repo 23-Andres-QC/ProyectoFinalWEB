@@ -9,5 +9,7 @@ public partial class Rol
 
     public string? Descripcion { get; set; }
 
+    public int? Estado { get; set; }
+
     public virtual ICollection<Usuario> Usuario { get; set; } = new List<Usuario>();
 }

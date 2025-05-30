@@ -6,7 +6,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
     {
         public int? IdRegistroIssn { get; set; }
         public int? IdRevista { get; set; }
-        public string? IdTipo { get; set; }
+        public string? TipoRevista { get; set; }
     }
 
     public class DetRegistroIssnListDTO
@@ -19,13 +19,13 @@ namespace ProyectoVDI.CORE.Core.DTOs
     {
         public int? IdRegistroIssn { get; set; }
         public int? IdRevista { get; set; }
-        public string? IdTipo { get; set; }
+        public string? TipoRevista { get; set; }
     }
-
+    //a
     public class DetRegistroIssnUpdateDTO
     {
         public int? IdRegistroIssn { get; set; }
         public int? IdRevista { get; set; }
-        public string? IdTipo { get; set; }
+        public string? TipoRevista { get; set; }
     }
 }
