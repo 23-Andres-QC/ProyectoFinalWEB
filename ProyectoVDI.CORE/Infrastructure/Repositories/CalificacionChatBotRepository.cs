@@ -22,7 +22,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task<int> CreateAsync(CalificacionChatBot calificacionChatBot)
         {
             // Asigna automáticamente fecha
-            calificacionChatBot.FechaHora = DateTime.Now;
+            calificacionChatBot.Fecha = DateOnly.FromDateTime(DateTime.Now);
 
             await _context.CalificacionChatBot.AddAsync(calificacionChatBot);
             await _context.SaveChangesAsync();

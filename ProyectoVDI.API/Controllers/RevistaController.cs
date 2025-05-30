@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Core.DTOs;
+using ProyectoVDI.CORE.Core.Entities;
+using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -15,41 +18,61 @@ namespace ProyectoVDI.API.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        // Simple list
+        [HttpGet("simple")]
+        public async Task<ActionResult<IEnumerable<RevistaListDTO>>> GetRevista()
         {
-            var result = await _service.GetRevistas();
-            return Ok(result);
+            var revistas = await _service.GetRevista();
+            return Ok(revistas);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        // Simple by id
+        [HttpGet("simple/{id}")]
+        public async Task<ActionResult<RevistaDTO>> GetRevistaById(int id)
         {
-            var result = await _service.GetRevistaById(id);
-            if (result == null) return NotFound();
-            return Ok(result);
+            var revista = await _service.GetRevistaById(id);
+            if (revista == null) return NotFound();
+            return Ok(revista);
+        }
+
+        // Full list
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<RevistaFullDTO>>> GetRevistas()
+        {
+            var revistas = await _service.GetRevistas();
+            return Ok(revistas);
+        }
+
+        // Full by id
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RevistaFullDTO>> GetRevistasById(int id)
+        {
+            var revista = await _service.GetRevistasById(id);
+            if (revista == null) return NotFound();
+            return Ok(revista);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] RevistaCreateDTO dto)
+        public async Task<ActionResult<int>> Create([FromBody] RevistaCreateDTO dto)
         {
             var id = await _service.CreateRevista(dto);
-            return CreatedAtAction(nameof(GetById), new { id }, dto);
+            return CreatedAtAction(nameof(GetRevistaById), new { id }, id);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] RevistaUpdateDTO dto)
+        [HttpPut("{id}")]
+        public async Task<String> Update(int id, [FromBody] RevistaUpdateDTO dto)
         {
+            dto.IdRevista = id; // Asigna el id de la URL al DTO
             var updated = await _service.UpdateRevista(dto);
-            if (!updated) return NotFound();
-            return NoContent();
+            if (!updated) return "No se puede actualizar";
+            return "Registrado";
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteRevista(id);
-            return NoContent();
+            return Ok(id);
         }
     }
 }

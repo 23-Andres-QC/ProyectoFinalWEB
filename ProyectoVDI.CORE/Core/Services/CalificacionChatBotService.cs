@@ -39,7 +39,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdFeedback = cal.IdFeedback,
                 IdUsuario = cal.IdUsuario,
                 Calificacion = cal.Calificacion,
-                FechaHora = cal.FechaHora
+                Fecha = cal.Fecha
             };
         }
 
@@ -49,7 +49,8 @@ namespace ProyectoVDI.CORE.Core.Services
             {
                 IdUsuario = dto.IdUsuario,
                 Calificacion = dto.Calificacion,
-                FechaHora = DateTime.Now // Assuming FechaHora is set to current time on creation
+                Fecha = dto.Fecha
+
             };
             return await _repository.CreateAsync(cal);
         }
@@ -60,10 +61,11 @@ namespace ProyectoVDI.CORE.Core.Services
             if (cal == null) return false;
             cal.IdUsuario = dto.IdUsuario;
             cal.Calificacion = dto.Calificacion;
-            cal.FechaHora = DateTime.Now;
+            cal.Fecha = dto.Fecha;
             await _repository.UpdateAsync(cal);
             return true;
         }
+        //a
 
         public async Task DeleteCalificacionChatBot(int id)
         {

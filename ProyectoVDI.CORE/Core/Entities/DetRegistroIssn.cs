@@ -9,7 +9,7 @@ public partial class DetRegistroIssn
 
     public int? IdRevista { get; set; }
 
-    public string? IdTipo { get; set; }
+    public string? TipoRevista { get; set; }
 
     public virtual RegistroIssn? IdRegistroIssnNavigation { get; set; }
 

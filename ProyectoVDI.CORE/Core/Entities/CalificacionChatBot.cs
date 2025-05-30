@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 namespace ProyectoVDI.CORE.Core.Entities;
 
-//HolaSas
-
 public partial class CalificacionChatBot
 {
     public int IdFeedback { get; set; }
@@ -13,7 +11,7 @@ public partial class CalificacionChatBot
 
     public int? Calificacion { get; set; }
 
-    public DateTime? FechaHora { get; set; }
+    public DateOnly? Fecha { get; set; }
 
     public virtual Usuario? IdUsuarioNavigation { get; set; }
 }

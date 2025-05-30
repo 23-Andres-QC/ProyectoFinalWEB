@@ -2,6 +2,7 @@ using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
@@ -37,12 +38,17 @@ namespace ProyectoVDI.CORE.Core.Services
             return new ProfesoresDTO
             {
                 IdProfesor = profesor.IdProfesor,
-                IdUsuario = profesor.IdUsuario,
                 IdCategoria = profesor.IdCategoria,
                 Dni = profesor.Dni,
                 NombreyApellido = profesor.NombreyApellido,
                 Correo = profesor.Correo,
-                Estado = profesor.Estado
+                Estado = profesor.Estado,
+                Usuarios = profesor.Usuario?.Select(u => new UsuarioListDTO
+                {
+                    IdUsuario = u.IdUsuario,
+                    Correo = u.Correo,
+                    IdProfesor = u.IdProfesor
+                }).ToList()
             };
         }
 
@@ -50,7 +56,6 @@ namespace ProyectoVDI.CORE.Core.Services
         {
             var profesor = new Profesores
             {
-                IdUsuario = dto.IdUsuario,
                 IdCategoria = dto.IdCategoria,
                 Dni = dto.Dni,
                 NombreyApellido = dto.NombreyApellido,
@@ -64,7 +69,6 @@ namespace ProyectoVDI.CORE.Core.Services
         {
             var profesor = await _profesoresRepository.GetByIdAsync(dto.IdProfesor);
             if (profesor == null) return false;
-            profesor.IdUsuario = dto.IdUsuario;
             profesor.IdCategoria = dto.IdCategoria;
             profesor.Dni = dto.Dni;
             profesor.NombreyApellido = dto.NombreyApellido;

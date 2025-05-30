@@ -47,7 +47,6 @@ namespace ProyectoVDI.CORE.Core.Services
             var categoria = new Categorias
             {
                 Descripcion = dto.Descripcion,
-                Estado = dto.Estado
             };
             return await _categoriaRepository.CreateAsync(categoria);
         }
