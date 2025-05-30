@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
+    /*
+     * Servicio de lógica de negocio para Profesores.
+     * Orquesta operaciones entre la capa de aplicación y el repositorio.
+     */
     public class ProfesoresService : IProfesoresService
     {
         private readonly IProfesoresRepository _profesoresRepository;
@@ -42,13 +46,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 Dni = profesor.Dni,
                 NombreyApellido = profesor.NombreyApellido,
                 Correo = profesor.Correo,
-                Estado = profesor.Estado,
-                Usuarios = profesor.Usuario?.Select(u => new UsuarioListDTO
-                {
-                    IdUsuario = u.IdUsuario,
-                    Correo = u.Correo,
-                    IdProfesor = u.IdProfesor
-                }).ToList()
+                Estado = profesor.Estado
             };
         }
 
@@ -60,7 +58,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 Dni = dto.Dni,
                 NombreyApellido = dto.NombreyApellido,
                 Correo = dto.Correo,
-                Estado = dto.Estado
+                Estado = dto.Estado ?? 1
             };
             return await _profesoresRepository.CreateAsync(profesor);
         }

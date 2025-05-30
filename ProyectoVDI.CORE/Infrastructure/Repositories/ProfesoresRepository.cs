@@ -9,6 +9,10 @@ using System.Linq;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
+    /*
+     * Implementación del repositorio de Profesores.
+     * Gestiona operaciones CRUD y navegación de entidades relacionadas.
+     */
     public class ProfesoresRepository : IProfesoresRepository
     {
         private readonly vdiContext _context;
@@ -18,7 +22,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             _context = context;
         }
 
-        // Obtener todos los profesores
         public async Task<List<Profesores>> GetAllAsync()
         {
             return await _context.Profesores
@@ -26,7 +29,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        // Obtener profesor por ID (incluye usuarios asociados)
         public async Task<Profesores?> GetByIdAsync(int id)
         {
             return await _context.Profesores
@@ -34,7 +36,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.IdProfesor == id);
         }
 
-        // Crear nuevo profesor
         public async Task<int> CreateAsync(Profesores profesor)
         {
             await _context.Profesores.AddAsync(profesor);
@@ -42,7 +43,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return profesor.IdProfesor;
         }
 
-        // Actualizar profesor existente
         public async Task UpdateAsync(Profesores profesor)
         {
             var existing = await _context.Profesores.FindAsync(profesor.IdProfesor);
@@ -55,7 +55,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        // Eliminar profesor por ID
         public async Task DeleteAsync(int id)
         {
             var profesor = await _context.Profesores.FindAsync(id);
