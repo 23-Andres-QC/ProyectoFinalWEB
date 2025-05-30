@@ -11,5 +11,6 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateAsync(Usuario usuario);
         Task UpdateAsync(Usuario usuario);
         Task DeleteAsync(int id);
+        // No se requieren cambios para login/cambio/búsqueda, ya que se usa GetAllAsync
     }
 }
