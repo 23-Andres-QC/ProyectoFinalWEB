@@ -22,6 +22,17 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        //OTENER CALIFICACIONES DE CHATBOT Y TODOS SUS ATRIBUTOS
+        //api/CalificacionChatBot/calificaciones
+        [HttpGet("calificaciones")]
+        public async Task<IActionResult> GetCalificaciones()
+        {
+            var result = await _service.GetCalificacionChatBot();
+            return Ok(result);
+        }
+
+        //OBTENER CALIFICACIONES DE CHATBOT POR ID
+        //api/CalificacionChatBot/2
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
