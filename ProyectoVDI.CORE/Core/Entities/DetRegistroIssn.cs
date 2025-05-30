@@ -5,6 +5,7 @@ namespace ProyectoVDI.CORE.Core.Entities;
 
 public partial class DetRegistroIssn
 {
+    public int IdDetalle { get; set; } // Nueva clave primaria
     public int? IdRegistroIssn { get; set; }
 
     public int? IdRevista { get; set; }

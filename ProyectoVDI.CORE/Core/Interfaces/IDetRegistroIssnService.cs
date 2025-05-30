@@ -11,5 +11,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateDetRegistroIssn(DetRegistroIssnCreateDTO dto);
         Task<bool> UpdateDetRegistroIssn(DetRegistroIssnUpdateDTO dto);
         Task DeleteDetRegistroIssn(int idRegistroIssn, int idRevista);
+        // Nuevo método para crear registro y detalle juntos
+        Task<(int IdRegistroIssn, int IdRevista)> CreateRegistroYDetalleAsync(RegistroIssnCreateDTO registroDto, DetRegistroIssnCreateDTO detalleDto);
     }
 }

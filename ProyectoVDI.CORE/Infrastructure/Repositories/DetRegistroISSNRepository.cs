@@ -18,8 +18,13 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
 
         // Crear nuevo detalle de registro ISSN
+        // IMPORTANTE: El IdRegistroIssn debe ser el mismo que el del registro principal y no puede ser nulo.
         public async Task<(int? IdRegistroIssn, int? IdRevista)> CreateAsync(DetRegistroIssn detalle)
         {
+            if (detalle.IdRegistroIssn == null)
+                throw new ArgumentException("IdRegistroIssn no puede ser nulo. Debe asignarse el id del registro principal creado.");
+            if (detalle.IdRevista == null)
+                throw new ArgumentException("IdRevista no puede ser nulo.");
             await _context.DetRegistroIssn.AddAsync(detalle);
             await _context.SaveChangesAsync();
             return (detalle.IdRegistroIssn, detalle.IdRevista);
