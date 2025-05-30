@@ -8,31 +8,44 @@ using System.Linq;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
+    // =====================
+    // Repositorio para la gestión de usuarios
+    // =====================
     public class UsuariosRepository : IUsuariosRepository
     {
+        // Contexto de base de datos inyectado
         private readonly vdiContext _context;
 
+        // Constructor
         public UsuariosRepository(vdiContext context)
         {
             _context = context;
         }
 
+        // =====================
+        // Obtiene todos los usuarios (sin filtrar por Estado)
+        // =====================
         public async Task<List<Usuario>> GetAllAsync()
         {
             return await _context.Usuario
-                .Where(u => u.Estado == 1)
                 .Include(u => u.IdProfesorNavigation)
                 .ToListAsync();
         }
 
+        // =====================
+        // Obtiene un usuario por su ID (sin filtrar por Estado)
+        // =====================
         public async Task<Usuario?> GetByIdAsync(int id)
         {
             return await _context.Usuario
-                .Where(u => u.IdUsuario == id && u.Estado == 1)
+                .Where(u => u.IdUsuario == id)
                 .Include(u => u.IdProfesorNavigation)
                 .FirstOrDefaultAsync();
         }
 
+        // =====================
+        // Crea un nuevo usuario
+        // =====================
         public async Task<int> CreateAsync(Usuario usuario)
         {
             usuario.Estado = 1;
@@ -43,6 +56,9 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return usuario.IdUsuario;
         }
 
+        // =====================
+        // Actualiza un usuario existente
+        // =====================
         public async Task UpdateAsync(Usuario usuario)
         {
             var existingUsuario = await _context.Usuario.FindAsync(usuario.IdUsuario);
@@ -54,12 +70,15 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             existingUsuario.Correo = usuario.Correo;
             existingUsuario.Contraseña = usuario.Contraseña;
             existingUsuario.IdRol = usuario.IdRol;
-            existingUsuario.Estado = usuario.Estado;
+            // Estado ya no se actualiza desde el servicio
             existingUsuario.FechaModificacion = DateOnly.FromDateTime(DateTime.Now);
             _context.Usuario.Update(existingUsuario);
             await _context.SaveChangesAsync();
         }
 
+        // =====================
+        // Elimina (soft delete) un usuario por su ID
+        // =====================
         public async Task DeleteAsync(int id)
         {
             var usuario = await _context.Usuario.FindAsync(id);
@@ -74,5 +93,3 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         }
     }
 }
-
-
