@@ -37,4 +37,6 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public DateOnly? Fecha { get; set; }
 
     }
+
+    
 }

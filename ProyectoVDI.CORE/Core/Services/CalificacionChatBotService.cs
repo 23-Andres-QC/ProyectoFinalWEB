@@ -14,8 +14,32 @@ namespace ProyectoVDI.CORE.Core.Services
         public CalificacionChatBotService(ICalificacionChatBotRepository repository)
         {
             _repository = repository;
+
+
+
         }
 
+        //Ontener todas la calificacion y sus atributos de un chatbot
+
+        public async Task<IEnumerable<CalificacionChatBotDTO>> GetCalificacionChatBot()
+        {
+            var calificaciones = await _repository.GetAllAsync();
+            var list = new List<CalificacionChatBotDTO>();
+            foreach (var cal in calificaciones)
+            {
+                list.Add(new CalificacionChatBotDTO
+                {
+                    IdFeedback = cal.IdFeedback,
+                    IdUsuario = cal.IdUsuario,
+                    Calificacion = cal.Calificacion,
+                    Fecha = cal.Fecha
+                });
+            }
+            return list;
+        }
+
+
+        // lista de calificaciones de chatbots
         public async Task<IEnumerable<CalificacionChatBotListDTO>> GetCalificacionChatBots()
         {
             var calificaciones = await _repository.GetAllAsync();
