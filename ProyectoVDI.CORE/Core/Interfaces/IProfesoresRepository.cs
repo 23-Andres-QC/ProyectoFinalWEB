@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Interfaces
 {
-    /*
-     * Interfaz para el repositorio de Profesores.
-     * Define las operaciones CRUD y navegación de entidades relacionadas.
-     */
+    
+     //Interfaz para el repositorio de Profesores.
+     // Define las operaciones CRUD y navegación de entidades relacionadas.
     public interface IProfesoresRepository
     {
         Task<List<Profesores>> GetAllAsync();
