@@ -21,7 +21,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public string? NombreUsuario { get; set; } // Desde Profesores
     }
 
-    // =====================
+    // =====================    
     // DTO para mostrar una lista de usuarios (GET)
     // =====================
     public class UsuarioListDTO
