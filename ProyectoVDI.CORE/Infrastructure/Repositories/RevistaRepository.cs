@@ -51,6 +51,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        // Obtener revista por ISSN
+        public async Task<Revista?> GetByIssnAsync(string issn)
+        {
+            return await _context.Revista.FirstOrDefaultAsync(r => r.Issn == issn);
+        }
+
         // Crear nueva revista
         public async Task<int> CreateAsync(Revista revista)
         {

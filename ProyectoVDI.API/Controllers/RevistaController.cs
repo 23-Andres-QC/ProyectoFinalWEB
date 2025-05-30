@@ -53,14 +53,14 @@ namespace ProyectoVDI.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Create([FromBody] RevistaCreateDTO dto)
+        public async Task<ActionResult<BulkRevistaResultDTO>> Create([FromBody] List<RevistaCreateDTO> revistas)
         {
-            var id = await _service.CreateRevista(dto);
-            return CreatedAtAction(nameof(GetRevistaById), new { id }, id);
+            var result = await _service.BulkUpsertRevistasAsync(revistas);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<String> Update(int id, [FromBody] RevistaUpdateDTO dto)
+        public async Task<string> Update(int id, [FromBody] RevistaUpdateDTO dto)
         {
             dto.IdRevista = id; // Asigna el id de la URL al DTO
             var updated = await _service.UpdateRevista(dto);

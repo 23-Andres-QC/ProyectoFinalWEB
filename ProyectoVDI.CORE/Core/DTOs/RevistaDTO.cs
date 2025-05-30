@@ -154,4 +154,10 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public int? MultidisciplinaryWosOScopys { get; set; }
         public int? Estado { get; set; }
     }
+
+    public class BulkRevistaResultDTO
+    {
+        public List<string> Creado { get; set; } = new();
+        public List<string> Actualizado { get; set; } = new();
+    }
 }

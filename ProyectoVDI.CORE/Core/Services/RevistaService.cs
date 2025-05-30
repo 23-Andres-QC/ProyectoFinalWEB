@@ -251,5 +251,115 @@ namespace ProyectoVDI.CORE.Core.Services
         {
             await _repository.DeleteAsync(id);
         }
+
+        public async Task<BulkRevistaResultDTO> BulkUpsertRevistasAsync(List<RevistaCreateDTO> revistas)
+        {
+            var result = new BulkRevistaResultDTO();
+            foreach (var dto in revistas)
+            {
+                if (string.IsNullOrWhiteSpace(dto.Issn)) continue;
+                var existing = await _repository.GetByIssnAsync(dto.Issn);
+                if (existing != null)
+                {
+                    // Actualizar campos
+                    if (dto.Nombre != null) existing.Nombre = dto.Nombre;
+                    if (dto.Scopus != null) existing.Scopus = dto.Scopus;
+                    if (dto.WoSQ != null) existing.WoSQ = dto.WoSQ;
+                    if (dto.WoSS.HasValue) existing.WoSS = dto.WoSS;
+                    if (dto.WoSEsci != null) existing.WoSEsci = dto.WoSEsci;
+                    if (dto.EsciQ != null) existing.EsciQ = dto.EsciQ;
+                    if (dto.Ajg4 != null) existing.Ajg4 = dto.Ajg4;
+                    if (dto.Ajg != null) existing.Ajg = dto.Ajg;
+                    if (dto.AjgS.HasValue) existing.AjgS = dto.AjgS;
+                    if (dto.Cnrs != null) existing.Cnrs = dto.Cnrs;
+                    if (dto.CnrsS.HasValue) existing.CnrsS = dto.CnrsS;
+                    if (dto.Abdc != null) existing.Abdc = dto.Abdc;
+                    if (dto.AbdcS.HasValue) existing.AbdcS = dto.AbdcS;
+                    if (dto.AlMenosEnUnaLista != null) existing.AlMenosEnUnaLista = dto.AlMenosEnUnaLista;
+                    if (dto.SoloEnUnaLista != null) existing.SoloEnUnaLista = dto.SoloEnUnaLista;
+                    if (dto.Scielo != null) existing.Scielo = dto.Scielo;
+                    if (dto.WoSLatam != null) existing.WoSLatam = dto.WoSLatam;
+                    if (dto.Top50 != null) existing.Top50 = dto.Top50;
+                    if (dto.N.HasValue) existing.N = dto.N;
+                    if (dto.BeallSList != null) existing.BeallSList = dto.BeallSList;
+                    if (dto.Mdpi != null) existing.Mdpi = dto.Mdpi;
+                    if (dto.Insights != null) existing.Insights = dto.Insights;
+                    if (dto.AjgExiste.HasValue) existing.AjgExiste = dto.AjgExiste;
+                    if (dto.CnrsExiste.HasValue) existing.CnrsExiste = dto.CnrsExiste;
+                    if (dto.AbdcExiste.HasValue) existing.AbdcExiste = dto.AbdcExiste;
+                    if (dto.WoSTopExiste.HasValue) existing.WoSTopExiste = dto.WoSTopExiste;
+                    if (dto.WoSEsciExiste.HasValue) existing.WoSEsciExiste = dto.WoSEsciExiste;
+                    if (dto.ScopusExiste.HasValue) existing.ScopusExiste = dto.ScopusExiste;
+                    if (dto.SoloScieloExiste.HasValue) existing.SoloScieloExiste = dto.SoloScieloExiste;
+                    if (dto._216bEspecial.HasValue) existing._216bEspecial = dto._216bEspecial;
+                    if (dto.LatamSinEsciExiste.HasValue) existing.LatamSinEsciExiste = dto.LatamSinEsciExiste;
+                    if (dto.EsciScieloSinScupus.HasValue) existing.EsciScieloSinScupus = dto.EsciScieloSinScupus;
+                    if (dto.Múltiple.HasValue) existing.Múltiple = dto.Múltiple;
+                    if (dto.MultidisciplinaryWos.HasValue) existing.MultidisciplinaryWos = dto.MultidisciplinaryWos;
+                    if (dto.CoautoriaEsan != null) existing.CoautoriaEsan = dto.CoautoriaEsan;
+                    if (dto.PosiciónDelAutor != null) existing.PosiciónDelAutor = dto.PosiciónDelAutor;
+                    if (dto.Jif.HasValue) existing.Jif = dto.Jif;
+                    if (dto.Country != null) existing.Country = dto.Country;
+                    if (dto.MultyYAlMenosUnaLista.HasValue) existing.MultyYAlMenosUnaLista = dto.MultyYAlMenosUnaLista;
+                    if (dto.MultidisciplinaryScopus.HasValue) existing.MultidisciplinaryScopus = dto.MultidisciplinaryScopus;
+                    if (dto.MultidisciplinaryWosOScopys.HasValue) existing.MultidisciplinaryWosOScopys = dto.MultidisciplinaryWosOScopys;
+                    existing.Estado = 1;
+                    await _repository.UpdateAsync(existing);
+                    result.Actualizado.Add(dto.Issn ?? "");
+                }
+                else
+                {
+                    var nueva = new Revista
+                    {
+                        Issn = dto.Issn,
+                        Nombre = dto.Nombre,
+                        Scopus = dto.Scopus,
+                        WoSQ = dto.WoSQ,
+                        WoSS = dto.WoSS,
+                        WoSEsci = dto.WoSEsci,
+                        EsciQ = dto.EsciQ,
+                        Ajg4 = dto.Ajg4,
+                        Ajg = dto.Ajg,
+                        AjgS = dto.AjgS,
+                        Cnrs = dto.Cnrs,
+                        CnrsS = dto.CnrsS,
+                        Abdc = dto.Abdc,
+                        AbdcS = dto.AbdcS,
+                        AlMenosEnUnaLista = dto.AlMenosEnUnaLista,
+                        SoloEnUnaLista = dto.SoloEnUnaLista,
+                        Scielo = dto.Scielo,
+                        WoSLatam = dto.WoSLatam,
+                        Top50 = dto.Top50,
+                        N = dto.N,
+                        BeallSList = dto.BeallSList,
+                        Mdpi = dto.Mdpi,
+                        Insights = dto.Insights,
+                        AjgExiste = dto.AjgExiste,
+                        CnrsExiste = dto.CnrsExiste,
+                        AbdcExiste = dto.AbdcExiste,
+                        WoSTopExiste = dto.WoSTopExiste,
+                        WoSEsciExiste = dto.WoSEsciExiste,
+                        ScopusExiste = dto.ScopusExiste,
+                        SoloScieloExiste = dto.SoloScieloExiste,
+                        _216bEspecial = dto._216bEspecial,
+                        LatamSinEsciExiste = dto.LatamSinEsciExiste,
+                        EsciScieloSinScupus = dto.EsciScieloSinScupus,
+                        Múltiple = dto.Múltiple,
+                        MultidisciplinaryWos = dto.MultidisciplinaryWos,
+                        CoautoriaEsan = dto.CoautoriaEsan,
+                        PosiciónDelAutor = dto.PosiciónDelAutor,
+                        Jif = dto.Jif,
+                        Country = dto.Country,
+                        MultyYAlMenosUnaLista = dto.MultyYAlMenosUnaLista,
+                        MultidisciplinaryScopus = dto.MultidisciplinaryScopus,
+                        MultidisciplinaryWosOScopys = dto.MultidisciplinaryWosOScopys,
+                        Estado = 1
+                    };
+                    await _repository.CreateAsync(nueva);
+                    result.Creado.Add(dto.Issn ?? "");
+                }
+            }
+            return result;
+        }
     }
 }
