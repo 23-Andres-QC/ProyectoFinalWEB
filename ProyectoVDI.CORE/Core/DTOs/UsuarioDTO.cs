@@ -10,6 +10,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
     public class UsuarioDTO
     {
         public int IdUsuario { get; set; }
+        public int? IdProfesor { get; set; }
         public string? Correo { get; set; }
         public int? IdRol { get; set; }
         public int? Estado { get; set; }
@@ -21,11 +22,13 @@ namespace ProyectoVDI.CORE.Core.DTOs
     {
         public int IdUsuario { get; set; }
         public string? Correo { get; set; }
+        public int? IdProfesor { get; set; }
     }
 
     // DTO para crear un usuario (datos requeridos para creación)
     public class UsuarioCreateDTO
     {
+        public int? IdProfesor { get; set; }
         public string? Correo { get; set; }
         public string? Contraseña { get; set; }
         public int? IdRol { get; set; }
@@ -35,6 +38,7 @@ namespace ProyectoVDI.CORE.Core.DTOs
     public class UsuarioUpdateDTO
     {
         public int IdUsuario { get; set; }
+        public int? IdProfesor { get; set; }
         public string? Correo { get; set; }
         public string? Contraseña { get; set; }
         public int? IdRol { get; set; }

@@ -20,6 +20,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         // Crear nuevo registro ISSN
         public async Task<int> CreateAsync(RegistroIssn registroISSN)
         {
+            registroISSN.FechaRegistro = DateOnly.FromDateTime(DateTime.Now);
             await _context.RegistroIssn.AddAsync(registroISSN);
             await _context.SaveChangesAsync();
             return registroISSN.IdRegistroIssn;

@@ -30,7 +30,8 @@ namespace ProyectoVDI.CORE.Core.Services
                 usuarioList.Add(new UsuarioListDTO
                 {
                     IdUsuario = usuario.IdUsuario,
-                    Correo = usuario.Correo
+                    Correo = usuario.Correo,
+                    IdProfesor = usuario.IdProfesor
                 });
             }
 
@@ -46,6 +47,7 @@ namespace ProyectoVDI.CORE.Core.Services
             return new UsuarioDTO
             {
                 IdUsuario = usuario.IdUsuario,
+                IdProfesor = usuario.IdProfesor,
                 Correo = usuario.Correo,
                 IdRol = usuario.IdRol,
                 Estado = usuario.Estado,
@@ -58,6 +60,7 @@ namespace ProyectoVDI.CORE.Core.Services
         {
             var usuario = new Usuario
             {
+                IdProfesor = dto.IdProfesor,
                 Correo = dto.Correo,
                 Contraseña = dto.Contraseña,
                 IdRol = dto.IdRol,
@@ -74,6 +77,7 @@ namespace ProyectoVDI.CORE.Core.Services
             var usuario = await _usuariosRepository.GetByIdAsync(dto.IdUsuario);
             if (usuario == null) return false;
 
+            usuario.IdProfesor = dto.IdProfesor;
             usuario.Correo = dto.Correo;
             usuario.Contraseña = dto.Contraseña;
             usuario.IdRol = dto.IdRol;

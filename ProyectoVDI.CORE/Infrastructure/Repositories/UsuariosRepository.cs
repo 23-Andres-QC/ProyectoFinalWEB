@@ -4,6 +4,7 @@ using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
@@ -20,6 +21,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         {
             return await _context.Usuario
                 .Where(u => u.Estado == 1)
+                .Include(u => u.IdProfesorNavigation)
                 .ToListAsync();
         }
 
@@ -27,6 +29,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         {
             return await _context.Usuario
                 .Where(u => u.IdUsuario == id && u.Estado == 1)
+                .Include(u => u.IdProfesorNavigation)
                 .FirstOrDefaultAsync();
         }
 
@@ -47,6 +50,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             {
                 throw new InvalidOperationException($"No se encontró el usuario con ID {usuario.IdUsuario} para actualizar.");
             }
+            existingUsuario.IdProfesor = usuario.IdProfesor;
             existingUsuario.Correo = usuario.Correo;
             existingUsuario.Contraseña = usuario.Contraseña;
             existingUsuario.IdRol = usuario.IdRol;
