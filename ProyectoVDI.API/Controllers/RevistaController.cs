@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Core.DTOs;
+using ProyectoVDI.CORE.Core.Interfaces;
+using ProyectoVDI.CORE.Core.Services;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -14,7 +15,7 @@ namespace ProyectoVDI.API.Controllers
         {
             _service = service;
         }
-
+        //api/revista
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -50,6 +51,15 @@ namespace ProyectoVDI.API.Controllers
         {
             await _service.DeleteRevista(id);
             return NoContent();
+        }
+
+        // api/revista/fullflat
+
+        [HttpGet("fullflat")]
+        public async Task<IActionResult> GetRevistasFullFlat()
+        {
+            var revistas = await _service.GetRevistasFullFlat();
+            return Ok(revistas);
         }
     }
 }

@@ -11,5 +11,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateAsync(Revista revista);
         Task UpdateAsync(Revista revista);
         Task DeleteAsync(int id);
+
+        Task<List<Revista>> GetRevistasWithAllJoinsAsync();
     }
 }

@@ -62,5 +62,17 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             _context.Revista.Remove(revista);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Revista>> GetRevistasWithAllJoinsAsync()
+        {
+            return await _context.Revista
+                .Include(r => r.Evaluaciones)
+                .Include(r => r.PresenciaEnListas)
+                .Include(r => r.Editorial)
+                .Include(r => r.Autoria)
+                .Include(r => r.RevistaIndexacion)
+                .ToListAsync();
+        }
+
     }
 }

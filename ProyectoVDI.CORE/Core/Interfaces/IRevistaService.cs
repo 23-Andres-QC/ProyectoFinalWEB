@@ -11,5 +11,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateRevista(RevistaCreateDTO dto);
         Task<bool> UpdateRevista(RevistaUpdateDTO dto);
         Task DeleteRevista(int id);
+
+        Task<IEnumerable<RevistaFullFlatDTO>> GetRevistasFullFlat();
     }
 }
