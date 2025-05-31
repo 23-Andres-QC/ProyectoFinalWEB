@@ -28,7 +28,7 @@ namespace ProyectoVDI.API.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
-        //as
+        //
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CategoriasCreateDTO dto)
         {
