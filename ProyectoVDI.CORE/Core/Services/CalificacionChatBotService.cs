@@ -39,7 +39,7 @@ namespace ProyectoVDI.CORE.Core.Services
         }
 
 
-        // lista de calificaciones de chatbots
+        // lista de calificaciones de chatbots SIMPLE (sin atributos)
         public async Task<IEnumerable<CalificacionChatBotListDTO>> GetCalificacionChatBots()
         {
             var calificaciones = await _repository.GetAllAsync();

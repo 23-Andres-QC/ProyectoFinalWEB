@@ -39,4 +39,11 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public string? Correo { get; set; }
         public int? Estado { get; set; }
     }
+
+    //update estado
+    public class ProfesoresUpdateEstadoDTO
+    {
+        public int IdProfesor { get; set; }
+        public int? Estado { get; set; }
+    }
 }

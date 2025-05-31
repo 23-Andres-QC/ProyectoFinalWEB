@@ -15,5 +15,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task DeleteRevista(int id);
         Task<BulkRevistaResultDTO> BulkUpsertRevistasAsync(List<RevistaCreateDTO> revistas); // bulk upsert
         Task<object> RegistrarRevistasConDetalleAsync(RevistaRegistroRequestDTO request); // NUEVO: flujo usuario, tipoRevista, revistas
+
+        // Nuevo método para crear revista con 3 entidades relacionadas
+        Task<bool> CrearRevistaConRegistroAsync(RevistaCreacionDTO dto);
+        
+
     }
 }

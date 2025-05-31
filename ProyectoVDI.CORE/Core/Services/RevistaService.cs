@@ -1,10 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
@@ -20,6 +21,68 @@ namespace ProyectoVDI.CORE.Core.Services
             _registroIssnService = registroIssnService;
             _detRegistroIssnService = detRegistroIssnService;
         }
+
+        // Crear revista y 3 entidades relacionadas (RegistroIssn y DetRegistroIssn)
+
+        public async Task<bool> CrearRevistaConRegistroAsync(RevistaCreacionDTO dto)
+        {
+            var revista = new Revista
+            {
+                Issn = dto.Issn,
+                Nombre = dto.Nombre,
+                Scopus = dto.Scopus,
+                WoSQ = dto.WoSQ,
+                WoSS = dto.WoSS,
+                WoSEsci = dto.WoSEsci,
+                EsciQ = dto.EsciQ,
+                Ajg4 = dto.Ajg4,
+                Ajg = dto.Ajg,
+                AjgS = dto.AjgS,
+                Cnrs = dto.Cnrs,
+                CnrsS = dto.CnrsS,
+                Abdc = dto.Abdc,
+                AbdcS = dto.AbdcS,
+                AlMenosEnUnaLista = dto.AlMenosEnUnaLista,
+                SoloEnUnaLista = dto.SoloEnUnaLista,
+                Scielo = dto.Scielo,
+                WoSLatam = dto.WoSLatam,
+                Top50 = dto.Top50,
+                N = dto.N,
+                BeallSList = dto.BeallSList,
+                Mdpi = dto.Mdpi,
+                Insights = dto.Insights,
+                AjgExiste = dto.AjgExiste,
+                CnrsExiste = dto.CnrsExiste,
+                AbdcExiste = dto.AbdcExiste,
+                WoSTopExiste = dto.WoSTopExiste,
+                WoSEsciExiste = dto.WoSEsciExiste,
+                ScopusExiste = dto.ScopusExiste,
+                SoloScieloExiste = dto.SoloScieloExiste,
+                _216bEspecial = dto._216bEspecial,
+                LatamSinEsciExiste = dto.LatamSinEsciExiste,
+                EsciScieloSinScupus = dto.EsciScieloSinScupus,
+                Múltiple = dto.Múltiple,
+                MultidisciplinaryWos = dto.MultidisciplinaryWos,
+                CoautoriaEsan = dto.CoautoriaEsan,
+                PosiciónDelAutor = dto.PosiciónDelAutor,
+                Jif = dto.Jif,
+                Country = dto.Country,
+                MultyYAlMenosUnaLista = dto.MultyYAlMenosUnaLista,
+                MultidisciplinaryScopus = dto.MultidisciplinaryScopus,
+                MultidisciplinaryWosOScopys = dto.MultidisciplinaryWosOScopys,
+                Estado = dto.Estado
+            };
+
+            return await _repository.CrearRevistaConRegistroAsync(revista, dto.IdUsuario, dto.TipoRevista);
+
+
+
+        }
+               
+                   
+
+
+
 
         // Simple list
         public async Task<IEnumerable<RevistaListDTO>> GetRevista()

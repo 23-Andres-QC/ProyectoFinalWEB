@@ -11,5 +11,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateRegistroIssn(RegistroIssnCreateDTO dto);
         Task<bool> UpdateRegistroIssn(RegistroIssnUpdateDTO dto);
         Task DeleteRegistroIssn(int id);
+                
+
     }
 }

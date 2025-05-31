@@ -31,6 +31,11 @@ namespace ProyectoVDI.CORE.Core.Services
             return list;
         }
 
+
+        //actualizar estado de el profesor
+
+       
+
         public async Task<ProfesoresDTO?> GetProfesoresById(int id)
         {
             var profesor = await _profesoresRepository.GetByIdAsync(id);

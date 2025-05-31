@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
+using ProyectoVDI.CORE.Core.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,6 +17,24 @@ namespace ProyectoVDI.API.Controllers
         public RevistaController(IRevistaService service)
         {
             _service = service;
+        }
+
+
+        // crear revista y 3 entidades relacionadas
+        //api/revista/Importar
+
+        [HttpPost("Importar")]
+        public async Task<IActionResult> CrearRevistaConRegistro([FromBody] RevistaCreacionDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _service.CrearRevistaConRegistroAsync(dto);
+
+            if (result)
+                return Ok(new { mensaje = "Revista creada con éxito." });
+            else
+                return StatusCode(500, new { mensaje = "Ocurrió un error al crear la revista." });
         }
 
         // Simple list

@@ -14,6 +14,7 @@ namespace ProyectoVDI.API.Controllers
         {
             _service = service;
         }
+        //OBTENER CALIFICACIONES DE CHATBOT (LISTADO SIMPLE)
         //api/CalificacionChatBot
         [HttpGet]
         public async Task<IActionResult> GetAll()

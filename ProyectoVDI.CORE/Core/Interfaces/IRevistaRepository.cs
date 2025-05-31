@@ -13,5 +13,9 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateAsync(Revista revista);
         Task<int> UpdateAsync(Revista revista);
         Task<string> DeleteAsync(int id);
+
+        // Nuevo método para crear revista con 3 entidades relacionadas
+        Task<bool> CrearRevistaConRegistroAsync(Revista revista, int idUsuario, string tipoRevista);
+
     }
 }

@@ -91,5 +91,50 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return "Revista inhabilitada";
         }
+
+
+
+        // Método crear una revista y 3 tablas adicionales
+
+        public async Task<bool> CrearRevistaConRegistroAsync(Revista revista, int idUsuario, string tipoRevista)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                // 1. Insertar Revista
+                await _context.Revista.AddAsync(revista);
+                await _context.SaveChangesAsync(); // revista.Id_revista generado
+
+                // 2. Insertar RegistroISSN
+                var registro = new RegistroIssn
+                {
+                    IdUsuario = idUsuario,
+                    FechaRegistro = DateOnly.FromDateTime(DateTime.Now)
+                };
+                await _context.RegistroIssn.AddAsync(registro);
+                await _context.SaveChangesAsync(); // registro.Id_RegistroISSN generado
+
+                // 3. Insertar DetRegistroISSN
+                var detalle = new DetRegistroIssn
+                {
+                    IdRegistroIssn = registro.IdRegistroIssn,
+                    IdRevista = revista.IdRevista,
+                    TipoRevista = tipoRevista
+                    
+                };
+                await _context.DetRegistroIssn.AddAsync(detalle);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                return false;
+            }
+        }
+
     }
 }
