@@ -2,7 +2,6 @@ using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
-using System.Data;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
@@ -10,92 +9,66 @@ namespace ProyectoVDI.CORE.Core.Services
     public class CalificacionChatBotService : ICalificacionChatBotService
     {
         private readonly ICalificacionChatBotRepository _repository;
-
         public CalificacionChatBotService(ICalificacionChatBotRepository repository)
         {
             _repository = repository;
-
-
-
         }
 
-        //Ontener todas la calificacion y sus atributos de un chatbot
-
-        public async Task<IEnumerable<CalificacionChatBotDTO>> GetCalificacionChatBot()
+        public async Task<IEnumerable<CalificacionChatBotListDTO>> GetAllAsync()
         {
-            var calificaciones = await _repository.GetAllAsync();
-            var list = new List<CalificacionChatBotDTO>();
-            foreach (var cal in calificaciones)
+            var list = await _repository.GetAllAsync();
+            var result = new List<CalificacionChatBotListDTO>();
+            foreach (var item in list)
             {
-                list.Add(new CalificacionChatBotDTO
+                result.Add(new CalificacionChatBotListDTO
                 {
-                    IdFeedback = cal.IdFeedback,
-                    IdUsuario = cal.IdUsuario,
-                    Calificacion = cal.Calificacion,
-                    Fecha = cal.Fecha
+                    IdFeedback = item.IdFeedback,
+                    IdUsuario = item.IdUsuario,
+                    Calificacion = item.Calificacion,
+                    Fecha = item.Fecha
                 });
             }
-            return list;
+            return result;
         }
 
-
-        // lista de calificaciones de chatbots
-        public async Task<IEnumerable<CalificacionChatBotListDTO>> GetCalificacionChatBots()
+        public async Task<CalificacionChatBotDetailDTO?> GetByIdAsync(int id)
         {
-            var calificaciones = await _repository.GetAllAsync();
-            var list = new List<CalificacionChatBotListDTO>();
-            foreach (var cal in calificaciones)
+            var item = await _repository.GetByIdAsync(id);
+            if (item == null) return null;
+            return new CalificacionChatBotDetailDTO
             {
-                list.Add(new CalificacionChatBotListDTO
-                {
-                    IdFeedback = cal.IdFeedback,
-                    IdUsuario = cal.IdUsuario
-                });
-            }
-            return list;
-        }
-
-        public async Task<CalificacionChatBotDTO?> GetCalificacionChatBotById(int id)
-        {
-            var cal = await _repository.GetByIdAsync(id);
-            if (cal == null) return null;
-            return new CalificacionChatBotDTO
-            {
-                IdFeedback = cal.IdFeedback,
-                IdUsuario = cal.IdUsuario,
-                Calificacion = cal.Calificacion,
-                Fecha = DateOnly.FromDateTime(DateTime.Now)
+                IdFeedback = item.IdFeedback,
+                IdUsuario = item.IdUsuario,
+                Calificacion = item.Calificacion,
+                Fecha = item.Fecha
             };
         }
 
-        public async Task<int> CreateCalificacionChatBot(CalificacionChatBotCreateDTO dto)
+        public async Task<int> CreateAsync(CalificacionChatBotCreateDTO dto)
         {
-            var cal = new CalificacionChatBot
+            var entity = new CalificacionChatBot
             {
                 IdUsuario = dto.IdUsuario,
                 Calificacion = dto.Calificacion,
-                Fecha= DateOnly.FromDateTime(DateTime.Now)
-
-
+                Fecha = System.DateTime.Now
             };
-            return await _repository.CreateAsync(cal);
+            return await _repository.CreateAsync(entity);
         }
 
-        public async Task<bool> UpdateCalificacionChatBot(CalificacionChatBotUpdateDTO dto)
+        public async Task<bool> UpdateAsync(CalificacionChatBotUpdateDTO dto)
         {
-            var cal = await _repository.GetByIdAsync(dto.IdFeedback);
-            if (cal == null) return false;
-            cal.IdUsuario = dto.IdUsuario;
-            cal.Calificacion = dto.Calificacion;
-            cal.Fecha = dto.Fecha;
-            await _repository.UpdateAsync(cal);
-            return true;
+            var entity = new CalificacionChatBot
+            {
+                IdFeedback = dto.IdFeedback,
+                IdUsuario = dto.IdUsuario,
+                Calificacion = dto.Calificacion
+            };
+            return await _repository.UpdateAsync(entity);
         }
-        //a
 
-        public async Task DeleteCalificacionChatBot(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            await _repository.DeleteAsync(id);
+            return await _repository.DeleteAsync(id);
         }
     }
 }

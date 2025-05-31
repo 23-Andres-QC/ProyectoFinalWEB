@@ -8,60 +8,64 @@ namespace ProyectoVDI.CORE.Core.Services
 {
     public class RolService : IRolService
     {
-        private readonly IRolRepository _rolRepository;
-
-        public RolService(IRolRepository rolRepository)
+        private readonly IRolRepository _repository;
+        public RolService(IRolRepository repository)
         {
-            _rolRepository = rolRepository;
+            _repository = repository;
         }
 
-        public async Task<IEnumerable<RolListDTO>> GetRoles()
+        public async Task<IEnumerable<RolListDTO>> GetAllAsync()
         {
-            var roles = await _rolRepository.GetAllAsync();
-            var list = new List<RolListDTO>();
-            foreach (var rol in roles)
+            var list = await _repository.GetAllAsync();
+            var result = new List<RolListDTO>();
+            foreach (var item in list)
             {
-                list.Add(new RolListDTO
+                result.Add(new RolListDTO
                 {
-                    IdRol = rol.IdRol,
-                    Descripcion = rol.Descripcion
+                    IdRol = item.IdRol,
+                    Descripcion = item.Descripcion,
+                    Estado = item.Estado
                 });
             }
-            return list;
+            return result;
         }
 
-        public async Task<RolDTO?> GetRolById(int id)
+        public async Task<RolDetailDTO?> GetByIdAsync(int id)
         {
-            var rol = await _rolRepository.GetByIdAsync(id);
-            if (rol == null) return null;
-            return new RolDTO
+            var item = await _repository.GetByIdAsync(id);
+            if (item == null) return null;
+            return new RolDetailDTO
             {
-                IdRol = rol.IdRol,
-                Descripcion = rol.Descripcion
+                IdRol = item.IdRol,
+                Descripcion = item.Descripcion,
+                Estado = item.Estado
             };
         }
 
-        public async Task<int> CreateRol(RolCreateDTO dto)
+        public async Task<int> CreateAsync(RolCreateDTO dto)
         {
-            var rol = new Rol
+            var entity = new Rol
             {
-                Descripcion = dto.Descripcion
+                Descripcion = dto.Descripcion,
+                Estado = 1
             };
-            return await _rolRepository.CreateAsync(rol);
+            return await _repository.CreateAsync(entity);
         }
 
-        public async Task<bool> UpdateRol(RolUpdateDTO dto)
+        public async Task<bool> UpdateAsync(RolUpdateDTO dto)
         {
-            var rol = await _rolRepository.GetByIdAsync(dto.IdRol);
-            if (rol == null) return false;
-            rol.Descripcion = dto.Descripcion;
-            await _rolRepository.UpdateAsync(rol);
-            return true;
+            var entity = new Rol
+            {
+                IdRol = dto.IdRol,
+                Descripcion = dto.Descripcion,
+                Estado = dto.Estado
+            };
+            return await _repository.UpdateAsync(entity);
         }
 
-        public async Task DeleteRol(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            await _rolRepository.DeleteAsync(id);
+            return await _repository.DeleteAsync(id);
         }
     }
 }

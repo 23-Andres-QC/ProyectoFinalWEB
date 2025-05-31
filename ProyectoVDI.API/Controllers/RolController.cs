@@ -8,24 +8,23 @@ namespace ProyectoVDI.API.Controllers
     [Route("api/[controller]")]
     public class RolController : ControllerBase
     {
-        private readonly IRolService _rolService;
-
-        public RolController(IRolService rolService)
+        private readonly IRolService _service;
+        public RolController(IRolService service)
         {
-            _rolService = rolService;
+            _service = service;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _rolService.GetRoles();
+            var result = await _service.GetAllAsync();
             return Ok(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _rolService.GetRolById(id);
+            var result = await _service.GetByIdAsync(id);
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -33,14 +32,15 @@ namespace ProyectoVDI.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] RolCreateDTO dto)
         {
-            var id = await _rolService.CreateRol(dto);
+            var id = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] RolUpdateDTO dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] RolUpdateDTO dto)
         {
-            var updated = await _rolService.UpdateRol(dto);
+            if (id != dto.IdRol) return BadRequest();
+            var updated = await _service.UpdateAsync(dto);
             if (!updated) return NotFound();
             return NoContent();
         }
@@ -48,7 +48,8 @@ namespace ProyectoVDI.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _rolService.DeleteRol(id);
+            var deleted = await _service.DeleteAsync(id);
+            if (!deleted) return NotFound();
             return NoContent();
         }
     }

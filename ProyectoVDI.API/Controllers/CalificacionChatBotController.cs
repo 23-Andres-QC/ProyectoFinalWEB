@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Core.DTOs;
+using ProyectoVDI.CORE.Core.Interfaces;
 
 namespace ProyectoVDI.API.Controllers
 {
@@ -9,61 +9,48 @@ namespace ProyectoVDI.API.Controllers
     public class CalificacionChatBotController : ControllerBase
     {
         private readonly ICalificacionChatBotService _service;
-
         public CalificacionChatBotController(ICalificacionChatBotService service)
         {
             _service = service;
         }
-        //api/CalificacionChatBot
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _service.GetCalificacionChatBots();
+            var result = await _service.GetAllAsync();
             return Ok(result);
         }
 
-        //OTENER CALIFICACIONES DE CHATBOT Y TODOS SUS ATRIBUTOS
-        //api/CalificacionChatBot/calificaciones
-        [HttpGet("calificaciones")]
-        public async Task<IActionResult> GetCalificaciones()
-        {
-            var result = await _service.GetCalificacionChatBot();
-            return Ok(result);
-        }
-
-        //OBTENER CALIFICACIONES DE CHATBOT POR ID
-        //api/CalificacionChatBot/2
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _service.GetCalificacionChatBotById(id);
+            var result = await _service.GetByIdAsync(id);
             if (result == null) return NotFound();
             return Ok(result);
         }
 
-        //api/CalificacionChatBot
-
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CalificacionChatBotCreateDTO dto)
+        public async Task<IActionResult> Create(int usuarioId, [FromBody] CalificacionChatBotCreateDTO dto)
         {
-            var id = await _service.CreateCalificacionChatBot(dto);
+            dto.IdUsuario = usuarioId;
+            var id = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id }, dto);
         }
-        // api/CalificacionChatBot
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] CalificacionChatBotUpdateDTO dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] CalificacionChatBotUpdateDTO dto)
         {
-            var updated = await _service.UpdateCalificacionChatBot(dto);
+            if (id != dto.IdFeedback) return BadRequest();
+            var updated = await _service.UpdateAsync(dto);
             if (!updated) return NotFound();
             return NoContent();
         }
-        // api/CalificacionChatBot/2
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteCalificacionChatBot(id);
+            var deleted = await _service.DeleteAsync(id);
+            if (!deleted) return NotFound();
             return NoContent();
         }
     }

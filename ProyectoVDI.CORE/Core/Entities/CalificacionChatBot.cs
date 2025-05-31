@@ -11,7 +11,7 @@ public partial class CalificacionChatBot
 
     public int? Calificacion { get; set; }
 
-    public DateOnly? Fecha { get; set; }
+    public DateTime? Fecha { get; set; }
 
     public virtual Usuario? IdUsuarioNavigation { get; set; }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProyectoVDI.CORE.Core.Entities;
 
+namespace ProyectoVDI.CORE.Core.Entities;
 public partial class PreguntasFrecuentesChatBot
 {
     public int IdPregunta { get; set; }
@@ -17,7 +17,7 @@ public partial class PreguntasFrecuentesChatBot
 
     public int? IdUsuario { get; set; }
 
-    public DateOnly? FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
     public virtual Usuario? IdUsuarioNavigation { get; set; }
 }
