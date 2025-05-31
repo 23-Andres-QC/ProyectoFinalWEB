@@ -6,10 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IRolRepository
     {
-        Task<int> CreateAsync(Rol rol);
-        Task<List<Rol>> GetAllAsync();
+        Task<IEnumerable<Rol>> GetAllAsync();
         Task<Rol?> GetByIdAsync(int id);
-        Task UpdateAsync(Rol rol);
-        Task DeleteAsync(int id);
+        Task<int> CreateAsync(Rol entity);
+        Task<bool> UpdateAsync(Rol entity);
+        Task<bool> DeleteAsync(int id);
     }
 }

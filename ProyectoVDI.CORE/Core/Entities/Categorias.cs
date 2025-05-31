@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProyectoVDI.CORE.Core.Entities;
 
+namespace ProyectoVDI.CORE.Core.Entities;
 public partial class Categorias
 {
     public int IdCategoria { get; set; }
@@ -11,5 +11,5 @@ public partial class Categorias
 
     public int? Estado { get; set; }
 
-    public virtual ICollection<Profesores> Profesores { get; set; } = new List<Profesores>();
+    public virtual ICollection<ProfesoresAdmis> ProfesoresAdmis { get; set; } = new List<ProfesoresAdmis>();
 }

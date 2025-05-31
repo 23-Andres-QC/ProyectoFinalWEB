@@ -6,14 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface ICalificacionChatBotService
     {
-        Task<IEnumerable<CalificacionChatBotListDTO>> GetCalificacionChatBots();
-
-        //TODO DE LAS CALIFICAIONES
-        Task<IEnumerable<CalificacionChatBotDTO>> GetCalificacionChatBot();
-        Task<CalificacionChatBotDTO?> GetCalificacionChatBotById(int id);
-        Task<int> CreateCalificacionChatBot(CalificacionChatBotCreateDTO dto);
-        Task<bool> UpdateCalificacionChatBot(CalificacionChatBotUpdateDTO dto);
-        
-        Task DeleteCalificacionChatBot(int id);
+        Task<IEnumerable<CalificacionChatBotListDTO>> GetAllAsync();
+        Task<CalificacionChatBotDetailDTO?> GetByIdAsync(int id);
+        Task<int> CreateAsync(CalificacionChatBotCreateDTO dto);
+        Task<bool> UpdateAsync(CalificacionChatBotUpdateDTO dto);
+        Task<bool> DeleteAsync(int id);
     }
 }

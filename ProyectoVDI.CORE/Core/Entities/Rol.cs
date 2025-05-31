@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProyectoVDI.CORE.Core.Entities;
 
+namespace ProyectoVDI.CORE.Core.Entities;
 public partial class Rol
 {
     public int IdRol { get; set; }

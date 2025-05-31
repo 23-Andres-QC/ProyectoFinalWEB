@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProyectoVDI.CORE.Core.Entities;
 
+namespace ProyectoVDI.CORE.Core.Entities;
 public partial class Usuario
 {
     public int IdUsuario { get; set; }
 
-    public int? IdProfesor { get; set; }
+    public int? IdProfesorAdmis { get; set; }
 
     public string? Correo { get; set; }
 
@@ -17,17 +17,17 @@ public partial class Usuario
 
     public int? Estado { get; set; }
 
-    public DateOnly? FechaCreacion { get; set; }
+    public DateTime? FechaCreacion { get; set; }
 
-    public DateOnly? FechaModificacion { get; set; }
+    public DateTime? FechaModificacion { get; set; }
 
     public virtual ICollection<CalificacionChatBot> CalificacionChatBot { get; set; } = new List<CalificacionChatBot>();
 
-    public virtual Profesores? IdProfesorNavigation { get; set; }
+    public virtual ProfesoresAdmis? IdProfesorAdmisNavigation { get; set; }
 
     public virtual Rol? IdRolNavigation { get; set; }
 
     public virtual ICollection<PreguntasFrecuentesChatBot> PreguntasFrecuentesChatBot { get; set; } = new List<PreguntasFrecuentesChatBot>();
 
-    public virtual ICollection<RegistroIssn> RegistroIssn { get; set; } = new List<RegistroIssn>();
+    public virtual ICollection<RegistroRevistas> RegistroRevistas { get; set; } = new List<RegistroRevistas>();
 }

@@ -9,131 +9,74 @@ namespace ProyectoVDI.CORE.Core.Services
     public class PreguntasFrecuentesChatBotService : IPreguntasFrecuentesChatBotService
     {
         private readonly IPreguntasFrecuentesChatBotRepository _repository;
-
         public PreguntasFrecuentesChatBotService(IPreguntasFrecuentesChatBotRepository repository)
         {
             _repository = repository;
-
-
         }
 
-        // preguntas frecuentas para el Administrador
-
-        public async Task<IEnumerable<PreguntasFrecuentesChatBotDTO>> GetAllPreguntasFrecuentesChatBot()
+        public async Task<IEnumerable<PreguntasFrecuentesChatBotListDTO>> GetAllAsync()
         {
-            var preguntas = await _repository.GetAllAsync();
-            var list = new List<PreguntasFrecuentesChatBotDTO>();
-            foreach (var pregunta in preguntas)
+            var list = await _repository.GetAllAsync();
+            var result = new List<PreguntasFrecuentesChatBotListDTO>();
+            foreach (var item in list)
             {
-                list.Add(new PreguntasFrecuentesChatBotDTO
+                result.Add(new PreguntasFrecuentesChatBotListDTO
                 {
-                    IdPregunta = pregunta.IdPregunta,
-                    Pregunta = pregunta.Pregunta,
-                    Respuesta = pregunta.Respuesta,
-                    Categoria = pregunta.Categoria,
-                    Estado = pregunta.Estado,
-                    IdUsuario = pregunta.IdUsuario,
-                    FechaCreacion = pregunta.FechaCreacion
+                    IdPregunta = item.IdPregunta,
+                    Pregunta = item.Pregunta,
+                    Categoria = item.Categoria,
+                    Estado = item.Estado
                 });
             }
-            return list;
+            return result;
         }
 
-        // obtener todas las preguntas frecuentes para el chat bot
-        public async Task<IEnumerable<PreguntasFrecuentesChatBotListDTO>> GetPreguntasFrecuentesChatBot()
+        public async Task<PreguntasFrecuentesChatBotDetailDTO?> GetByIdAsync(int id)
         {
-            var preguntas = await _repository.GetAllAsync();
-            var list = new List<PreguntasFrecuentesChatBotListDTO>();
-            foreach (var pregunta in preguntas)
+            var item = await _repository.GetByIdAsync(id);
+            if (item == null) return null;
+            return new PreguntasFrecuentesChatBotDetailDTO
             {
-                list.Add(new PreguntasFrecuentesChatBotListDTO
-                {
-                    
-                    Pregunta = pregunta.Pregunta,
-                    Respuesta = pregunta.Respuesta
-
-                });
-            }
-            return list;
-        }
-
-
-        // obtener respuesta de una pregunta frecuente del chat bot por id
-        public async Task<PreguntasFrecuentesChatBotDTO?> GetPreguntasFrecuentesChatBotById(int id)
-        {
-            var pregunta = await _repository.GetByIdAsync(id);
-            if (pregunta == null) return null;
-            return new PreguntasFrecuentesChatBotDTO
-            {
-                IdPregunta = pregunta.IdPregunta,
-                Pregunta = pregunta.Pregunta,
-                Respuesta = pregunta.Respuesta,
-                Categoria = pregunta.Categoria,
-                Estado = pregunta.Estado,
-                IdUsuario = pregunta.IdUsuario,
-                FechaCreacion = pregunta.FechaCreacion
+                IdPregunta = item.IdPregunta,
+                Pregunta = item.Pregunta,
+                Respuesta = item.Respuesta,
+                Categoria = item.Categoria,
+                Estado = item.Estado,
+                IdUsuario = item.IdUsuario,
+                FechaCreacion = item.FechaCreacion
             };
         }
 
-        // obtener respuesta de una pregunta frecuente del chat bot por id
-        public async Task<PreguntasFrecuentesChatBotResponseDTO?> GetRespuestaPreguntasFrecuentesChatBotById(int id)
+        public async Task<int> CreateAsync(PreguntasFrecuentesChatBotCreateDTO dto)
         {
-            var pregunta = await _repository.GetByIdAsync(id);
-            if (pregunta == null) return null;
-            return new PreguntasFrecuentesChatBotResponseDTO
-            {
-                Respuesta = pregunta.Respuesta
-            };
-        }
-
-
-
-        // crear una pregunta frecuente del chat bot
-
-        public async Task<int> CreatePreguntasFrecuentesChatBot(PreguntasFrecuentesChatBotCreateDTO dto)
-        {
-            //ss
-            var pregunta = new PreguntasFrecuentesChatBot
+            var entity = new PreguntasFrecuentesChatBot
             {
                 Pregunta = dto.Pregunta,
                 Respuesta = dto.Respuesta,
                 Categoria = dto.Categoria,
                 Estado = "Activo",
                 IdUsuario = dto.IdUsuario,
-                FechaCreacion = DateOnly.FromDateTime(DateTime.Now)
+                FechaCreacion = System.DateTime.Now
             };
-            await _repository.CreateAsync(pregunta);
-            return pregunta.IdPregunta;
+            return await _repository.CreateAsync(entity);
         }
 
-
-        // actualizar una pregunta frecuente del chat bot
-        public async Task<bool> UpdatePreguntasFrecuentesChatBot(PreguntasFrecuentesChatBotUpdateDTO dto)
+        public async Task<bool> UpdateAsync(PreguntasFrecuentesChatBotUpdateDTO dto)
         {
-            var pregunta = await _repository.GetByIdAsync(dto.IdPregunta);
-            if (pregunta == null) return false;
-            pregunta.Pregunta = dto.Pregunta;
-            pregunta.Respuesta = dto.Respuesta;
-            pregunta.Categoria = dto.Categoria;
-            pregunta.Estado = dto.Estado;
-            pregunta.IdUsuario = dto.IdUsuario;
-            await _repository.UpdateAsync(pregunta);
-            return true;
+            var entity = new PreguntasFrecuentesChatBot
+            {
+                IdPregunta = dto.IdPregunta,
+                Pregunta = dto.Pregunta,
+                Respuesta = dto.Respuesta,
+                Categoria = dto.Categoria,
+                Estado = dto.Estado
+            };
+            return await _repository.UpdateAsync(entity);
         }
 
-        // actualizar el estado de una pregunta frecuente del chat bot
-        public async Task<bool> UpdateEstadoPreguntasFrecuentesChatBot(UpdateEstadoPreguntasFrecuentesChatBotDTO dto)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var pregunta = await _repository.GetByIdAsync(dto.IdPregunta);
-            if (pregunta == null) return false;
-            pregunta.Estado = dto.Estado;
-            await _repository.UpdateAsync(pregunta);
-            return true;
-        }
-
-        public async Task DeletePreguntasFrecuentesChatBot(int id)
-        {
-            await _repository.DeleteAsync(id);
+            return await _repository.DeleteAsync(id);
         }
     }
 }

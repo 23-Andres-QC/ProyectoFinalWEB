@@ -1,65 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
-using ProyectoVDI.CORE.Infrastructure.Data;
+using ProyectoVDI.Infrastructure.Data;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
     public class RolRepository : IRolRepository
     {
         private readonly vdiContext _context;
-
         public RolRepository(vdiContext context)
         {
             _context = context;
         }
 
-        // Crear nuevo rol
-        public async Task<int> CreateAsync(Rol rol)
-        {
-            await _context.Rol.AddAsync(rol);
-            await _context.SaveChangesAsync();
-            return rol.IdRol;
-        }
-
-        // Obtener todos los roles
-        public async Task<List<Rol>> GetAllAsync()
+        public async Task<IEnumerable<Rol>> GetAllAsync()
         {
             return await _context.Rol.ToListAsync();
         }
 
-        // Obtener rol por ID (devuelve null si no existe)
         public async Task<Rol?> GetByIdAsync(int id)
         {
             return await _context.Rol.FindAsync(id);
         }
 
-        // Actualizar rol
-        public async Task UpdateAsync(Rol rol)
+        public async Task<int> CreateAsync(Rol entity)
         {
-            var existing = await _context.Rol.FindAsync(rol.IdRol);
-            if (existing == null)
-            {
-                throw new InvalidOperationException($"No se encontró el rol con ID {rol.IdRol} para actualizar.");
-            }
-            existing.Descripcion = rol.Descripcion;
-            _context.Rol.Update(existing);
+            entity.Estado = 1;
+            _context.Rol.Add(entity);
             await _context.SaveChangesAsync();
+            return entity.IdRol;
         }
 
-        // Eliminar rol por ID
-        public async Task DeleteAsync(int id)
+        public async Task<bool> UpdateAsync(Rol entity)
         {
-            var rol = await _context.Rol.FindAsync(id);
-            if (rol == null)
-            {
-                throw new InvalidOperationException($"No se encontró el rol con ID {id} para eliminar.");
-            }
-            _context.Rol.Remove(rol);
+            var existing = await _context.Rol.FindAsync(entity.IdRol);
+            if (existing == null) return false;
+            _context.Entry(existing).CurrentValues.SetValues(entity);
             await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var entity = await _context.Rol.FindAsync(id);
+            if (entity == null) return false;
+            entity.Estado = 0;
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

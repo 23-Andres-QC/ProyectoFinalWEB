@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Core.Services;
-using ProyectoVDI.CORE.Infrastructure.Data;
 using ProyectoVDI.CORE.Infrastructure.Repositories;
+using ProyectoVDI.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,27 +20,34 @@ builder.Services.AddDbContext<vdiContext>(options =>
 
 // add interface
 
+// Repositorios
 builder.Services.AddTransient<ICalificacionChatBotRepository, CalificacionChatBotRepository>();
-builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
-builder.Services.AddTransient<IDetRegistroISSNRepository, DetRegistroISSNRepository>();
+builder.Services.AddTransient<ICategoriasRepository, CategoriasRepository>();
+builder.Services.AddTransient<IDetRegistroRevistaRepository, DetRegistroRevistaRepository>();
+builder.Services.AddTransient<IIssnsRevistaRepository, IssnsRevistaRepository>();
+builder.Services.AddTransient<IMetadatosRevistaIssnRepository, MetadatosRevistaIssnRepository>();
 builder.Services.AddTransient<IPreguntasFrecuentesChatBotRepository, PreguntasFrecuentesChatBotRepository>();
-builder.Services.AddTransient<IProfesoresRepository, ProfesoresRepository>();
-builder.Services.AddTransient<IRegistroISSNRepository, RegistroISSNRepository>();
+builder.Services.AddTransient<IProfesoresAdmisRepository, ProfesoresAdmisRepository>();
+builder.Services.AddTransient<IRegistroRevistasRepository, RegistroRevistasRepository>();
+builder.Services.AddTransient<IRevistaListaCerradaRepository, RevistaListaCerradaRepository>();
 builder.Services.AddTransient<IRevistaRepository, RevistaRepository>();
 builder.Services.AddTransient<IRolRepository, RolRepository>();
-builder.Services.AddTransient<IUsuariosRepository, UsuariosRepository>();
+builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 
-
+// Servicios
 builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>();
-builder.Services.AddTransient<ICategoriaService, CategoriaService>();
-builder.Services.AddTransient<IDetRegistroIssnService, DetRegistroIssnService>();
+builder.Services.AddTransient<ICategoriasService, CategoriasService>();
+builder.Services.AddTransient<IDetRegistroRevistaService, DetRegistroRevistaService>();
+builder.Services.AddTransient<IIssnsRevistaService, IssnsRevistaService>();
+builder.Services.AddTransient<IMetadatosRevistaIssnService, MetadatosRevistaIssnService>();
 builder.Services.AddTransient<IPreguntasFrecuentesChatBotService, PreguntasFrecuentesChatBotService>();
-builder.Services.AddTransient<IProfesoresService, ProfesoresService>();
+builder.Services.AddTransient<IProfesoresAdmisService, ProfesoresAdmisService>();
+builder.Services.AddTransient<IRegistroRevistasService, RegistroRevistasService>();
+builder.Services.AddTransient<IRevistaListaCerradaService, RevistaListaCerradaService>();
 builder.Services.AddTransient<IRevistaService, RevistaService>();
-builder.Services.AddTransient<IRegistroIssnService, RegistroIssnService>();
-builder.Services.AddTransient<IRolService,RolService>();
+builder.Services.AddTransient<IRolService, RolService>();
 builder.Services.AddTransient<IUsuarioService, UsuarioService>();
-builder.Services.AddTransient<IRegistroIssnService, RegistroIssnService>();
+
 
 
 builder.Services.AddControllers();

@@ -6,10 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IPreguntasFrecuentesChatBotRepository
     {
-        Task<int> CreateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot);
-        Task<List<PreguntasFrecuentesChatBot>> GetAllAsync();
+        Task<IEnumerable<PreguntasFrecuentesChatBot>> GetAllAsync();
         Task<PreguntasFrecuentesChatBot?> GetByIdAsync(int id);
-        Task UpdateAsync(PreguntasFrecuentesChatBot preguntasFrecuentesChatBot);
-        Task DeleteAsync(int id);
+        Task<int> CreateAsync(PreguntasFrecuentesChatBot entity);
+        Task<bool> UpdateAsync(PreguntasFrecuentesChatBot entity);
+        Task<bool> DeleteAsync(int id);
     }
 }
