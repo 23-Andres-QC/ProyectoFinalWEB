@@ -43,11 +43,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return true;
         }
 
+        // eliminar una pregunta frecuente del chatbot por ID
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _context.PreguntasFrecuentesChatBot.FindAsync(id);
             if (entity == null) return false;
-            entity.Estado = "Inactivo";
+            _context.PreguntasFrecuentesChatBot.Remove(entity);
             await _context.SaveChangesAsync();
             return true;
         }

@@ -14,38 +14,72 @@ namespace ProyectoVDI.API.Controllers
             _service = service;
         }
 
+        //obtener id y las preguntas frecuentes del chatbot
+        // api/preguntasfrecuenteschatbot
         [HttpGet]
+        public async Task<IActionResult> GetAllpreguntas() { 
+            var preguntas = await _service.GetAllPreguntasAsync();
+            if (preguntas == null || !preguntas.Any()) return NotFound("No hay preguntas frecuentes disponibles.");
+            return Ok(preguntas);
+
+        }
+        //obtener una pregunta frecuente del chatbot por ID
+        // api/preguntasfrecuenteschatbot/byId/{id}
+        [HttpGet("byId/{id}")]
+        public async Task<IActionResult> GetByIdPregunta(int id)
+        {
+            var pregunta = await _service.GetByIdAsync(id);
+            if (pregunta == null) return NotFound("Pregunta frecuente no encontrada.");
+            return Ok(pregunta);
+        }
+
+
+        //obtener todas las preguntas frecuentes del chatbot con detalles
+        // api/preguntasfrecuenteschatbot/all
+        [HttpGet("all")]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _service.GetAllAsync();
-            return Ok(result);
+            var preguntas = await _service.GetAllAsync();
+            if (preguntas == null || !preguntas.Any()) return NotFound("No hay preguntas frecuentes disponibles.");
+            return Ok(preguntas);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var result = await _service.GetByIdAsync(id);
-            if (result == null) return NotFound();
-            return Ok(result);
-        }
+        // crear una pregunta frecuente del chatbot
+        // api/preguntasfrecuenteschatbot
 
         [HttpPost]
-        public async Task<IActionResult> Create(int usuarioId, [FromBody] PreguntasFrecuentesChatBotCreateDTO dto)
+        public async Task<IActionResult> Create([FromBody] PreguntasFrecuentesChatBotCreateDTO dto)
         {
-            dto.IdUsuario = usuarioId;
-            var id = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id }, dto);
+            if (dto == null) return BadRequest("Los datos de la pregunta frecuente son inválidos.");
+            var createdId = await _service.CreateAsync(dto); // Assuming CreateAsync returns an int (IdPregunta)
+            if (createdId <= 0) return BadRequest("Error al crear la pregunta frecuente.");
+            return CreatedAtAction(nameof(GetByIdPregunta), new { id = createdId }, dto);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] PreguntasFrecuentesChatBotUpdateDTO dto)
+
+        // actualizar todo lo relacionado a las preguntas frecuentes del chatbot
+        // api/preguntasfrecuenteschatbot
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] PreguntasFrecuentesChatBotUpdateDTO dto)
         {
-            if (id != dto.IdPregunta) return BadRequest();
+            if (dto == null || dto.IdPregunta <= 0) return BadRequest("Los datos de la pregunta frecuente son inválidos.");
             var updated = await _service.UpdateAsync(dto);
-            if (!updated) return NotFound();
+            if (!updated) return NotFound("Pregunta frecuente no encontrada o error al actualizar.");
+            return NoContent();
+        }
+        // actualizar el estado de una pregunta frecuente del chatbot 
+        // api/preguntasfrecuenteschatbot/updateEstado
+        public async Task<IActionResult> UpdateEstado([FromBody] ActualizarEstadoPreguntaFrecuenteDTO dto)
+        {
+            if (dto == null || dto.IdPregunta <= 0) return BadRequest("Los datos de la pregunta frecuente son inválidos.");
+            var updated = await _service.UpdateEstadoAsync(dto);
+            if (!updated) return NotFound("Pregunta frecuente no encontrada o error al actualizar el estado.");
             return NoContent();
         }
 
+
+        // eliminar una pregunta frecuente del chatbot por ID
+        // api/preguntasfrecuenteschatbot/delete/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

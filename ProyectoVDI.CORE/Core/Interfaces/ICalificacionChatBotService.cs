@@ -7,7 +7,9 @@ namespace ProyectoVDI.CORE.Core.Interfaces
     public interface ICalificacionChatBotService
     {
         Task<IEnumerable<CalificacionChatBotListDTO>> GetAllAsync();
-        Task<CalificacionChatBotDetailDTO?> GetByIdAsync(int id);
+      
+        Task <IEnumerable<CalificacionChatBotListDTO>> GetByIdListAsync(int idUsuario);
+        Task<IEnumerable<CalificacionChatBotDetailDTO>> GetAllDetailAsync();
         Task<int> CreateAsync(CalificacionChatBotCreateDTO dto);
         Task<bool> UpdateAsync(CalificacionChatBotUpdateDTO dto);
         Task<bool> DeleteAsync(int id);

@@ -6,10 +6,12 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IPreguntasFrecuentesChatBotService
     {
-        Task<IEnumerable<PreguntasFrecuentesChatBotListDTO>> GetAllAsync();
-        Task<PreguntasFrecuentesChatBotDetailDTO?> GetByIdAsync(int id);
+        Task<IEnumerable<GetAllPreguntasFrecuentesDTO>> GetAllPreguntasAsync();
+        Task<PreguntasFrecuentesChatBotDTObyId?> GetByIdAsync(int id);
+        Task<IEnumerable<PreguntasFrecuentesChatBotDetailDTO>> GetAllAsync();
         Task<int> CreateAsync(PreguntasFrecuentesChatBotCreateDTO dto);
         Task<bool> UpdateAsync(PreguntasFrecuentesChatBotUpdateDTO dto);
+        Task<bool> UpdateEstadoAsync(ActualizarEstadoPreguntaFrecuenteDTO dto);
         Task<bool> DeleteAsync(int id);
     }
 }
