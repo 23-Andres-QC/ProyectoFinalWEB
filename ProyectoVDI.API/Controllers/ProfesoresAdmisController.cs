@@ -10,12 +10,16 @@ namespace ProyectoVDI.API.Controllers
     [Route("api/[controller]")]
     public class ProfesoresAdmisController : ControllerBase
     {
+        // Inyección de dependencia del servicio de profesores
         private readonly IProfesoresAdmisService _service;
         public ProfesoresAdmisController(IProfesoresAdmisService service)
         {
             _service = service;
         }
 
+        // Función: Obtener la lista de todos los profesores
+        // Método: GET
+        // Ruta: api/profesoresadmis
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -23,6 +27,9 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        // Función: Obtener el detalle de un profesor por su ID
+        // Método: GET
+        // Ruta: api/profesoresadmis/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -31,6 +38,10 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        // Función: Registrar uno o varios profesores (importación masiva o registro individual)
+        // Método: POST
+        // Ruta: api/profesoresadmis
+        // Body: [ { ... }, { ... } ]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] List<ProfesoresAdmisCreateDTO> profesores)
         {
@@ -43,6 +54,10 @@ namespace ProyectoVDI.API.Controllers
             return Ok(ids);
         }
 
+        // Función: Actualizar los datos de un profesor existente
+        // Método: PUT
+        // Ruta: api/profesoresadmis/{id}
+        // Body: { ... }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] ProfesoresAdmisUpdateDTO dto)
         {
@@ -52,6 +67,9 @@ namespace ProyectoVDI.API.Controllers
             return NoContent();
         }
 
+        // Función: Eliminar un profesor por su ID
+        // Método: DELETE
+        // Ruta: api/profesoresadmis/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
