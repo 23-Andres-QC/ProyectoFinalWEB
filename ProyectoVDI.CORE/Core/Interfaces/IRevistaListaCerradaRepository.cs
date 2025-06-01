@@ -7,9 +7,9 @@ namespace ProyectoVDI.CORE.Core.Interfaces
     public interface IRevistaListaCerradaRepository
     {
         Task<IEnumerable<RevistaListaCerrada>> GetAllAsync();
-        Task<RevistaListaCerrada?> GetByIdAsync(int id);
         Task<int> CreateAsync(RevistaListaCerrada entity);
-        Task<bool> UpdateAsync(RevistaListaCerrada entity);
         Task<bool> DeleteAsync(int id);
+        Task<bool> UpdateAsync(RevistaListaCerrada entity);
+        Task<RevistaListaCerrada?> GetByNombreAsync(string nombre);
     }
 }

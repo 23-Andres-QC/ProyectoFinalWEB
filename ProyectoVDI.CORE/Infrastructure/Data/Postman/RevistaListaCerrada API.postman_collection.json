@@ -1,0 +1,61 @@
+{
+  "info": {
+    "name": "RevistaListaCerrada API",
+    "_postman_id": "b1e1e1e1-1234-5678-9101-abcdefabcdef",
+    "description": "Colección para probar importación y consulta de lista cerrada",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Importar Lista Cerrada",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "archivoExcel",
+              "type": "file",
+              "src": ""
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5009/api/revistalistacerrada/importar",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5009",
+          "path": [
+            "api",
+            "revistalistacerrada",
+            "importar"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Consultar Lista Cerrada",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5009/api/revistalistacerrada",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "revistalistacerrada"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
