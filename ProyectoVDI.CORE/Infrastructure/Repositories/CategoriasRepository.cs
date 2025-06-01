@@ -48,14 +48,14 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return true;
         }
 
-        // Elimina (desactiva) una categoria por su ID
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var entity = await _context.Categorias.FindAsync(id);
-            if (entity == null) return false;
-            entity.Estado = 0;
-            await _context.SaveChangesAsync();
-            return true;
-        }
+        // Elimina (desactiva) una categoria por su ID (ya no se usará)
+        // public async Task<bool> DeleteAsync(int id)
+        // {
+        //     var entity = await _context.Categorias.FindAsync(id);
+        //     if (entity == null) return false;
+        //     entity.Estado = 0;
+        //     await _context.SaveChangesAsync();
+        //     return true;
+        // }
     }
 }
