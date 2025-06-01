@@ -69,10 +69,10 @@ namespace ProyectoVDI.CORE.Core.Services
             return await _repository.UpdateAsync(entity);
         }
 
-        // Elimina (desactiva) una categoria por su ID
-        public async Task<bool> DeleteAsync(int id)
+        // Ya no elimina la categoria, solo retorna false
+        public Task<bool> DeleteAsync(int id)
         {
-            return await _repository.DeleteAsync(id);
+            return Task.FromResult(false);
         }
     }
 }

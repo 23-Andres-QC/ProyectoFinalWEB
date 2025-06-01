@@ -15,7 +15,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateAsync(Categorias entity);
         // Actualiza una categoria existente
         Task<bool> UpdateAsync(Categorias entity);
-        // Elimina (desactiva) una categoria por su ID
-        Task<bool> DeleteAsync(int id);
+        // Elimina (desactiva) una categoria por su ID (ya no se usará)
+        // Task<bool> DeleteAsync(int id); // Comentado para dejar claro que no se usa
     }
 }

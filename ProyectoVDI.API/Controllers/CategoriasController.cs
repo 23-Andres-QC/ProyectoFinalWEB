@@ -62,13 +62,11 @@ namespace ProyectoVDI.API.Controllers
         }
 
         // DELETE: api/categorias/{id}
-        // Elimina (desactiva) una categoria
+        // Ya no elimina la categoria, solo retorna 405 Method Not Allowed
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var deleted = await _service.DeleteAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
+            return StatusCode(405, "La eliminación de categorías no está permitida. Solo se permite actualizar el estado.");
         }
     }
 }
