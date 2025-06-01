@@ -17,12 +17,18 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
 
         public async Task<IEnumerable<ProfesoresAdmis>> GetAllAsync()
         {
-            return await _context.ProfesoresAdmis.ToListAsync();
+            // Incluye la navegación a Categorias para que la descripción esté disponible
+            return await _context.ProfesoresAdmis
+                .Include(p => p.IdCategoriaNavigation)
+                .ToListAsync();
         }
 
         public async Task<ProfesoresAdmis?> GetByIdAsync(int id)
         {
-            return await _context.ProfesoresAdmis.FindAsync(id);
+            // Incluye la navegación a Categorias para que la descripción esté disponible
+            return await _context.ProfesoresAdmis
+                .Include(p => p.IdCategoriaNavigation)
+                .FirstOrDefaultAsync(p => p.IdProfesorAdmis == id);
         }
 
         public async Task<int> CreateAsync(ProfesoresAdmis entity)
