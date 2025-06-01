@@ -8,5 +8,6 @@ namespace ProyectoVDI.CORE.Core.Interfaces
     {
         Task<IEnumerable<RevistaListaCerradaListDTO>> GetAllAsync();
         Task<bool> ImportarDesdeExcelAsync(byte[] archivoExcelBytes);
+        Task<bool> ImportarDesdeListaAsync(IEnumerable<RevistaListaCerradaDetailDTO> revistas);
     }
 }

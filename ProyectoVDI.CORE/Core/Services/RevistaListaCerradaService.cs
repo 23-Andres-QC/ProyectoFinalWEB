@@ -70,5 +70,38 @@ namespace ProyectoVDI.CORE.Core.Services
             }
             return true;
         }
+
+        // Importa la lista cerrada desde un array de objetos JSON y actualiza o inserta según corresponda
+        public async Task<bool> ImportarDesdeListaAsync(IEnumerable<RevistaListaCerradaDetailDTO> revistas)
+        {
+            foreach (var dto in revistas)
+            {
+                var existente = await _repository.GetByNombreAsync(dto.Nombre);
+                var entity = new RevistaListaCerrada
+                {
+                    Nombre = dto.Nombre,
+                    Categoria = dto.Categoria,
+                    Puntaje = dto.Puntaje,
+                    IncentivoUsd = dto.IncentivoUsd,
+                    Scopus = dto.Scopus,
+                    WoSQ = dto.WoSQ,
+                    EsciQ = dto.EsciQ,
+                    Ajg = dto.Ajg,
+                    Cnrs = dto.Cnrs,
+                    Abdc = dto.Abdc,
+                    WoSLatam = dto.WoSLatam
+                };
+                if (existente != null)
+                {
+                    entity.IdRevista = existente.IdRevista;
+                    await _repository.UpdateAsync(entity);
+                }
+                else
+                {
+                    await _repository.CreateAsync(entity);
+                }
+            }
+            return true;
+        }
     }
 }
