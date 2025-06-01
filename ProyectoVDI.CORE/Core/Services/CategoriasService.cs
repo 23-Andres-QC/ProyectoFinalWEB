@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
+    // Servicio de aplicación para la gestión de Categorias
     public class CategoriasService : ICategoriasService
     {
+        // Repositorio de Categorias inyectado por dependencia
         private readonly ICategoriasRepository _repository;
         public CategoriasService(ICategoriasRepository repository)
         {
             _repository = repository;
         }
 
+        // Obtiene todas las categorias y las mapea a DTOs de lista
         public async Task<IEnumerable<CategoriasListDTO>> GetAllAsync()
         {
             var list = await _repository.GetAllAsync();
@@ -30,6 +33,7 @@ namespace ProyectoVDI.CORE.Core.Services
             return result;
         }
 
+        // Obtiene una categoria por su ID y la mapea a DTO de detalle
         public async Task<CategoriasDetailDTO?> GetByIdAsync(int id)
         {
             var item = await _repository.GetByIdAsync(id);
@@ -42,16 +46,18 @@ namespace ProyectoVDI.CORE.Core.Services
             };
         }
 
+        // Crea una nueva categoria a partir de un DTO
         public async Task<int> CreateAsync(CategoriasCreateDTO dto)
         {
             var entity = new Categorias
             {
                 Descripcion = dto.Descripcion,
-                Estado = 1
+                Estado = dto.Estado ?? 1 // Usa el estado proporcionado o 1 por defecto
             };
             return await _repository.CreateAsync(entity);
         }
 
+        // Actualiza una categoria existente a partir de un DTO
         public async Task<bool> UpdateAsync(CategoriasUpdateDTO dto)
         {
             var entity = new Categorias
@@ -63,6 +69,7 @@ namespace ProyectoVDI.CORE.Core.Services
             return await _repository.UpdateAsync(entity);
         }
 
+        // Elimina (desactiva) una categoria por su ID
         public async Task<bool> DeleteAsync(int id)
         {
             return await _repository.DeleteAsync(id);
