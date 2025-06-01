@@ -3,6 +3,9 @@ using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using OfficeOpenXml;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
@@ -17,71 +20,55 @@ namespace ProyectoVDI.CORE.Core.Services
         public async Task<IEnumerable<RevistaListaCerradaListDTO>> GetAllAsync()
         {
             var list = await _repository.GetAllAsync();
-            var result = new List<RevistaListaCerradaListDTO>();
-            foreach (var item in list)
-            {
-                result.Add(new RevistaListaCerradaListDTO
-                {
-                    IdRevista = item.IdRevista,
-                    Nombre = item.Nombre,
-                    Categoria = item.Categoria,
-                    Puntaje = item.Puntaje,
-                    IncentivoUsd = item.IncentivoUsd
-                });
-            }
-            return result;
-        }
-
-        public async Task<RevistaListaCerradaDetailDTO?> GetByIdAsync(int id)
-        {
-            var item = await _repository.GetByIdAsync(id);
-            if (item == null) return null;
-            return new RevistaListaCerradaDetailDTO
+            return list.Select(item => new RevistaListaCerradaListDTO
             {
                 IdRevista = item.IdRevista,
                 Nombre = item.Nombre,
                 Categoria = item.Categoria,
                 Puntaje = item.Puntaje,
-                IncentivoUsd = item.IncentivoUsd,
-                Scopus = item.Scopus,
-                WoSQ = item.WoSQ,
-                EsciQ = item.EsciQ,
-                Ajg = item.Ajg,
-                Cnrs = item.Cnrs,
-                Abdc = item.Abdc,
-                WoSLatam = item.WoSLatam
-            };
+                IncentivoUsd = item.IncentivoUsd
+            });
         }
 
-        public async Task<int> CreateAsync(RevistaListaCerradaCreateDTO dto)
+        // Importa la lista cerrada desde un archivo Excel y actualiza o inserta según corresponda
+        public async Task<bool> ImportarDesdeExcelAsync(byte[] archivoExcelBytes)
         {
-            var entity = new RevistaListaCerrada
+            // No establecer licencia aquí, solo configuración en appsettings.json
+            using (var stream = new MemoryStream(archivoExcelBytes))
+            using (var package = new ExcelPackage(stream))
             {
-                IdRevista = dto.IdRevista,
-                Nombre = dto.Nombre,
-                Categoria = dto.Categoria,
-                Puntaje = dto.Puntaje,
-                IncentivoUsd = dto.IncentivoUsd
-            };
-            return await _repository.CreateAsync(entity);
-        }
-
-        public async Task<bool> UpdateAsync(RevistaListaCerradaUpdateDTO dto)
-        {
-            var entity = new RevistaListaCerrada
-            {
-                IdRevista = dto.IdRevista,
-                Nombre = dto.Nombre,
-                Categoria = dto.Categoria,
-                Puntaje = dto.Puntaje,
-                IncentivoUsd = dto.IncentivoUsd
-            };
-            return await _repository.UpdateAsync(entity);
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            return await _repository.DeleteAsync(id);
+                var worksheet = package.Workbook.Worksheets.First();
+                int rowCount = worksheet.Dimension.Rows;
+                for (int row = 2; row <= rowCount; row++) // Asume encabezado en la fila 1
+                {
+                    var nombre = worksheet.Cells[row, 1].Text;
+                    var existente = await _repository.GetByNombreAsync(nombre);
+                    var entity = new RevistaListaCerrada
+                    {
+                        Nombre = nombre,
+                        Categoria = worksheet.Cells[row, 2].Text,
+                        Puntaje = double.TryParse(worksheet.Cells[row, 3].Text, out var puntaje) ? puntaje : null,
+                        IncentivoUsd = int.TryParse(worksheet.Cells[row, 4].Text, out var incentivo) ? incentivo : null,
+                        Scopus = worksheet.Cells[row, 5].Text,
+                        WoSQ = worksheet.Cells[row, 6].Text,
+                        EsciQ = worksheet.Cells[row, 7].Text,
+                        Ajg = worksheet.Cells[row, 8].Text,
+                        Cnrs = worksheet.Cells[row, 9].Text,
+                        Abdc = worksheet.Cells[row, 10].Text,
+                        WoSLatam = worksheet.Cells[row, 11].Text
+                    };
+                    if (existente != null)
+                    {
+                        entity.IdRevista = existente.IdRevista;
+                        await _repository.UpdateAsync(entity);
+                    }
+                    else
+                    {
+                        await _repository.CreateAsync(entity);
+                    }
+                }
+            }
+            return true;
         }
     }
 }

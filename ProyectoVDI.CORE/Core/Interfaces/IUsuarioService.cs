@@ -6,10 +6,14 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IUsuarioService
     {
-        Task<IEnumerable<UsuarioListDTO>> GetAllAsync();
-        Task<UsuarioDetailDTO?> GetByIdAsync(int id);
-        Task<int> CreateAsync(UsuarioCreateDTO dto);
-        Task<bool> UpdateAsync(UsuarioUpdateDTO dto);
-        Task<bool> DeleteAsync(int id);
+        Task<int> CreateUsuario(UsuarioCreateDTO dto);
+        Task DeleteUsuario(int id);
+        Task<UsuarioDTO?> GetUsuarioById(int id);
+        Task<IEnumerable<UsuarioListDTO>> GetUsuarios();
+        Task<bool> UpdateUsuario(UsuarioUpdateDTO dto);
+        Task<UsuarioDTO?> Login(UsuarioLoginDTO dto);
+        Task<bool> RecuperarContraseña(UsuarioRecuperarDTO dto);
+        Task<bool> CambiarContraseña(UsuarioChangePasswordDTO dto);
+        Task<IEnumerable<UsuarioListDTO>> BuscarUsuarios(string query);
     }
 }

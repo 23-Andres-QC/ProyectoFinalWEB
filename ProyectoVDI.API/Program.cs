@@ -3,8 +3,12 @@ using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Core.Services;
 using ProyectoVDI.CORE.Infrastructure.Repositories;
 using ProyectoVDI.Infrastructure.Data;
+//using OfficeOpenXml; // Eliminar referencia directa
 
 var builder = WebApplication.CreateBuilder(args);
+
+// EPPlus 8+: No establecer la licencia por código, solo por configuración (appsettings.json)
+// ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Eliminar esta línea
 
 // Add services to the container.
  
@@ -16,7 +20,6 @@ builder.Services.AddDbContext<vdiContext>(options =>
 );
 
 // Register the DbContext with dependency injection
-
 
 // add interface
 
@@ -32,7 +35,7 @@ builder.Services.AddTransient<IRegistroRevistasRepository, RegistroRevistasRepos
 builder.Services.AddTransient<IRevistaListaCerradaRepository, RevistaListaCerradaRepository>();
 builder.Services.AddTransient<IRevistaRepository, RevistaRepository>();
 builder.Services.AddTransient<IRolRepository, RolRepository>();
-builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddTransient<IUsuariosRepository, UsuariosRepository>();
 
 // Servicios
 builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>();
@@ -47,8 +50,6 @@ builder.Services.AddTransient<IRevistaListaCerradaService, RevistaListaCerradaSe
 builder.Services.AddTransient<IRevistaService, RevistaService>();
 builder.Services.AddTransient<IRolService, RolService>();
 builder.Services.AddTransient<IUsuarioService, UsuarioService>();
-
-
 
 builder.Services.AddControllers();
 

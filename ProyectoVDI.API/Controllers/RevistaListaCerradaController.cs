@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
@@ -15,6 +17,7 @@ namespace ProyectoVDI.API.Controllers
             _service = service;
         }
 
+        // Obtener toda la lista cerrada
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -22,29 +25,21 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        // Importar lista cerrada desde Excel (reemplaza todo)
+        [HttpPost("importar")]
+        public async Task<IActionResult> ImportarListaCerrada([FromForm] IFormFile archivoExcel)
         {
-            var result = await _service.GetByIdAsync(id);
-            if (result == null) return NotFound();
-            return Ok(result);
-        }
+            if (archivoExcel == null || archivoExcel.Length == 0)
+                return BadRequest("Debe subir un archivo Excel válido.");
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] RevistaListaCerradaUpdateDTO dto)
-        {
-            if (id != dto.IdRevista) return BadRequest();
-            var updated = await _service.UpdateAsync(dto);
-            if (!updated) return NotFound();
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var deleted = await _service.DeleteAsync(id);
-            if (!deleted) return NotFound();
-            return NoContent();
+            using (var ms = new System.IO.MemoryStream())
+            {
+                await archivoExcel.CopyToAsync(ms);
+                var result = await _service.ImportarDesdeExcelAsync(ms.ToArray());
+                if (!result)
+                    return StatusCode(500, "Error al importar la lista cerrada.");
+                return Ok("Lista cerrada importada correctamente.");
+            }
         }
     }
 }
