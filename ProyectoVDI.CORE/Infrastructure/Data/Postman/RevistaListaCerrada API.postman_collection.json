@@ -7,37 +7,6 @@
   },
   "item": [
     {
-      "name": "Importar Lista Cerrada",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "formdata",
-          "formdata": [
-            {
-              "key": "archivoExcel",
-              "type": "file",
-              "src": ""
-            }
-          ]
-        },
-        "url": {
-          "raw": "http://localhost:5009/api/revistalistacerrada/importar",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "5009",
-          "path": [
-            "api",
-            "revistalistacerrada",
-            "importar"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "Importar Lista Cerrada (JSON)",
       "request": {
         "method": "POST",
