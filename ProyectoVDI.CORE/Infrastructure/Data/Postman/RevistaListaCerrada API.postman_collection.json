@@ -2,7 +2,7 @@
   "info": {
     "name": "RevistaListaCerrada API",
     "_postman_id": "b1e1e1e1-1234-5678-9101-abcdefabcdef",
-    "description": "Colección para probar importación y consulta de lista cerrada",
+    "description": "ColecciÃ³n para probar importaciÃ³n y consulta de lista cerrada",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -38,6 +38,36 @@
       "response": []
     },
     {
+      "name": "Importar Lista Cerrada (JSON)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\n    \"Nombre\": \"Revista 1\",\n    \"Categoria\": \"A\",\n    \"Puntaje\": 10.5,\n    \"IncentivoUsd\": 100,\n    \"Scopus\": \"Q1\",\n    \"WoSQ\": \"Q2\",\n    \"EsciQ\": \"Q3\",\n    \"Ajg\": \"A\",\n    \"Cnrs\": \"B\",\n    \"Abdc\": \"C\",\n    \"WoSLatam\": \"D\"\n  }\n]"
+        },
+        "url": {
+          "raw": "http://localhost:5009/api/revistalistacerrada/importar-json",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5009",
+          "path": [
+            "api",
+            "revistalistacerrada",
+            "importar-json"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Consultar Lista Cerrada",
       "request": {
         "method": "GET",
@@ -48,7 +78,7 @@
           "host": [
             "localhost"
           ],
-          "port": "5000",
+          "port": "5009",
           "path": [
             "api",
             "revistalistacerrada"

@@ -41,5 +41,18 @@ namespace ProyectoVDI.API.Controllers
                 return Ok("Lista cerrada importada correctamente.");
             }
         }
+
+        // Importar lista cerrada desde un array de objetos JSON
+        [HttpPost("importar-json")]
+        public async Task<IActionResult> ImportarListaCerradaJson([FromBody] List<RevistaListaCerradaDetailDTO> revistas)
+        {
+            if (revistas == null || revistas.Count == 0)
+                return BadRequest("Debe enviar una lista de revistas válida.");
+
+            var result = await _service.ImportarDesdeListaAsync(revistas);
+            if (!result)
+                return StatusCode(500, "Error al importar la lista cerrada.");
+            return Ok("Lista cerrada importada correctamente.");
+        }
     }
 }
