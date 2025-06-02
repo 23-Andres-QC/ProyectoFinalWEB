@@ -42,8 +42,7 @@ namespace ProyectoVDI.CORE.Core.Services
 
                 // 3. Crear METADATOS solo si TipoLista es ISSN
                 MetadatosRevistaIssn? metadatos = null;
-                if (dto.TipoLista == "ISSN")
-                {
+                
                     metadatos = new MetadatosRevistaIssn
                     {
                         Scopus = dto.Scopus,                         // 1
@@ -94,7 +93,7 @@ namespace ProyectoVDI.CORE.Core.Services
                         MultidisciplinaryScopus = dto.MultidisciplinaryScopus, // 39
                         MultidisciplinaryWosOScopys = dto.MultidisciplinaryWosOScopys // 40
                     };
-                }
+                
 
                 // 4. Crear REGISTRO
                 var registro = new RegistroRevistas
