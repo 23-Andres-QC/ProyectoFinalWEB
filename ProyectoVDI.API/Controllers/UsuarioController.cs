@@ -125,5 +125,19 @@ namespace ProyectoVDI.API.Controllers
             var result = await _usuarioService.BuscarUsuarios(query);
             return Ok(result);
         }
+
+
+        // creacion de token de autenticación para el usuario
+        //api/usuario/signin
+
+        [HttpPost("signin")]
+        public async Task<IActionResult> SignIn([FromBody] SignInRequestDTO request)
+        {
+            var result = await _usuarioService.SignIn(request);
+            if (result == null)
+                return Unauthorized("Credenciales inválidas.");
+            return Ok(result);
+        }
+
     }
 }

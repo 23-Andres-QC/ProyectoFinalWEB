@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Core.Services;
 using ProyectoVDI.CORE.Infrastructure.Repositories;
+using ProyectoVDI.CORE.Infrastructure.Shared;
 using ProyectoVDI.Infrastructure.Data;
 //using OfficeOpenXml; // Eliminar referencia directa
 
@@ -50,6 +51,9 @@ builder.Services.AddTransient<IRevistaListaCerradaService, RevistaListaCerradaSe
 builder.Services.AddTransient<IRevistaService, RevistaService>();
 builder.Services.AddTransient<IRolService, RolService>();
 builder.Services.AddTransient<IUsuarioService, UsuarioService>();
+
+// JWT Authentication
+builder.Services.AddSharedInfrastructure(_config);
 
 builder.Services.AddControllers();
 
