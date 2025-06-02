@@ -2,6 +2,7 @@ using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Infrastructure.Repositories;
+using ProyectoVDI.CORE.Infrastructure.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,15 +12,45 @@ namespace ProyectoVDI.CORE.Core.Services
     // =====================
     // Servicio para la lógica de negocio relacionada con usuarios
     // =====================
+
+
     public class UsuarioService : IUsuarioService
     {
         // Repositorio de usuarios inyectado
         private readonly IUsuariosRepository _usuariosRepository;
+        private readonly IJWTService _jwtService;
 
         // Constructor que recibe el repositorio
-        public UsuarioService(IUsuariosRepository usuariosRepository)
+        public UsuarioService(IUsuariosRepository usuariosRepository, IJWTService service)
         {
             _usuariosRepository = usuariosRepository;
+            _jwtService = service;
+        }
+
+
+
+        // metodo SingIn para autenticar usuarios y generar un token JWT
+
+        public async Task<SignInResponseDTO?> SignIn(SignInRequestDTO request)
+        {
+            var usuarios = await _usuariosRepository.GetAllAsync();
+            var usuario = usuarios.FirstOrDefault(u =>
+                u.Correo == request.Correo &&
+                u.Contraseña == request.Contraseña &&
+                (u.Estado == 1 || u.Estado == null)
+            );
+            if (usuario == null)
+                return null;
+            var token = _jwtService.GenerateJWToken(usuario);
+            return new SignInResponseDTO
+            {
+                IdUsuario = usuario.IdUsuario,
+                NombreyApellido = usuario.IdProfesorAdmisNavigation?.NombreyApellido,
+                Correo = usuario.Correo,
+                IdRol = usuario.IdRol,
+                Estado = usuario.Estado,
+                Token = token
+            };
         }
 
         // =====================
@@ -180,5 +211,8 @@ namespace ProyectoVDI.CORE.Core.Services
             }
             return usuarioList;
         }
+
+
+        
     }
 }
