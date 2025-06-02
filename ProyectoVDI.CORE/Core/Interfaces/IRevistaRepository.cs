@@ -9,6 +9,9 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<IEnumerable<Revista>> GetAllAsync();
         Task<Revista?> GetByIdAsync(int id);
         Task<int> CreateAsync(Revista entity);
+        //Task<bool> CreateAsync(Revista revista,List<IssnsRevista>? listaIssns,MetadatosRevistaIssn? metadatos, RegistroRevistas registro, DetRegistroRevista detalle );
+        Task<bool> CreateAsync(  Revista revista,  List<IssnsRevista>? listaIssns,  MetadatosRevistaIssn? metadatos,  RegistroRevistas registro);
+
         Task<bool> UpdateAsync(Revista entity);
         Task<bool> DeleteAsync(int id);
     }
