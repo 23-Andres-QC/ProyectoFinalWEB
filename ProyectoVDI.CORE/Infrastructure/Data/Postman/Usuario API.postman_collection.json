@@ -42,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"idProfesorAdmis\": 1,\n  \"correo\": \"ejemplo@esan.edu.pe\",\n  \"contraseña\": \"123456\",\n  \"idRol\": 2\n}",
+					"raw": "{\n  \"idProfesorAdmis\": 1,\n  \"correo\": \"ejemplo@esan.edu.pe\",\n  \"contraseï¿½a\": \"123456\",\n  \"idRol\": 2\n}",
 					"options": {"raw": {"language": "json"}}
 				},
 				"url": {
@@ -62,7 +62,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"idUsuario\": 1,\n  \"idProfesorAdmis\": 1,\n  \"correo\": \"nuevo@esan.edu.pe\",\n  \"contraseña\": \"nueva123\",\n  \"idRol\": 2,\n  \"estado\": 1\n}",
+					"raw": "{\n  \"idUsuario\": 1,\n  \"idProfesorAdmis\": 1,\n  \"correo\": \"nuevo@esan.edu.pe\",\n  \"contraseï¿½a\": \"nueva123\",\n  \"idRol\": 2,\n  \"estado\": 1\n}",
 					"options": {"raw": {"language": "json"}}
 				},
 				"url": {
@@ -97,7 +97,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"correo\": \"ejemplo@esan.edu.pe\",\n  \"contraseña\": \"123456\"\n}",
+					"raw": "{\n  \"correo\": \"ejemplo@esan.edu.pe\",\n  \"contraseï¿½a\": \"123456\"\n}",
 					"options": {"raw": {"language": "json"}}
 				},
 				"url": {
@@ -111,7 +111,7 @@
 			"response": []
 		},
 		{
-			"name": "Recuperar contraseña",
+			"name": "Recuperar contraseï¿½a",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -131,21 +131,21 @@
 			"response": []
 		},
 		{
-			"name": "Cambiar contraseña",
+			"name": "Cambiar contraseï¿½a",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"idUsuario\": 1,\n  \"contraseñaActual\": \"123456\",\n  \"nuevaContraseña\": \"nueva123\",\n  \"confirmarContraseña\": \"nueva123\"\n}",
+					"raw": "{\n  \"idUsuario\": 1,\n  \"contraseï¿½aActual\": \"123456\",\n  \"nuevaContraseï¿½a\": \"nueva123\",\n  \"confirmarContraseï¿½a\": \"nueva123\"\n}",
 					"options": {"raw": {"language": "json"}}
 				},
 				"url": {
-					"raw": "http://localhost:5009/api/usuario/cambiar-contraseña",
+					"raw": "http://localhost:5009/api/usuario/cambiar-contraseï¿½a",
 					"protocol": "http",
 					"host": ["localhost"],
 					"port": "5009",
-					"path": ["api", "usuario", "cambiar-contraseña"]
+					"path": ["api", "usuario", "cambiar-contraseï¿½a"]
 				}
 			},
 			"response": []

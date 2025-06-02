@@ -1,0 +1,112 @@
+{
+  "info": {
+    "_postman_id": "meta-issn-001",
+    "name": "API MetadatosRevistaIssn",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener todos los metadatos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5009/api/metadatosrevistaissn",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5009",
+          "path": ["api", "metadatosrevistaissn"]
+        }
+      },
+      "response": [
+        {
+          "name": "Ejemplo de respuesta con nombre de revista e ISSN",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5009/api/metadatosrevistaissn",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5009",
+              "path": ["api", "metadatosrevistaissn"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"idRevista\": 1,\n    \"nombreRevista\": \"Revista de Ejemplo\",\n    \"issn\": \"1234-5678\",\n    \"scopus\": \"Q1\",\n    \"ajg\": \"A\",\n    ...otros atributos...\n  }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Obtener metadatos por Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5009/api/metadatosrevistaissn/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5009",
+          "path": ["api", "metadatosrevistaissn", "1"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Importar metadatos desde JSON (con nombre y ISSN)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\n    \"idRevista\": 1,\n    \"nombreRevista\": \"Revista de Ejemplo\",\n    \"issn\": \"1234-5678\",\n    \"scopus\": \"Q2\",\n    \"ajg\": \"A\",\n    \"woSQ\": \"Q2\",\n    \"woSEsci\": \"Q3\",\n    \"cnrs\": \"B\",\n    \"abdc\": \"C\"\n  },\n  {\n    \"idRevista\": 2,\n    \"nombreRevista\": \"Otra Revista\",\n    \"issn\": \"8765-4321\",\n    \"ajg\": \"B\",\n    \"scopus\": \"Q3\"\n  }\n]"
+        },
+        "url": {
+          "raw": "http://localhost:5009/api/metadatosrevistaissn/importar-json",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5009",
+          "path": ["api", "metadatosrevistaissn", "importar-json"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actualizar metadatos (con nombre y ISSN)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idRevista\": 1,\n  \"nombreRevista\": \"Revista de Ejemplo Actualizada\",\n  \"issn\": \"1234-5678\",\n  \"scopus\": \"Q3\",\n  \"ajg\": \"A+\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:5009/api/metadatosrevistaissn/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5009",
+          "path": ["api", "metadatosrevistaissn", "1"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
