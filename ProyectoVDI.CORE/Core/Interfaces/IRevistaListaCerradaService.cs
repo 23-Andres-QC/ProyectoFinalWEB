@@ -6,8 +6,10 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IRevistaListaCerradaService
     {
-        Task<IEnumerable<RevistaListaCerradaListDTO>> GetAllAsync();
-        Task<bool> ImportarDesdeExcelAsync(byte[] archivoExcelBytes);
-        Task<bool> ImportarDesdeListaAsync(IEnumerable<RevistaListaCerradaDetailDTO> revistas);
+        Task<IEnumerable<ListaCerradaRegistroDTO>> GetAllLCDAsync();
+        Task<ListaCerradaRegistroDTO?> GetLCDByIssnAsync(string issn);
+        Task<bool> RegistrarLCDAsync(int idUsuario, List<ListaCerradaRegistroDTO> revistas);
+        Task<bool> ActualizarLCDPorIssnAsync(ListaCerradaRegistroDTO dto);
+        Task<bool> EliminarLCDPorIssnAsync(string issn);
     }
 }

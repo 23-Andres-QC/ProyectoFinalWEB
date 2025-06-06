@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
 {
-    // Repositorio para la gestión de MetadatosRevistaIssn en la base de datos
     public class MetadatosRevistaIssnRepository : IMetadatosRevistaIssnRepository
     {
-        // Contexto de base de datos inyectado por dependencia
         private readonly vdiContext _context;
         public MetadatosRevistaIssnRepository(vdiContext context)
         {
             _context = context;
         }
-
-        // Obtiene todos los registros para visualización en tabla
         public async Task<IEnumerable<MetadatosRevistaIssn>> GetAllAsync()
         {
             return await _context.MetadatosRevistaIssn.ToListAsync();
@@ -37,7 +33,6 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return entity.IdRevista;
         }
 
-        // Actualiza un registro existente de MetadatosRevistaIssn
         public async Task<bool> UpdateAsync(MetadatosRevistaIssn entity)
         {
             var existing = await _context.MetadatosRevistaIssn.FindAsync(entity.IdRevista);
@@ -47,6 +42,5 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return true;
         }
 
-        // No se permite eliminar registros, por lo que no hay método DeleteAsync
     }
 }

@@ -1,0 +1,15 @@
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\bin\Debug\net9.0\ProyectoVDI.CORE.deps.json
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\bin\Debug\net9.0\ProyectoVDI.CORE.runtimeconfig.json
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\bin\Debug\net9.0\ProyectoVDI.CORE.dll
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\bin\Debug\net9.0\ProyectoVDI.CORE.pdb
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.csproj.AssemblyReference.cache
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.AssemblyInfoInputs.cache
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.AssemblyInfo.cs
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.csproj.CoreCompileInputs.cache
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.sourcelink.json
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.dll
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\refint\ProyectoVDI.CORE.dll
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.pdb
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ProyectoVDI.CORE.genruntimeconfig.cache
+C:\Users\andre\Source\Repos\ProyectoFinalWEB\ProyectoVDI.CORE\obj\Debug\net9.0\ref\ProyectoVDI.CORE.dll

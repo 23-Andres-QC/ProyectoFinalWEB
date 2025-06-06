@@ -21,25 +21,13 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return await _context.RevistaListaCerrada.ToListAsync();
         }
 
-        public async Task<int> CreateAsync(RevistaListaCerrada entity)
+        public async Task<RevistaListaCerrada?> CreateListaCerrada(RevistaListaCerrada entity)
         {
-            // Buscar o crear la entidad principal Revista
-            var revista = await _context.Revista.FirstOrDefaultAsync(r => r.Nombre == entity.Nombre && r.TipoLista == "listaCerrada");
-            if (revista == null)
-            {
-                revista = new Revista
-                {
-                    Nombre = entity.Nombre,
-                    TipoLista = "listaCerrada",
-                    Estado = 1
-                };
-                _context.Revista.Add(revista);
-                await _context.SaveChangesAsync();
-            }
-            entity.IdRevista = revista.IdRevista;
-            _context.RevistaListaCerrada.Add(entity);
+            if (entity == null) return null;
+
+            await _context.RevistaListaCerrada.AddAsync(entity);
             await _context.SaveChangesAsync();
-            return entity.IdRevista;
+            return entity;
         }
 
         public async Task<bool> UpdateAsync(RevistaListaCerrada entity)
