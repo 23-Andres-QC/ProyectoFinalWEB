@@ -1,106 +1,219 @@
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.IO;
 using System.Linq;
-using OfficeOpenXml;
+using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
     public class RevistaListaCerradaService : IRevistaListaCerradaService
     {
-        private readonly IRevistaListaCerradaRepository _repository;
-        public RevistaListaCerradaService(IRevistaListaCerradaRepository repository)
+        private readonly IRevistaListaCerradaRepository _lcdRepo;
+        private readonly IRevistaRepository _revistaRepo;
+        private readonly IIssnsRevistaRepository _issnRepo;
+        private readonly IRegistroRevistasRepository _registroRepo;
+        private readonly IDetRegistroRevistaRepository _detRepo;
+
+        public RevistaListaCerradaService(
+            IRevistaListaCerradaRepository lcdRepo,
+            IRevistaRepository revistaRepo,
+            IIssnsRevistaRepository issnRepo,
+            IRegistroRevistasRepository registroRepo,
+            IDetRegistroRevistaRepository detRepo)
         {
-            _repository = repository;
+            _lcdRepo = lcdRepo;
+            _revistaRepo = revistaRepo;
+            _issnRepo = issnRepo;
+            _registroRepo = registroRepo;
+            _detRepo = detRepo;
         }
 
-        public async Task<IEnumerable<RevistaListaCerradaListDTO>> GetAllAsync()
+        public async Task<IEnumerable<ListaCerradaRegistroDTO>> GetAllLCDAsync()
         {
-            var list = await _repository.GetAllAsync();
-            return list.Select(item => new RevistaListaCerradaListDTO
-            {
-                IdRevista = item.IdRevista,
-                Nombre = item.Nombre,
-                Categoria = item.Categoria,
-                Puntaje = item.Puntaje,
-                IncentivoUsd = item.IncentivoUsd
+            var lcds = await _lcdRepo.GetAllAsync();
+            var issns = await _issnRepo.GetAllAsync();
+            var revistas = await _revistaRepo.GetAllAsync();
+            return lcds.Select(lcd => {
+                var issnList = issns.Where(i => i.IdRevista == lcd.IdRevista).Select(i => i.Issn).ToList();
+                return new ListaCerradaRegistroDTO
+                {
+                    ISSN = issnList.ElementAtOrDefault(0) ?? string.Empty,
+                    ISSN2 = issnList.ElementAtOrDefault(1) ?? string.Empty,
+                    ISSN3 = issnList.ElementAtOrDefault(2) ?? string.Empty,
+                    Nombre = lcd.Nombre ?? string.Empty,
+                    Categoria2 = lcd.Categoria ?? string.Empty,
+                    Puntaje = lcd.Puntaje,
+                    IncentivoUSD = lcd.IncentivoUsd,
+                    SCOPUS = lcd.Scopus ?? string.Empty,
+                    WoS_Q = lcd.WoSQ ?? string.Empty,
+                    ESCI_Q = lcd.EsciQ ?? string.Empty,
+                    AJG = lcd.Ajg ?? string.Empty,
+                    CNRS = lcd.Cnrs ?? string.Empty,
+                    ABDC = lcd.Abdc ?? string.Empty,
+                    WoS_LATAM = lcd.WoSLatam ?? string.Empty
+                };
             });
         }
 
-        // Importa la lista cerrada desde un archivo Excel y actualiza o inserta según corresponda
-        public async Task<bool> ImportarDesdeExcelAsync(byte[] archivoExcelBytes)
+        public async Task<ListaCerradaRegistroDTO?> GetLCDByIssnAsync(string issn)
         {
-            // No establecer licencia aquí, solo configuración en appsettings.json
-            using (var stream = new MemoryStream(archivoExcelBytes))
-            using (var package = new ExcelPackage(stream))
+            var issnObj = (await _issnRepo.GetAllAsync()).FirstOrDefault(x => x.Issn == issn);
+            if (issnObj == null || !issnObj.IdRevista.HasValue) return null;
+            var lcd = (await _lcdRepo.GetAllAsync()).FirstOrDefault(x => x.IdRevista == issnObj.IdRevista);
+            if (lcd == null) return null;
+            var issnList = (await _issnRepo.GetAllAsync()).Where(i => i.IdRevista == lcd.IdRevista).Select(i => i.Issn).ToList();
+            return new ListaCerradaRegistroDTO
             {
-                var worksheet = package.Workbook.Worksheets.First();
-                int rowCount = worksheet.Dimension.Rows;
-                for (int row = 2; row <= rowCount; row++) // Asume encabezado en la fila 1
+                ISSN = issnList.ElementAtOrDefault(0) ?? string.Empty,
+                ISSN2 = issnList.ElementAtOrDefault(1) ?? string.Empty,
+                ISSN3 = issnList.ElementAtOrDefault(2) ?? string.Empty,
+                Nombre = lcd.Nombre ?? string.Empty,
+                Categoria2 = lcd.Categoria ?? string.Empty,
+                Puntaje = lcd.Puntaje,
+                IncentivoUSD = lcd.IncentivoUsd,
+                SCOPUS = lcd.Scopus ?? string.Empty,
+                WoS_Q = lcd.WoSQ ?? string.Empty,
+                ESCI_Q = lcd.EsciQ ?? string.Empty,
+                AJG = lcd.Ajg ?? string.Empty,
+                CNRS = lcd.Cnrs ?? string.Empty,
+                ABDC = lcd.Abdc ?? string.Empty,
+                WoS_LATAM = lcd.WoSLatam ?? string.Empty
+            };
+        }
+
+        public async Task<bool> RegistrarLCDAsync(int idUsuario, List<ListaCerradaRegistroDTO> revistas)
+        {
+            var registro = new RegistroRevistas
+            {
+                IdUsuario = idUsuario,
+                FechaRegistro = DateTime.UtcNow
+            };
+            int idRegistro = await _registroRepo.CreateAsync(registro);
+            foreach (var dto in revistas)
+            {
+                var issns = new[] { dto.ISSN, dto.ISSN2, dto.ISSN3 }
+                    .Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+                var issnEntities = (await _issnRepo.GetAllAsync())
+                    .Where(x => issns.Contains(x.Issn)).ToList();
+                int? idRevista = issnEntities.FirstOrDefault()?.IdRevista;
+                Revista revista;
+                if (idRevista.HasValue)
                 {
-                    var nombre = worksheet.Cells[row, 1].Text;
-                    var existente = await _repository.GetByNombreAsync(nombre);
-                    var entity = new RevistaListaCerrada
+                    revista = await _revistaRepo.GetByIdAsync(idRevista.Value);
+                    if (revista == null) continue;
+                    revista.Nombre = dto.Nombre;
+                    revista.TipoLista = "LCD";
+                    revista.Estado = 1;
+                    await _revistaRepo.UpdateAsync(revista);
+                    // Agregar ISSN faltantes
+                    var existentes = issnEntities.Select(x => x.Issn).ToList();
+                    foreach (var issn in issns)
                     {
-                        Nombre = nombre,
-                        Categoria = worksheet.Cells[row, 2].Text,
-                        Puntaje = double.TryParse(worksheet.Cells[row, 3].Text, out var puntaje) ? puntaje : null,
-                        IncentivoUsd = int.TryParse(worksheet.Cells[row, 4].Text, out var incentivo) ? incentivo : null,
-                        Scopus = worksheet.Cells[row, 5].Text,
-                        WoSQ = worksheet.Cells[row, 6].Text,
-                        EsciQ = worksheet.Cells[row, 7].Text,
-                        Ajg = worksheet.Cells[row, 8].Text,
-                        Cnrs = worksheet.Cells[row, 9].Text,
-                        Abdc = worksheet.Cells[row, 10].Text,
-                        WoSLatam = worksheet.Cells[row, 11].Text
-                    };
-                    if (existente != null)
-                    {
-                        entity.IdRevista = existente.IdRevista;
-                        await _repository.UpdateAsync(entity);
-                    }
-                    else
-                    {
-                        await _repository.CreateAsync(entity);
+                        if (!existentes.Contains(issn))
+                        {
+                            await _issnRepo.CreateAsync(new IssnsRevista { Issn = issn, IdRevista = revista.IdRevista });
+                        }
                     }
                 }
+                else
+                {
+                    revista = new Revista
+                    {
+                        Nombre = dto.Nombre,
+                        TipoLista = "LCD",
+                        Estado = 1
+                    };
+                    idRevista = await _revistaRepo.CreateAsync(revista);
+                    foreach (var issn in issns)
+                    {
+                        await _issnRepo.CreateAsync(new IssnsRevista { Issn = issn, IdRevista = idRevista.Value });
+                    }
+                }
+                // Crear o actualizar RevistaListaCerrada
+                var lcd = new RevistaListaCerrada
+                {
+                    IdRevista = idRevista.Value,
+                    Nombre = dto.Nombre,
+                    Categoria = dto.Categoria2,
+                    Puntaje = dto.Puntaje,
+                    IncentivoUsd = dto.IncentivoUSD,
+                    Scopus = dto.SCOPUS,
+                    WoSQ = dto.WoS_Q,
+                    EsciQ = dto.ESCI_Q,
+                    Ajg = dto.AJG,
+                    Cnrs = dto.CNRS,
+                    Abdc = dto.ABDC,
+                    WoSLatam = dto.WoS_LATAM
+                };
+                var actualizado = await _lcdRepo.UpdateAsync(lcd);
+                if (!actualizado)
+                {
+                    await _lcdRepo.CreateListaCerrada(lcd);
+                }
+                // Registrar detalle
+                var det = new DetRegistroRevista
+                {
+                    IdRegistro = idRegistro,
+                    IdRevista = idRevista.Value
+                };
+                await _detRepo.CreateAsync(det);
             }
             return true;
         }
 
-        // Importa la lista cerrada desde un array de objetos JSON y actualiza o inserta según corresponda
-        public async Task<bool> ImportarDesdeListaAsync(IEnumerable<RevistaListaCerradaDetailDTO> revistas)
+        public async Task<bool> ActualizarLCDPorIssnAsync(ListaCerradaRegistroDTO dto)
         {
-            foreach (var dto in revistas)
+            var issns = new[] { dto.ISSN, dto.ISSN2, dto.ISSN3 }
+                .Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+            var issnEntities = (await _issnRepo.GetAllAsync())
+                .Where(x => issns.Contains(x.Issn)).ToList();
+            int? idRevista = issnEntities.FirstOrDefault()?.IdRevista;
+            if (!idRevista.HasValue) return false;
+            var revista = await _revistaRepo.GetByIdAsync(idRevista.Value);
+            if (revista == null) return false;
+            revista.Nombre = dto.Nombre;
+            revista.TipoLista = "LCD";
+            revista.Estado = 1;
+            await _revistaRepo.UpdateAsync(revista);
+            // Agregar ISSN faltantes
+            var existentes = issnEntities.Select(x => x.Issn).ToList();
+            foreach (var issn in issns)
             {
-                var existente = await _repository.GetByNombreAsync(dto.Nombre);
-                var entity = new RevistaListaCerrada
+                if (!existentes.Contains(issn))
                 {
-                    Nombre = dto.Nombre,
-                    Categoria = dto.Categoria,
-                    Puntaje = dto.Puntaje,
-                    IncentivoUsd = dto.IncentivoUsd,
-                    Scopus = dto.Scopus,
-                    WoSQ = dto.WoSQ,
-                    EsciQ = dto.EsciQ,
-                    Ajg = dto.Ajg,
-                    Cnrs = dto.Cnrs,
-                    Abdc = dto.Abdc,
-                    WoSLatam = dto.WoSLatam
-                };
-                if (existente != null)
-                {
-                    entity.IdRevista = existente.IdRevista;
-                    await _repository.UpdateAsync(entity);
-                }
-                else
-                {
-                    await _repository.CreateAsync(entity);
+                    await _issnRepo.CreateAsync(new IssnsRevista { Issn = issn, IdRevista = revista.IdRevista });
                 }
             }
+            // Actualizar RevistaListaCerrada
+            var lcd = new RevistaListaCerrada
+            {
+                IdRevista = idRevista.Value,
+                Nombre = dto.Nombre,
+                Categoria = dto.Categoria2,
+                Puntaje = dto.Puntaje,
+                IncentivoUsd = dto.IncentivoUSD,
+                Scopus = dto.SCOPUS,
+                WoSQ = dto.WoS_Q,
+                EsciQ = dto.ESCI_Q,
+                Ajg = dto.AJG,
+                Cnrs = dto.CNRS,
+                Abdc = dto.ABDC,
+                WoSLatam = dto.WoS_LATAM
+            };
+            await _lcdRepo.UpdateAsync(lcd);
+            return true;
+        }
+
+        public async Task<bool> EliminarLCDPorIssnAsync(string issn)
+        {
+            var issnObj = (await _issnRepo.GetAllAsync()).FirstOrDefault(x => x.Issn == issn);
+            if (issnObj == null || !issnObj.IdRevista.HasValue) return false;
+            var revista = await _revistaRepo.GetByIdAsync(issnObj.IdRevista.Value);
+            if (revista == null) return false;
+            revista.Estado = 0;
+            await _revistaRepo.UpdateAsync(revista);
             return true;
         }
     }
