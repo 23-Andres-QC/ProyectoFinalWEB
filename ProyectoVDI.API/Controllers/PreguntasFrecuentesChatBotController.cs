@@ -6,7 +6,7 @@ namespace ProyectoVDI.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //hh
+    //
     public class PreguntasFrecuentesChatBotController : ControllerBase
     {
         private readonly IPreguntasFrecuentesChatBotService _service;
