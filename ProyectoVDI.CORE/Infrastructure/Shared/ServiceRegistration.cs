@@ -3,10 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ProyectoVDI.CORE.Core.Interfaces;
+using ProyectoVDI.CORE.Core.Services;
 using ProyectoVDI.CORE.Core.Setting;
 using System;
 using System.Text;
-
 
 namespace ProyectoVDI.CORE.Infrastructure.Shared
 {
@@ -40,6 +40,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Shared
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
+        }
+
+        public static void AddCoreServices(this IServiceCollection services)
+        {
+            services.AddScoped<IRevistaRegistroService, RevistaRegistroService>();
+            services.AddScoped<IRevistaListaCerradaService, RevistaListaCerradaService>();
         }
     }
 }

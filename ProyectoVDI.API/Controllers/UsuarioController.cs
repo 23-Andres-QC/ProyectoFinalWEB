@@ -6,6 +6,7 @@ namespace ProyectoVDI.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    
     // =====================
     // Controlador para la gestión de usuarios
     // =====================

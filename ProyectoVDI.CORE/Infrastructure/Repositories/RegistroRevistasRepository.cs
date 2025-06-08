@@ -27,6 +27,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
 
         public async Task<int> CreateAsync(RegistroRevistas entity)
         {
+            // Validar que el usuario exista antes de insertar
+            var usuarioExiste = await _context.Usuario.AnyAsync(u => u.IdUsuario == entity.IdUsuario);
+            if (!usuarioExiste)
+                throw new System.Exception($"No existe el usuario con IdUsuario={entity.IdUsuario}. No se puede registrar la revista.");
+
             entity.FechaRegistro = System.DateTime.Now;
             _context.RegistroRevistas.Add(entity);
             await _context.SaveChangesAsync();

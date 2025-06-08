@@ -41,14 +41,8 @@ builder.Services.AddTransient<IUsuariosRepository, UsuariosRepository>();
 // Servicios
 builder.Services.AddTransient<ICalificacionChatBotService, CalificacionChatBotService>();
 builder.Services.AddTransient<ICategoriasService, CategoriasService>();
-builder.Services.AddTransient<IDetRegistroRevistaService, DetRegistroRevistaService>();
-builder.Services.AddTransient<IIssnsRevistaService, IssnsRevistaService>();
-builder.Services.AddTransient<IMetadatosRevistaIssnService, MetadatosRevistaIssnService>();
 builder.Services.AddTransient<IPreguntasFrecuentesChatBotService, PreguntasFrecuentesChatBotService>();
 builder.Services.AddTransient<IProfesoresAdmisService, ProfesoresAdmisService>();
-builder.Services.AddTransient<IRegistroRevistasService, RegistroRevistasService>();
-builder.Services.AddTransient<IRevistaListaCerradaService, RevistaListaCerradaService>();
-builder.Services.AddTransient<IRevistaService, RevistaService>();
 builder.Services.AddTransient<IRolService, RolService>();
 builder.Services.AddTransient<IUsuarioService, UsuarioService>();
 
@@ -56,6 +50,7 @@ builder.Services.AddTransient<IUsuarioService, UsuarioService>();
 builder.Services.AddSharedInfrastructure(_config);
 
 builder.Services.AddControllers();
+builder.Services.AddCoreServices();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

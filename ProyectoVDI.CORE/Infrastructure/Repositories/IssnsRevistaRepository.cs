@@ -41,13 +41,5 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return true;
         }
 
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var entity = await _context.IssnsRevista.FindAsync(id);
-            if (entity == null) return false;
-            _context.IssnsRevista.Remove(entity);
-            await _context.SaveChangesAsync();
-            return true;
-        }
     }
 }
