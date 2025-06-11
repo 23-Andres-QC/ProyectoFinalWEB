@@ -48,6 +48,7 @@ builder.Services.AddTransient<IUsuarioService, UsuarioService>();
 
 // JWT Authentication
 builder.Services.AddSharedInfrastructure(_config);
+builder.Services.AddHttpClient(); // para usar HttpClient en los controladores
 
 builder.Services.AddControllers();
 builder.Services.AddCoreServices();

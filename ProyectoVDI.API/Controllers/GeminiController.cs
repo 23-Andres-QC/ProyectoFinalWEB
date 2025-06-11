@@ -1,0 +1,2362 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace ProyectoVDI.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class GeminiController : ControllerBase
+    {
+        private readonly HttpClient _httpClient;
+
+        public GeminiController(IHttpClientFactory httpClientFactory)
+        {
+            _httpClient = httpClientFactory.CreateClient();
+        }
+        // Endpoint to ask a question to the Gemini API
+        // api/gemini/ask
+        [HttpPost("ask")]
+        public async Task<IActionResult> Ask([FromBody] string pregunta)
+        {
+            // Compose the prompt as in your Python code
+           var prompt = @"
+
+CONSEJO UNIVERSITARIO
+EXTRACTO DEL ACTA DE LA SESIÓN ORDINARIA N°09
+DE FECHA MIERCOLES 02 DE OCTUBRE DE 2024
+Modalidad Virtual
+
+Orden del Día
+Procedimiento para la Aprobación de los Proyectos y Productos de Investigación:
+Modificación.
+Acuerdo N° 260-09/2024
+El Consejo Universitario acordó por unanimidad aprobar la modificación del
+Procedimiento para la Aprobación de los Proyectos y Productos de Investigación de la
+Universidad ESAN.
+Copia del documento queda registrado como Anexo 11 de esta acta y archivado en el
+Vicerrectorado de Investigación de la Universidad ESAN.
+De igual manera, acordaron por unanimidad dispensar este acuerdo del trámite de
+lectura y aprobación
+
+Jorge Del Castillo Reyes
+Secretario General
+Surco, 16 de octubre de 2024
+
+Alonso de Molina 1652, Monterrico Chico, Surco │Apartado 1846, Lima 100 │Perú
+Telfs.: [511] 317-7200 / 712-7200 │Fax: [511] 345-1328
+
+Universidad ESAN
+Vicerrectorado de Investigación
+
+PROCEDIMIENTO PARA LA
+APROBACIÓN DE LOS
+PROYECTOS Y PRODUCTOS
+DE INVESTIGACIÓN
+
+Lima, octubre de 2024
+
+Documento aprobado por el Consejo Universitario, Sesión Ordinaria de fecha 02.10.2024
+
+ÍNDICE
+I.
+
+ALCANCE................................................................................................ 3
+
+II.
+
+PROCEDIMIENTO PARA PROYECTOS DE INVESTIGACIÓN ............. 4
+
+III.
+
+PROCEDIMIENTO PARA PRODUCTOS DE INVESTIGACIÓN ............. 7
+
+IV. INCUMPLIMIENTO DEL COMPROMISO Y PENALIDADES ................ 12
+V.
+
+ANEXOS................................................................................................ 13
+
+ANEXO 1 ....................................................................................................... 13
+DOCUMENTOS PARA LA PRESENTACIÓN DE PROYECTOS Y
+PRODUCTOS DE INVESTIGACIÓN (FORMULARIOS) ............................... 13
+ANEXO 2 ....................................................................................................... 22
+INCENTIVOS Y PUNTAJES ASIGNABLES POR CATEGORÍAS Y
+SUBCATEGORÍAS DE PRODUCTOS DE INVESTIGACIÓN ....................... 22
+ANEXO 3 ....................................................................................................................28
+BASES DE DATOS REFERENCIALES PARA EVALUACIÓN DE
+PRODUCTOS DE INVESTIGACIÓN ............................................................ 28
+ANEXO 4 ....................................................................................................... 29
+CÁLCULO DE INCENTIVO Y PUNTAJE EN FUNCIÓN DE LA COAUTORÍA
+...................................................................................................................... 29
+ANEXO 5 ....................................................................................................... 33
+LISTAS REFERENCIALES PARA LIBROS, CAPÍTULOS DE LIBROS Y
+CASOS .......................................................................................................... 33
+ANEXO 6 ....................................................................................................... 33
+EMPRESAS CONSIDERADAS PARA LA REDACCIÓN DE ........................ 33
+CASOS DE ESTUDIO DE ESAN EDICIONES.............................................. 33
+
+P á g . 2 | 35
+
+PROCEDIMIENTO PARA LA APROBACIÓN DE LOS
+PROYECTOS Y PRODUCTOS DE INVESTIGACIÓN
+El presente procedimiento tiene como objetivo dar a conocer los criterios de
+evaluación de proyectos y productos de investigación. Asimismo, se explica
+cómo se distribuyen los recursos económicos disponibles para la investigación,
+específicamente para el financiamiento de proyectos, la asignación de
+incentivos, y los puntajes aplicables.
+
+I. ALCANCE
+El ámbito de la Política de Investigación comprende a:
+a. Profesores ordinarios
+En todas sus categorías.
+a.1. Profesor ordinario investigador
+Los docentes ordinarios pueden asumir el rol de profesor investigador
+comprometiéndose a realizar fundamentalmente labores de investigación
+retribuidas bajo un convenio de bonificación especial por estas labores,
+conforme al artículo 53 del Reglamento del Cuerpo Académico de la
+Universidad.
+b. Profesores contratados a tiempo completo
+c. Profesores contratados a tiempo parcial
+Pueden solicitar el registro de proyectos y productos de investigación. Sin
+embargo, para acceder al financiamiento y la obtención de incentivos
+califican, solo aquellos cuyo vínculo con la institución sea no menor de
+tres años, con carga laboral fija y desempeño satisfactorio. Dichas
+condiciones serán verificadas por el Vicerrectorado Académico o el
+Decanato de la Escuela de Administración de Negocios para Graduados.
+d. Instructores
+Solo pueden presentar solicitudes de registro de proyectos que busquen
+desarrollar propuestas que estén alineadas con los objetivos de
+investigación vigentes de la universidad. Estas solicitudes están sujetas a
+evaluación del Comité de Investigación y Ética (CI).
+e. Estudiantes
+Solo pueden presentar solicitudes de registro de proyectos que busquen
+desarrollar propuestas en compañía de profesores de la Universidad,
+como coautores, que estén alineados con los objetivos de investigación
+vigentes. Estas solicitudes están sujetas a evaluación del CI.
+
+P á g . 3 | 35
+
+II. PROCEDIMIENTO PARA PROYECTOS DE INVESTIGACIÓN
+A. EVALUACIÓN DE PROYECTOS DE INVESTIGACIÓN
+a.1. Los proyectos de investigación que desarrolle la Universidad ESAN
+deben regirse por los principios éticos que se detallan en el documento
+«Código de Ética para la Investigación».
+a.2. Las solicitudes de registro de proyectos de investigación se presentan
+a la Dirección de Investigación (DI) para su calificación y aprobación en
+cualquier momento del año académico. Para registrar un proyecto de
+investigación en la DI, es necesario completar el Formulario 1 y enviarlo
+en versión digital a <dinv@esan.edu.pe> para su evaluación.
+Los proyectos tienen como propósito:
+1. Publicar artículos en revistas indizadas de prestigio internacional.
+2. Elaborar libros, capítulos de libros y casos.
+3. Obtener patentes de invención y modelos de utilidad (ver
+Procedimiento para la Selección de Proyectos y Productos de
+Ciencia, Tecnología e Innovación).
+En el Anexo 2 del documento “Procedimiento para la Aprobación de
+Proyectos y Productos de Investigación”, se presenta una lista detallada
+de los productos de investigación. En este Anexo, también se incluye la
+base de datos SciELO, ya que publicar artículos en esta base permitirá al
+autor postular como investigador en el Renacyt (Registro Nacional
+Científico, Tecnológico y de Innovación Tecnológica) del Concytec.
+a.3. Adicional al Formulario 1, se solicita adjuntar información que
+sustente que el producto que se desarrollará como resultado del proyecto
+tiene un destino predefinido o preasegurado, según sea el caso. Por
+ejemplo, para libros y capítulos de libros, invitación o documento que
+muestre el interés o la promesa de publicación de la casa editorial; para
+ponencias en conferencias o encuentros académicos, carta o correo
+electrónico de aceptación del resumen enviado, entre otros.
+
+a.4. La DI prioriza los siguientes criterios en el proceso de evaluación de
+proyectos:
+• Orientación: el proyecto debe corresponder a las líneas de
+investigación prioritarias para la universidad.
+• Medio de publicación: el proyecto debe estar orientado a
+convertirse en un producto publicable en revistas indizadas o
+editoriales de prestigio. A través de su proceso de revisión por
+pares, la revista o editorial debe evaluar la significancia, el potencial
+impacto o la importancia del tema propuesto.
+• Aporte: el proyecto debe ser original y buscar constituirse en un
+real aporte al conocimiento.
+
+P á g . 4 | 35
+
+a.5. La DI se encarga de evaluar que los proyectos cumplan con los
+requisitos y criterios establecidos. Si como resultado de la evaluación se
+hacen observaciones al proyecto, estas se comunican al autor por escrito,
+quien debe subsanarlas antes de presentar el proyecto para su
+revaluación.
+a.6. Todo cambio que se presente en un proyecto aprobado por el CI debe
+ser informado y sustentado mediante comunicación formal a la Dirección
+de Investigación.
+a.7. Para presentar un proyecto o producto de investigación a la DI, los
+profesores considerados como tales según el Reglamento del Cuerpo
+Académico de la Universidad y que se estén comprendidos en el alcance
+de la Política de Investigación (punto I de este documento) deberán estar
+registrados en la base de datos CTI Vitae, del Concytec, y contar con su
+respectivo código Orcid con la afiliación de la Universidad ESAN.
+Es responsabilidad de los profesores actualizar periódicamente la
+información del CTI Vitae y solicitar su clasificación y calificación para ser
+parte de los investigadores del Registro Nacional de Ciencia, Tecnología
+y de Innovación Tecnológica (Renacyt).
+
+B. FINANCIAMIENTO DE PROYECTOS DE INVESTIGACIÓN CON
+FONDOS INTERNOS
+Los profesores pertenecientes a las categorías a, b y c del punto I
+(Alcance) pueden contar con un fondo de hasta S/ 12,000 anuales para el
+total de sus proyectos de investigación. El financiamiento está sujeto al
+fondo de disponibilidad anual que el Vicerrectorado de Investigación
+administre.
+Para ello, el VDI informará mediante un comunicado oficial el fondo
+disponible y los concursos a lanzar durante el año.
+El apoyo financiero se aplica, previa evaluación de la DI, a las categorías
+indicadas en el alcance de la Política de Investigación (punto I de este
+documento) y comprende el financiamiento de lo siguiente:
+b. 1. Financiamiento de proyectos de investigación
+• Accesibilidad a centros de documentación y bases de datos.
+• Equipamiento especializado para trabajo de campo y/o en
+procesamiento y análisis de datos.
+• Presentación en congresos o conferencias internacionales:
+inscripción, gastos de transporte, alojamiento y viáticos. (Hasta el
+50% del fondo anual).
+• Traducción y/o edición de estilo de artículos científicos. (Hasta el
+15% del fondo anual).
+
+P á g . 5 | 35
+
+•
+
+•
+
+•
+
+•
+
+Asistencia o asesoría de investigación: personal contratado por
+locación de servicios u otra modalidad que se encuentre dedicado
+a funciones de asistencia a la investigación (trabajo de campo,
+procesamiento y/o análisis de datos, entre otros relacionados).
+Reconocer la coautoría del asistente o asesor dependerá del
+investigador principal (hasta el 35% del fondo anual).
+Si el profesor ordinario investigador logra en los últimos 3 años dos
+(2) puntos de investigación con artículos de las categorías 2.1.1,
+2.1.2, 2.1.3 y 2.1.4 (o equivalentes), podrá utilizar hasta 65% de su
+fondo anual para presentación en congresos o conferencias
+internacionales y hasta 50% para asistente o asesor de
+investigación.
+Si el profesor pertenece a otras categorías y logra en los últimos 3
+años un (1) punto de investigación con artículos de las categorías
+2.1.1, 2.1.2, 2.1.3 y 2.1.4 (o equivalentes), podrá utilizar hasta 65%
+de su fondo anual para presentación en congresos o conferencias
+internacionales y hasta 50% para asistente o asesor de
+investigación.
+Si el profesor pertenece por lo menos a un grupo de investigación
+aprobado por la Dirección de Investigación, esta última
+administrará hasta el 50% del presupuesto de investigación del
+profesor.
+
+b.2. Gestión de adquisiciones
+Para ejecutar el financiamiento de los requerimientos de un proyecto
+aprobado es necesario que el profesor responsable de la investigación se
+comunique con la DI para determinar la selección de proveedores. La DI
+se encarga de definir el tipo de servicio, la compra y/o los pagos por
+realizarse de acuerdo con los procedimientos y plazos establecidos por la
+universidad, para garantizar el cumplimiento de los objetivos y resultados
+propuestos en la investigación.
+Todo requerimiento es sustentado con una factura (o su equivalente) a
+nombre de la Universidad, y/o cualquier documento que le solicite el VDI.
+En caso de materiales o servicios especializados, el profesor debe
+presentar las cotizaciones que correspondan. Todo proveedor debe
+aceptar la política de pagos de la Universidad.
+El apoyo financiero se otorga de acuerdo con el cronograma declarado en
+el Formulario 1 y conforme a la aprobación de los avances del proyecto
+de investigación. El Formulario 2 del Anexo 1 del presente documento
+debe llenarse como mínimo cada 6 meses o a solicitud de la Oficina de
+Gestión de la Investigación para dar el seguimiento correspondiente.
+
+P á g . 6 | 35
+
+III. PROCEDIMIENTO PARA PRODUCTOS DE INVESTIGACIÓN
+Los profesores pertenecientes a las categorías a, b y c del punto I de este
+documento (Alcance) califican para la asignación del incentivo y el puntaje
+dispuesto en el Anexo 2.
+A. EVALUACIÓN DE PRODUCTOS DE INVESTIGACIÓN
+Los productos de investigación que desarrolle la Universidad ESAN deben
+regirse por los principios éticos que se detallan en el documento «Código
+de Ética para la Investigación». Para garantizar la originalidad de los
+productos de investigación, la DI utiliza recursos electrónicos de
+verificación de contenido.
+Este procedimiento se aplica en la evaluación de productos de
+investigación presentados y publicados dentro del periodo de gestión y
+con la única afiliación de la Universidad ESAN. Para ello, el investigador
+debe presentar el Formulario 3, en versión digital, dirigido a la Dirección
+de Investigación.
+Todo producto de investigación debe contar con un proyecto de
+investigación (Formulario 1) presentado previamente a la DI para su
+aprobación. Asimismo, el destino de publicación debe coincidir con lo
+declarado en el Formulario 1 aprobado. Los anteriores son requisitos para
+proceder con el cálculo y/o pago de incentivos.
+
+El proceso de evaluación comprende lo siguiente:
+a.1. La DI recibe las solicitudes de evaluación de productos de
+investigación (Formulario 3) en cualquier momento del año académico.
+Para la evaluación, es obligatorio adjuntar el producto de investigación
+publicado, en formato físico o electrónico, según sea el caso, e indicar el
+medio en que se publicó (revista, editorial, etc.).
+• En el caso de un libro o capítulo de libro, es necesario presentar el
+libro en versión impresa o digital. En el caso de la versión impresa,
+esta será devuelta luego de su evaluación.
+• En el caso de la publicación de un artículo o un caso, se debe
+adjuntar el DOI (digital object identifier) y/o la versión final o
+postprint del produto de investigación en formato electrónico.
+a.2. Afiliación: es la identificación de la institución a la que pertenece el
+investigador, donde presta servicios o bajo cuya dependencia elaboró un
+producto de investigación científica.
+La afiliación permite reconocer los productos de investigación de la
+Universidad como parte de su aporte al conocimiento.
+
+P á g . 7 | 35
+
+Por lo tanto, la afiliación debe declararse como:
+Nombre del profesor y correo electrónico (xxxxxx@esan.edu.pe)
+Universidad ESAN, Lima, Peru
+El reconocimiento de incentivos y/o puntaje será efectivo solo para los
+productos que cumplan con los criterios establecidos e incluyan a la
+Universidad ESAN como única afiliación del autor.
+a.3. Tanto en la valoración de los productos de investigación como la
+correspondiente asignación de incentivos y puntaje se basan en el tipo de
+producto de investigación y en la valoración del impacto del medio de
+publicación. Algunos de los medios para establecer esto último es la
+indización del medio de publicación en las principales bases de datos
+científicas o su presencia en listas prestigiosas. Para ello, la DI utiliza las
+bases de datos del Anexo 3.
+La valoración del impacto del medio de publicación se realiza conforme a
+la calificación vigente de las bases de datos del Anexo 3 u otras fuentes
+de información al momento de la publicación del producto de
+investigación. Asimismo, se evalúa la correspondencia del área de estudio
+del medio de publicación con las líneas de investigación de la Universidad.
+En el caso de que un medio de publicación o revista pertenezca a más de
+un área de estudio, se priorizará el área con mayor relación con las líneas
+de investigación de la Universidad.
+B. CONSIDERACIONES
+b.1. La DI valida los principios de integridad académica para la calificación
+y aceptación de un proyecto o producto de investigación. En caso se
+evidencie algún incumplimiento al Código de Ética en la Investigación de
+la Universidad ESAN, la DI elevará un reporte al Comité de Investigación
+y Ética para que pueda evaluar el caso y recomendar las medidas
+correspondientes.
+Algunos factores por considerar para evitar enviar un trabajo a una revista
+inadecuada:
+•
+•
+•
+•
+
+Ausencia de un proceso de revisión por pares o peer review, en sus
+modalidades simple ciego o doble ciego.
+Plazos relativamente cortos para la revisión por pares.
+Si los costos por procesamiento de artículo (APC) son elevados o no
+transparentes.
+Convocatoria permanente para enviar artículos a números
+especiales (special issues).
+
+P á g . 8 | 35
+
+•
+•
+
+Publicación de un gran número de revistas científicas con el mismo
+sello.
+Si publican los artículos rápidamente.
+
+Sobre la base de los factores enumerados anteriormente, deben ser
+eliminadas como opciones posibles las siguientes revistas o editoriales:
+•
+
+•
+•
+•
+•
+•
+
+Aquellas incluidas en la lista Beall’s List of Potential Predatory
+Journals and Publishers (https://beallslist.net). Si la revista o editorial
+ha estado incluida alguna vez en la lista, es motivo suficiente para
+eliminarlas como opciones de publicación. Para lo anterior se debe
+revisar https://beallslist.net/changelog-for-the-original-list/
+Aquellas
+incluidas
+en
+https://www.journalsinsights.com/blog/predatory-journals-list/
+Las del sello MDPI - Multidisciplinary Digital Publishing Institute
+(https://www.mdpi.com/).
+Aquellas que hayan sido excluidas de Web of Science o Scopus por
+mala conducta académica.
+Aquellas que no cumplan alguno de los criterios considerados en
+https://www.aje.com/arc/8-ways-identify-questionable-open-accessjournal/
+Si al realizar una búsqueda en internet de la revista o la editorial se
+reportan malas prácticas o dudas razonables de que se tenga o haya
+tenido una conducta depredadora o mala conducta académica.
+
+Se necesita autorización expresa de la DI antes de enviar el artículo a una
+revista que tenga APC obligatorio y el valor del APC debe registrarse en
+el Formulario 1. Si se hace caso omiso a esta normativa, el artículo no
+recibirá ni puntaje ni incentivo alguno.
+Se recomienda a los profesores revisar y validar los criterios contenidos
+en https://thinkchecksubmit.org/ antes de enviar su trabajo. En caso de
+duda sobre la idoneidad de una revista o editorial consultar a la DI.
+b.2. En el caso de que el artículo por publicarse no cuente con la versión
+final o postprint al momento de realizarse su valoración, se considerará la
+carta de aceptación de la revista, siempre que se cuente con la fecha
+estimada de publicación, así como con el volumen y número. En el caso
+del libro que aún no está publicado, se considerará una carta o
+comunicación de la editorial o una versión de preprensa digital (PDF).
+Para ello, la DI realizará una preevaluación del producto de investigación
+próximo a publicarse y con este resultado ejecutará el 50% del incentivo.
+El 50% restante se ejecutará cuando se realice la publicación del producto
+de investigación. En el caso de existir variaciones entre la preevaluación
+y la evaluación final, el incentivo y el puntaje asignados se ajustarán a la
+calificación vigente al momento de la publicación.
+
+P á g . 9 | 35
+
+b.3. En el caso de artículos publicados en revistas indizadas que hayan
+sido elaborados por seis (6) o menos autores:
+•
+
+Si el número total de autores con afiliación a la Universidad ESAN
+es igual a uno (1), el incentivo y puntaje se asignará de acuerdo con
+la siguiente tabla:
+Posición
+Primero
+Segundo
+Tercero
+Cuarto
+Quinto
+Sexto
+
+•
+
+Porcentaje
+100%
+70%
+60%
+50%
+40%
+40%
+
+Si el número total de autores con afiliación a la Universidad ESAN es
+mayor a uno (1) el 100% del puntaje se multiplicará por 1.4 y se
+distribuirá de manera equitativa (o según el porcentaje de
+participación declarado) entre los autores con afiliación a la
+Universidad ESAN. En ningún caso un autor podrá recibir más del
+100% del puntaje del artículo. El incentivo asignado no se multiplica
+por ningún coeficiente y se distribuirá de manera equitativa (o según
+el porcentaje de participación declarado) entre los de autores con
+afiliación a la Universidad ESAN.
+
+Los incentivos y los puntajes para los autores con afiliación a la
+Universidad ESAN se calculan según los acápites anteriores, solo serán
+acreedores a ellos los profesores comprendidos en las categorías a, b y c
+del acápite 1. Si la coautoría es con algún profesor de una universidad
+dentro del top 100 de QS World University Ranking vigente al momento
+de la aceptación del artículo el incentivo y el puntaje final se multiplica por
+1.10.
+Para información de incentivos y puntajes, revisar el Anexo 2.
+b.4. En el caso de artículos publicados en revistas indizadas que hayan
+sido elaborados por siete (7) o más autores:
+•
+
+Si el número total de autores con afiliación a la Universidad ESAN
+es igual a uno (1), el incentivo y puntaje se fijará de acuerdo con la
+siguiente tabla:
+
+P á g . 10 | 35
+
+Posición
+Primero
+Segundo
+Tercero
+Cuarto
+Quinto
+Sexto a más
+
+Porcentaje
+100%
+70%
+60%
+50%
+40%
+30%
+
+•
+
+Si el número total de autores afiliados a la Universidad ESAN es
+mayor o igual que dos (2) y todos ellos se encuentran en posiciones
+hasta la siete (7), entonces se asigna 100% del puntaje o del
+incentivo asignable dividido entre el número total de autores con
+afiliación a la Universidad ESAN. También podrían repartirse de
+acuerdo con el porcentaje de participación declarado. Solo en el
+caso del puntaje este se multiplica por 1.4; pero, en ningún caso un
+autor podrá recibir más del 100% del puntaje del artículo.
+
+•
+
+Si todos los autores con afiliación a la Universidad ESAN se
+encuentran en posiciones posteriores a la siete (7), se asigna 30%
+del puntaje o del incentivo asignable dividido entre el número total
+de autores con afiliación a la Universidad ESAN. También podrían
+repartirse de acuerdo con el porcentaje de participación declarado.
+Solo en el caso del puntaje este se multiplica por 1.4. En ningún caso
+un autor podrá recibir más del 30% del puntaje del artículo.
+
+•
+
+Para cualquier otro caso de posiciones y número autores el incentivo
+y el puntaje se repartirán según lo especificado en el Anexo 4.
+
+Los incentivos y los puntajes para los autores con afiliación a la
+Universidad ESAN se calculan según los acápites anteriores, solo serán
+acreedores a ellos los profesores comprendidos en las categorías a, b y c
+del acápite 1.
+Para información de incentivos y puntajes, revisar el Anexo 2.
+
+b.5. En el caso de libros y capítulos de libros, el incentivo y puntaje se
+asignan según lo dispuesto en el Anexo 2 y según las reglas de coautoría
+de los artículos b.3 y b.4 de la presente sección. Sin embargo, el puntaje
+no estará sujeto al factor de 1.4.
+Si un único autor con afiliación a la Universidad ESAN ha elaborado más
+de un capítulo en un mismo libro, el incentivo y el puntaje se asignan en
+función de la ratio Capítulos Publicados en el Libro a Capítulos Totales
+
+P á g . 11 | 35
+
+del Libro. Otros casos de coautoría en múltiples capítulos serán
+analizados por el Comité de Investigación y Ética.
+b.6. Los profesores ordinarios pueden asumir el rol de profesor
+investigador comprometiéndose a realizar fundamentalmente labores de
+investigación retribuidas bajo un convenio de bonificación especial por
+estas labores conforme al artículo 53 del Reglamento del Cuerpo
+Académico de la Universidad.
+La DI fomenta la investigación de alto nivel de los profesores
+investigadores. Para ello, prioriza la producción de artículos científicos de
+estos profesores a revistas reconocidas por su calidad académica.
+b.7. Los profesores contratados a tiempo parcial reciben incentivos por la
+publicación de productos de investigación aprobados por la DI. Estos
+equivalen al 50% de los montos dispuestos en el Anexo 2.
+b.8. En las publicaciones resultantes de los trabajos estudiantiles, el
+profesor asesor (o asesores) recibe el puntaje y el incentivo
+correspondientes establecidos en el Anexo 2. Se debe incluir Universidad
+ESAN como la afiliación institucional de todos los coautores (asesores y
+estudiantes).
+b.9. Cualquier producto de investigación no indizado a las bases de datos
+Journal Citation Report, Master Journal List, Master Book List o Journal
+rankings and metrics son incluidos en el registro sin incentivo y ni puntaje.
+b.10. Las reediciones de libros no son consideradas como un producto
+nuevo.
+b.11. Los autores otorgan a la Universidad el permiso para incluir su
+publicación en los canales de difusión y el repositorio institucional, según
+corresponda.
+b.12. La decisión final del Comité de Investigación en la evaluación de
+productos de investigación es inapelable.
+b.13. Cualquier caso no contemplado en los puntos anteriores será
+evaluado por el Comité de Investigación.
+
+IV. INCUMPLIMIENTO DEL COMPROMISO Y PENALIDADES
+En el caso del incumplimiento del compromiso adquirido (en términos de
+exigencia académica o de calidad de la investigación, o en términos de la
+puntualidad en la entrega de avances, según el cronograma establecido), se
+aplicará la penalidad estipulada en el convenio con el profesor investigador o la
+establecida por el Comité de Investigación.
+
+P á g . 12 | 35
+
+V. ANEXOS
+ANEXO 1
+DOCUMENTOS PARA LA PRESENTACIÓN DE PROYECTOS Y
+PRODUCTOS DE INVESTIGACIÓN (FORMULARIOS)
+En esta sección se describe la documentación que los interesados deben
+presentar para la evaluación de sus proyectos y productos de investigación:
+1. Durante el desarrollo del proyecto de investigación, se entrega a la DI los
+siguientes Formularios:
+•
+•
+•
+
+Formulario 1: Presentación de proyecto de investigación.
+Formulario 2: Reporte de avance o de terminación de proyecto de
+investigación.
+Formulario 3: Presentación de producto de investigación.
+
+2. Las siguientes guías pueden servir para la elaboración de los documentos.
+Todas estas guías son referenciales, pues el investigador puede presentar
+informes alternos en coordinación con la DI.
+
+Guía de referencia para la elaboración del proyecto de investigación (plan)
+1. Abstract/Resumen
+2. Objetivos y formulación del problema
+3. Antecedentes
+4. Contribución al conocimiento
+5. Impacto que se espera lograr con el producto
+6. Diseño metodológico de la investigación (fuentes de información,
+población objeto, instrumentos)
+7. Resumen de marco teórico y/o referencial y revisión de literatura
+8. Cronograma detallado y compromiso de entregas parciales
+9. Presupuesto detallado
+
+P á g . 13 | 35
+
+Guía de referencia para la elaboración de informes de avances (de
+acuerdo con el cronograma presentado):
+1. Estado del proceso de recolección de información, especificándose si
+proviene de fuentes primarias o secundarias.
+2. Estado de la utilización de los instrumentos diseñados para la
+recolección de la información (encuestas, entrevistas, etc.).
+3. Procesamiento de la información según el plan de análisis: uso de
+métodos cualitativos y cuantitativos, analógicos, etc.
+4. Desarrollo de los capítulos o etapas previstos para este informe, según
+cronograma.
+5. Población y/o periodo para los cuales son validados los resultados
+obtenidos.
+6. Aplicación del presupuesto.
+7. Dificultades encontradas y alternativas de solución para la continuidad
+de la investigación.
+8. Factores que no se han podido controlar en la investigación.
+9. Redacción parcial del texto mostrando la coherencia del proyecto con
+los objetivos propuestos.
+10. Comentarios y análisis de la etapa realizada.
+11. Evaluación del trabajo de los miembros del equipo de investigación.
+
+Guía de referencia para la elaboración del informe final:
+El informe final es el documento que sirve para dar por concluido el
+proyecto de investigación, puede ser también el producto de investigación,
+es decir, el artículo, libro, informe de investigación, etc.
+Los aspectos que se evalúan en el informe final son los siguientes:
+1. Coherencia entre los objetivos, las hipótesis, los resultados obtenidos
+y el impacto.
+2. Redacción clara y observancia de las reglas gramaticales.
+3. Autoevaluación y comentarios sobre el proyecto concluido.
+4. Detalle del gasto del presupuesto asignado (materiales bibliográficos,
+uso de equipos, servicios de terceros, etc.).
+5. Posibilidad y/o necesidad de continuar con nuevas etapas del
+proyecto.
+
+3. En el caso de que el profesor solicite dar por terminado un proyecto de
+investigación, deberá sustentar el motivo que originó esta decisión y
+adjuntar al Formulario 2 el manuscrito y los datos cuali-cuantitativos de
+la investigación.
+
+P á g . 14 | 35
+
+FORMULARIO 1
+Presentación de proyecto de investigación
+PROY - -000Datos del solicitante
+Documento de identidad (DNI o
+Apellidos
+pasaporte)
+Nombres
+Grado académico
+OrcID
+Fecha de solicitud
+Posgrado/Pregrado
+Regimen de dedicación
+Categoría Renacyt
+Datos de la investigación publicada
+Título
+Nombre de medio de publicación
+Editorial/Universidad
+País
+ISSN (revista)/ISBN (libro)
+Monto APC si es que es obligatorio
+Línea de investigación
+Tipo de producto de investigación (marque solo uno)
+1. Investigación para la enseñanza y el aprendizaje
+
+1.1 Libro de texto
+1.2 Capítulo de ibro de texto
+1.3 Caso
+2. Investigación básica y aplicada
+2.1 Artículo en revista académica (journal) evaluada por pares
+2.2 Libro (resultado de investigación original, desarrollo conceptual, sistematización de conocimientos, etc.)
+
+2.3 Capítulo en libro
+3. Contribución a la práctica
+3.1. Informes especializados
+4. Propiedad intelectual
+4.1 Patente de invención
+4.2 Modelo de utilidad
+4.3 Diseño industrial o esquema trazados de circuitos integrados
+4.4 Otros
+
+P á g . 15 | 35
+
+Información de coautores, según orden de participación
+Apellidos
+
+Nombres
+
+Afiliación
+
+*Si necesita más líneas puede adjuntar un documento detallado.
+
+Abstract/resumen
+
+Objetivo general
+
+Objetivos específicos
+
+Impacto que se espera lograr con el producto
+
+Diseño metodológico de la investigación
+
+Resumen del marco teórico y/o referencial
+
+Cronograma detallado y compromiso de entregas parciales (Gantt del proyecto)
+Fecha de inicio
+Fecha de fin
+
+P á g . 16 | 35
+
+Actividades clave
+
+Entregable
+
+Inicio
+
+Fin
+
+*Si necesita más líneas puede adjuntar un documento.
+
+Presupuesto detallado (en soles)
+Moneda
+
+Soles
+
+Total presupuesto
+Concepto
+
+Moneda
+
+Monto
+
+*Si necesita más líneas puede adjuntar un documento.
+
+Documentación adjunta (marcar)
+Artículo científico: carta o correo electrónico de aceptación
+Conferencia: carta o correo electrónico de aceptación
+Libro y/o capítulo: comunicación formal de la casa editorial
+Otros (indicar)
+Al firmar este Formulario, el profesor declara que:
+El presente proyecto de investigación culminará en un producto de investigación y su
+elaboración se ajustará con lo establecido en los siguientes documentos del VDI que fijan
+las políticas y procedimientos de investigación:
+1. Política de Investigación
+2. Política de Propiedad Intelectual
+3. Código de Ética para Investigación
+4. Procedimiento para la Aprobación de Proyectos y Productos de Investigación
+
+Doy fe de que la información presentada
+es la correcta y está completa.
+Firma del profesor solicitante
+
+A ser llenado por la DI
+Aprobado por
+
+Fecha de aprobación
+
+Evaluación
+
+P á g . 17 | 35
+
+FORMULARIO 2
+Reporte de avance o de terminación de proyecto de investigación
+PROY- -000Datos del solicitante
+DNI o pasaporte
+Apellidos y nombres
+OrcID
+Fecha de solicitud
+Datos del proyecto de investigación
+ID proyecto*
+Título del proyecto
+* Número correlativo asignado por la DI al proyecto de investigación.
+
+Datos del medio de publicación
+Nombre de medio de publicación
+Editorial/Universidad
+País
+ISSN (revista)/ ISBN (libro)
+Monto APC si es que es obligatorio
+Fecha estimada de publicación
+Información de coautores, según orden de participación
+Apellidos
+Nombres
+
+Afiliación
+
+*Si necesita más líneas puede adjuntar un documento detallado.
+
+Indicar la actividad en la que se encuentra, el porcentaje de avance del
+proyecto, las tareas que se están llevando a cabo en la actividad elegida y la
+fecha que estima en la que se culminarán las actividades:
+Actividad
+
+Avance(%)
+
+Descripción
+
+Fecha de fin
+
+1. Apoyo de asistente o practicante
+2. Traducción solicitada por docente
+3. Participación en conferencia
+4. Versión preliminar del manuscrito
+5. Búsqueda de Journal / Editorial
+6. Corrección de estilo
+7. Versión final del manuscrito
+8. Comunicación de rechazo de publicación
+9. Comunicación de aceptación de publicación
+Otra, indicar:
+
+P á g . 18 | 35
+
+(*) Guía referencial de porcentajes de avance del proyecto:
+Act 1
+Act 2
+Act 3
+Act 4
+Act 5
+Act 6
+Act 7
+Act 8
+Act 9
+
+40
+55
+%
+70
+%
+75
+%
+80
+%
+85
+%
+90
+%
+65
+%
+10
+%
+0%
+En caso su proyecto de investigación cuente con modificaciones o dificultades,
+indicar:
+Modificaciones en la aplicación del presupuesto o en el cumplimiento del
+cronograma
+
+Dificultades encontradas y alternativas de solución para la continuidad de la
+investigación
+
+Solo para proyectos inviables: justificar su solicitud para dar por terminado el
+proyecto sin contar con un producto o entregable. Adjuntar al Formulario el
+manuscrito y los datos cuali-cuantitativos de la investigación.
+
+Al firmar este Formulario, el profesor declara que:
+El presente proyecto de investigación culminará en un producto de investigación, y su elaboración se
+ajustará a lo establecido en los siguientes documentos del VDI que fijan las políticas y procedimientos
+de investigación:
+1. Política de Investigación
+2. Política de Propiedad Intelectual
+3. Código de Ética para Investigación
+
+Doy fe de que la información presentada es
+la correcta y está completa.
+Firma del profesor solicitante
+
+A ser llenado por la DI
+Aprobado por
+
+Fecha de aprobación
+
+Evaluación
+
+P á g . 19 | 35
+
+FORMULARIO 3
+Presentación de producto de investigación
+PUB - -000Datos del solicitante
+Documento de identidad (DNI o pasaporte)
+Apellidos
+Nombres
+Grado académico
+OrcID
+Fecha de solicitud
+Posgrado/Pregrado
+Regimen de dedicación
+Categoría Renacyt
+Datos de la investigación publicada
+Título
+Nombre de medio de publicación
+Editorial/Universidad
+País
+ISSN (revista)/ ISBN (libro)
+Monto APC si es que es obligatorio
+ID Proyecto*
+Fecha de aceptación
+Fecha de publicación
+Línea de investigación
+* Número correlativo asignado por la DI al proyecto de investigación.
+
+Tipo de producto de investigación (marque solo uno)
+1. Investigación para la enseñanza y el aprendizaje
+1.1 Libro de texto
+1.2 Capítulo de ibro de texto
+1.3 Caso
+2. Investigación básica y aplicada
+
+2.1 Artículo en revista académica (journal) evaluada por pares
+2.2 Libro (resultado de investigación original, desarrollo conceptual, sistematización de
+conocimientos, etc.)
+
+2.3 Capitulo en libro
+3. Contribución a la práctica
+
+3.1. Informes especializados
+
+P á g . 20 | 35
+
+4. Propiedad intelectual
+
+4.1 Patente de invención
+4.2 Modelo de utilidad
+4.3 Diseño industrial o esquema trazados de circuitos integrados
+4.4 Otros
+Información de coautores, en el orden que aparecen en la publicación
+Apellidos
+Nombres
+Afiliación
+
+*Si necesita más líneas puede adjuntar un documento detallado.
+
+Abstract/resumen (en español y en inglés, si se publicó en una revista
+internacional)
+
+Documentación adjunta (marcar)
+Versión final/posprint del artículo o caso, en formato
+electrónico
+DOI (digital object identifier)
+Libro impreso
+Otros (indicar)
+Firma del profesor solicitante
+Doy fe de que la información presentada
+es la correcta y está completa.
+
+A ser llenado por la DI
+Aprobado por
+
+Fecha de aprobación
+
+Evaluación
+
+P á g . 21 | 35
+
+ANEXO 2
+INCENTIVOS Y PUNTAJES ASIGNABLES POR CATEGORÍAS Y
+SUBCATEGORÍAS DE PRODUCTOS DE INVESTIGACIÓN
+
+Categoría 1. Investigación para la
+enseñanza y el aprendizaje
+Subcategoría 1.1. Libro de texto
+1.1.1. Publicado por ESAN Ediciones
+1.1.2. Libro. Publicado por editorial
+comercial y/o universitaria prestigiosa y
+de ámbito internacional, nivel A (ver
+Anexo 5)
+
+Incentivo
+asignable (USD)
+
+Equivalencia
+en puntaje
+
+2,600 + 30%
+regalías
+
+1.00
+
+6,600
+
+1.50
+
+1.1.3. Libro. Publicado por editorial
+comercial y/o universitaria prestigiosa y
+4,400
+de ámbito internacional, nivel B (ver
+Anexo 5)
+1.1.4. Libro. Publicado por editorial
+comercial y/o universitaria prestigiosa y
+3,300
+de ámbito internacional, nivel C (ver
+Anexo 5)
+Subcategoría 1.2. Capítulo en libro de texto
+
+1.00
+
+0.75
+
+1.2.1. Publicado por ESAN Ediciones
+
+880
+
+0.20
+
+1.2.2. Publicado por editorial comercial
+y/o universitaria prestigiosa y de ámbito
+internacional, nivel A (ver Anexo 5)
+
+2,200
+
+0.50
+
+1.2.3. Publicado por editorial comercial
+y/o universitaria prestigiosa y de ámbito
+internacional, nivel B (ver Anexo 5)
+
+1,320
+
+0.30
+
+1.2.4. Publicado por editorial comercial
+y/o universitaria prestigiosa y de ámbito
+internacional, nivel C (ver Anexo 5)
+
+880
+
+0.20
+
+1,100
+
+0.25
+
+1,100
+
+0.25
+
+Subcategoría 1.3. Caso
+1.3.1. Caso ampliamente documentado
+con su respectiva guía para el instructor
+publicado por ESAN Ediciones (ver
+Anexo 6)
+1.3.2. Caso ampliamente documentado
+con su respectiva guía para el instructor
+publicado por The Case Center
+
+P á g . 22 | 35
+
+1.3.3. Caso ampliamente documentado
+con su respectiva guía para el instructor
+(tipo caso Harvard) y publicado por
+editorial comercial y/o universitaria
+prestigiosa y de ámbito internacional (ver
+Anexo 5)
+
+3,080
+
+0.70
+
+Categoría 2. Investigación básica y
+aplicada
+
+Incentivo
+asignable (USD)
+
+Equivalencia en
+puntaje
+
+Subcategoría 2.1. Artículo en revista académica (journal) revisada por
+pares o arbitrada
+2.1.1. Artículo publicado en una revista
+que aparece en la lista vigente AJG con
+15,400
+3.50
+calificación 4* o en la lista vigente del
+Financial Times Top 50 Journals
+2.1.2 Artículo publicado en una revista
+que aparece en la lista vigente AJG,
+11,000
+2.50
+CNRS o ABDC y clasificada con 𝑁 = 1
+2.1.3 Artículo publicado en una revista
+que aparece en la lista vigente AJG,
+7,700
+1.75
+CNRS o ABDC y clasificada con 𝑁 = 2
+2.1.4 Artículo publicado en una revista
+que aparece en la lista vigente AJG,
+CNRS o ABDC y clasificada con 𝑁 = 3
+2.1.5.A Artículo publicado en una
+revista que aparece en la lista vigente
+AJG, CNRS o ABDC y clasificada con
+𝑁=4
+2.1.5.B Artículo publicado en una
+revista que no aparece en las listas
+vigentes AJG, CNRS o ABDC,
+con 𝑁 ≥ 4, indizada en la base de
+datos de Web of Science y editada en
+Latinoamérica
+2.1.6.A Artículo publicado en una revista
+con 𝑁 = 5 que aparece solo en una de
+las listas vigentes (AJG, CNRS o ABDC)
+y está indizada en la base de datos de
+Scopus
+
+5,500
+
+1.25
+
+4,400
+
+1.00
+
+4,400
+
+1.00
+
+2,200
+
+0.50
+
+P á g . 23 | 35
+
+2.1.6.B Artículo publicado en una revista
+que no se encuentra en ninguna de las
+listas vigentes (AJG, CNRS o ABDC),
+con 𝑁 ≥ 4, pero se encuentra indizada
+en las bases de datos de Web of
+Science o Scopus cuartil Q1.
+Los artículos publicados en ESCi solo se
+aceptarán si pertenecen a Scopus (Q1,
+Q2 y Q3).
+2.1.7 Artículo publicado en una revista
+que no se encuentra en ninguna de las
+listas vigentes (AJG, CNRS o ABDC),
+con 𝑁 = 5, indizada en la base de datos
+Scopus cuartil Q2. Como máximo se
+reconocerán 2 publicaciones al año por
+profesor en esta categoría.
+2.1.8 Artículo publicado en una revista
+que no se encuentra en ninguna de las
+listas vigentes (AJG, CNRS o ABDC),
+con 𝑁 = 5, indizada en la base de
+datos Scopus cuartil Q3 o Q4.
+Como máximo se reconocerá 1
+publicación al año por profesor en esta
+categoría.
+
+2,200
+
+0.50
+
+1,540
+
+0.35
+
+1,100
+
+0.25
+
+2.1.9 Artículo publicado en una revista
+indizada en la base de datos SciELO
+
+No califica para incentivo ni puntaje.
+Sin embargo, esta publicación sirve
+para ser considerado como
+investigador en Renacyt de
+Concytec.
+2.1.10 Artículo publicado en un
+No califica para incentivo ni puntaje.
+Conference Proceeding indizado en las Sin embargo, esta publicación sirve
+bases de datos SciELO, Scopus o Web para ser considerado como
+of Science
+investigador en el Renacyt del
+Concytec.
+Subcategoría 2.2. Libro (resultado de investigación original, desarrollo
+conceptual, sistematización de conocimientos, compilación)
+2.2.1. Publicado por ESAN Ediciones
+
+5,500
+
+1.25
+
+2.2.2. Libro. Publicado por editorial
+comercial y/o universitaria prestigiosa y
+de ámbito internacional, nivel A (ver
+Anexo 5)
+
+8,800
+
+2.00
+
+P á g . 24 | 35
+
+2.2.3. Libro. Publicado por editorial
+comercial y/o universitaria prestigiosa y
+6,600
+1.50
+de ámbito internacional, nivel B (ver
+Anexo 5)
+2.2.4. Libro. Publicado por editorial
+comercial y/o universitaria prestigiosa y
+5,500
+1.25
+de ámbito internacional, nivel C (ver
+Anexo 5)
+Subcategoría 2.3. Capítulo en libro (resultado de investigación original,
+desarrollo conceptual, sistematización de conocimientos, compilación)
+2.3.1. Publicado por ESAN Ediciones
+2.3.2. Publicado por editorial comercial
+y/o universitaria prestigiosa y de ámbito
+internacional, nivel A (ver Anexo 5)
+2.3.3. Publicado por editorial comercial
+y/o universitaria prestigiosa y de ámbito
+internacional, nivel B (ver Anexo 5)
+2.3.4. Publicado por editorial comercial
+y/o universitaria prestigiosa y de ámbito
+internacional, nivel C (ver Anexo 5)
+Subcategoría 2.4. Otro
+
+1,320
+
+0.30
+
+2,640
+
+0.60
+
+1,760
+
+0.40
+
+1,320
+
+0.30
+
+2.4.1. Artículo para conference
+proceedings publicados por ESAN
+Ediciones
+2.4.2. Libro de Serie de Gerencia para
+Desarrollo
+
+No califica para
+incentivo. Sin
+embargo, esta
+publicación sirve
+para ser
+considerado
+como
+investigador en
+Renacyt de
+Concytec.
+
+0.15
+
+0.25
+
+IMPORTANTE
+• Aplicable a profesores conforme al punto III de este Procedimiento
+• La publicación en revistas multidisciplinarias solo será reconocida si la
+revista se encuentra dentro de alguna de las listas vigentes AJG, CNRS
+o ABDC.
+• Los artículos de las categorías 2.1.1, 2.1.2, 2.1.3, 2.1.4, 2.1.5.A, 2.1.5.B y
+2.1.6.A se encuentran a disposición de los autores en la web del VDI con
+el nombre «Lista Negocios TOP». Solo artículos pertenecientes a la lista
+vigente serán válidos para esas categorías.
+• Artículos de temas de Educación, Psicología, Ingeniería Industrial, Medio
+Ambiente y Computer Science tienen sus propias listas vigentes. Todo
+
+P á g . 25 | 35
+
+•
+
+•
+
+•
+
+•
+•
+•
+•
+
+artículo que asigne 1.00 o más puntos de investigación deberá estar
+contenido obligatoriamente en las listas vigentes antes mencionadas.
+Se incluye una lista adicional de negocios, denominada «Negocios
+Miscelánea» que contiene puntajes e incentivos. Esta contiene revistas
+indizadas en Scopus y WoS (colección principal) que complementa las
+listas vigentes anteriores.
+Los artículos no contenidos en ninguna lista vigente serán clasificados
+como categorías 2.1.6.B, 2.1.7, 2.1.8 únicamente según su cuartil de
+Scopus y su indización en ESCi.
+Si un caso de categoría 1.3.3 se publica en alguna revista incluida en las
+listas vigentes de revistas, recibirá como incentivo y puntaje el monto
+mayor.
+Cualquier caso de la categoría 1.3.1 en empresa no considerada en el
+Anexo 7 será evaluada por el Comité de Investigación y Ética.
+Si un libro es publicado en coedición, el incentivo y el puntaje se asignan
+de acuerdo con la editorial de mayor calificación (ver Anexo 5).
+Como máximo se reconocerán tres (3) publicaciones al año por autor en
+las diferentes subcategorías de ESAN Ediciones (ver Anexo 2).
+Toda publicación de ESAN Ediciones posee titularidad plena y absoluta
+de los derechos de distribución, reproducción, comunicación pública y
+transformación de la obra en todos los idiomas, los formatos y los medios
+conocidos o por conocerse, incluyendo, pero no limitándose a, ediciones
+impresas, digitales, audiovisuales y electrónicas.
+
+CÁLCULO DEL NIVEL DE LA REVISTA
+El nivel 𝑁 de una revista científica se determina a partir de las siguientes
+equivalencias:
+Lista AJG
+4*, 4
+3
+2
+1
+No en la lista
+
+Lista CNRS
+1ge, 1g, 1e, 1
+2
+3
+4
+No en la lista
+
+Lista ABDC
+A*, A
+B
+C
+No en la lista
+
+Web of Science
+Q1
+Q2
+Q3
+Q4
+No indizada
+
+S
+1
+2
+3
+4
+5
+
+La revista es clasificada según su 𝑆 en cada fuente de información, es decir, se
+determinan sus puntajes 𝑆𝐴𝐽𝐺 , 𝑆𝐶𝑁𝑅𝑆 , 𝑆𝐴𝐵𝐷𝐶 y 𝑆𝑊𝑂𝑆 . Luego se determina 𝑆 𝑚𝑎𝑥 que
+es igual a
+𝑆 𝑚𝑎𝑥 = max (𝑆𝐴𝐽𝐺 , 𝑆𝐶𝑁𝑅𝑆 , 𝑆𝐴𝐵𝐷𝐶 , 𝑆𝑊𝑂𝑆 ).
+
+P á g . 26 | 35
+
+Con lo cual el puntaje 𝑁 de la revista es igual a
+𝑆
+
+𝑁 = 𝑟𝑒𝑑𝑜𝑛𝑑𝑒𝑎𝑟 ( 𝐴𝐽𝐺
+
++ 𝑆𝐶𝑁𝑅𝑆 +𝑆𝐴𝐵𝐷𝐶 +𝑆𝑊𝑂𝑆 −𝑆 𝑚𝑎𝑥
+3
+
+),
+
+donde el redondeo se hace al entero más cercano.
+Como ejemplo, consideremos el Journal XYZ. Primero, se realiza la clasificación
+de esta revista según cada una de las fuentes de información:
+•
+•
+•
+•
+
+Esta revista es categoría 3 en AJG, con lo cual 𝑆𝐴𝐽𝐺 = 2
+Esta revista no aparece en la lista CNRS, con lo cual 𝑆𝐶𝑁𝑅𝑆 = 5
+Esta revista es categoría C en ABDC, con lo cual 𝑆𝐴𝐵𝐷𝐶 = 4
+Esta revista es Q1 en Web of Science, con lo cual 𝑆𝑊𝑂𝑆 = 1
+
+Luego, 𝑆 𝑚𝑎𝑥 = max (𝑆𝐴𝐽𝐺 , 𝑆𝐶𝑁𝑅𝑆 , 𝑆𝐴𝐵𝐷𝐶 , 𝑆𝑊𝑂𝑆 ) = max(2,5,4,1) = 5. Con lo cual:
+𝑁 = 𝑟𝑒𝑑𝑜𝑛𝑑𝑒𝑎𝑟 (
+
+𝑆𝐴𝐽𝐺 + 𝑆𝐶𝑁𝑅𝑆 + 𝑆𝐴𝐵𝐷𝐶 + 𝑆𝑊𝑂𝑆 − 𝑆 𝑚𝑎𝑥
+)
+3
+
+2+5+4+1−5
+
+= 𝑟𝑒𝑑𝑜𝑛𝑑𝑒𝑎𝑟 (
+
+3
+
+) = 𝑟𝑒𝑑𝑜𝑛𝑑𝑒𝑎𝑟(2.33) = 2
+
+Entonces, el nivel del Journal XYZ es 𝑁 = 2
+
+P á g . 27 | 35
+
+ANEXO 3
+BASES DE DATOS REFERENCIALES PARA EVALUACIÓN DE
+PRODUCTOS DE INVESTIGACIÓN
+Para garantizar la objetividad de la evaluación de los productos de investigación,
+la DI utiliza las siguientes fuentes de información:
+Categoría
+
+Subcatego
+ría 2.1.
+Artículo en
+revista
+académica
+(journal)
+revisada
+por pares
+o arbitrada
+
+Fuente
+
+Base de
+datos
+
+Web
+
+Financial
+Times
+
+Financial
+Times Top
+50 Journals
+
+https://www.ft.com/content/3405a5125cbb-11e1-8f1f-00144feabdc0
+
+Clarivate
+
+Web of
+Science
+
+https://jcr.clarivate.com
+https://mjl.clarivate.com/
+
+Elsevier
+
+Scopus
+
+https://www.scopus.com
+
+SciELO
+
+SciELO
+
+https://scielo.org/
+
+Australia
+n
+Business
+Deans
+Council
+Chartere
+d
+Associati
+on of
+Business
+Schools
+
+ABDC
+Journal
+Quality List
+(ABDC)
+
+https://abdc.edu.au/abdc-journalquality-list/
+
+Academic
+https://charteredabs.org
+Journal
+Guide (AJG)
+
+Categorizati
+on of
+Journals in https://www.gate.cnrs.fr/wpEconomics content/uploads/2021/12/categorisati
+and
+on37_liste_juin_2020-2.pdf
+Managemen
+t (CNRS)
+IMPORTANTE. Estas bases de datos de actualizan anualmente. La valoración
+del impacto del medio de publicación se realiza conforme a la calificación vigente
+de las bases de datos al momento de la publicación del producto de
+investigación.
+National
+Center
+for
+Scientific
+Research
+
+P á g . 28 | 35
+
+ANEXO 4
+CÁLCULO DE INCENTIVO Y PUNTAJE EN FUNCIÓN DE LA COAUTORÍA
+Cuando el total de autores sea mayor o igual a siete (7), los autores se dividirán
+en dos secciones:
+• Primera sección. Profesores con afiliación a la Universidad ESAN
+que se encuentren hasta la séptima posición
+• Segunda sección. Profesores con afiliación a la Universidad ESAN
+que se encuentren después de la séptima posición
+Utilizaremos los siguientes términos:
+•
+•
+•
+•
+
+Incentivo. 100% del incentivo que se daría por tener un único autor
+𝑄(𝑃𝑟𝑖𝑚𝑒𝑟𝑎 𝑠𝑒𝑐𝑐𝑖ó𝑛). Cantidad de profesores con afiliación a la
+Universidad ESAN en la primera sección
+𝑄(𝑆𝑒𝑔𝑢𝑛𝑑𝑎 𝑠𝑒𝑐𝑐𝑖ó𝑛). Cantidad de profesores con afiliación a la
+Universidad ESAN en la segunda sección
+Las cantidades (a), (b) y (c) se obtienen de las siguientes fórmulas:
+70% ∗ 𝑖𝑛𝑐𝑒𝑛𝑡𝑖𝑣𝑜
+
+o (𝑎) = 𝑄(𝑃𝑟𝑖𝑚𝑒𝑟𝑎 𝑠𝑒𝑐𝑐𝑖ó𝑛)
+30% ∗ 𝑖𝑛𝑐𝑒𝑛𝑡𝑖𝑣𝑜
+
+o (𝑏) = 𝑄(𝑆𝑒𝑔𝑢𝑛𝑑𝑎 𝑠𝑒𝑐𝑐𝑖ó𝑛)
+o (𝑐) =
+
+𝑖𝑛𝑐𝑒𝑛𝑡𝑖𝑣𝑜−(𝑎) ∗ 𝑄(𝑆𝑒𝑔𝑢𝑛𝑑𝑎 𝑠𝑒𝑐𝑐𝑖ó𝑛)
+𝑄(𝑃𝑟𝑖𝑚𝑒𝑟𝑎 𝑠𝑒𝑐𝑐𝑖ó𝑛)
+
+Si (a), (b) o (c) da un número negativo o es división por 0, tomará el valor de cero
+(0).
+La repartición del incentivo podrá tener dos escenarios A o B, los cuales se
+exponen en la siguiente tabla:
+
+Escenario
+A
+B
+
+Condición
+(a) ≥ (b), o
+(a) = cero, o
+(b) = cero
+(a) < (b)
+
+Asignación a cada profesor en
+Primera
+Segunda
+sección
+sección
+(a)
+
+(b)
+
+(c)
+
+(a)
+
+El incentivo total asignado a todos los autores con afiliación a la Universidad
+ESAN se podrá dividir de acuerdo con el porcentaje de participación declarado.
+
+P á g . 29 | 35
+
+El puntaje será proporcional al incentivo brindado al profesor con respecto al
+incentivo total del artículo. En caso de que el número de autores pertenecientes
+a la Universidad ESAN sea mayor o igual que 2, el monto se multiplica por 1.4.
+El puntaje total asignado a los autores con afiliación a la Universidad ESAN se
+podrá dividir de acuerdo con el porcentaje de participación declarado. En ningún
+caso un autor podrá recibir más del 100% del puntaje del artículo.
+A continuación, se presentan tres casos en que el incentivo es de USD 15,400
+
+Caso 1
+Cuatro autores afiliados a la Universidad ESAN están dentro de los 7 primeros
+autores (primera Sección) y hay un único profesor afiliado a la Universidad ESAN
+en el puesto 10 de autoría (segunda sección).
+Se aplican las fórmulas:
+•
+
+(𝑎) =
+
+•
+
+(𝑏) =
+
+•
+
+(𝑐) =
+
+70% ∗ 15,400
+4
+30% ∗ 15,400
+1
+15,400−(2,695) ∗ 1
+4
+
+(a) = USD 2,695.00
+(b) = USD 4,620.00
+(c) = USD 3,176.25
+
+Como (a) < (b) se aplica el escenario B, quedando como repartición de
+incentivos:
+•
+
+•
+
+Cada autor de la primera sección recibirá USD 3,176.25 y cada uno
+de la segunda sección, USD 2,695.00. El incentivo total asignado
+es de USD 15,400.00
+En términos de puntaje asignado, cada uno de los cuatro
+3176.25
+
+profesores en las primeras 7 posiciones recibirán 1.4 × ( 15400 ) ×
+3.5 = 1.01 puntos, y el profesor en el puesto 10 recibirá
+2695
+
+1.4 × (15400) × 3.5 = 0.8575. El puntaje total asignado entre todos
+•
+
+los autores es igual a 1.4 × 3.5 = 4.9
+El incentivo y puntaje total asignado (en este caso USD 15,400.00
+y 4.9 puntos) también se pudieron asignar según participación
+declarada. En el caso del puntaje, ningún autor podrá recibir más
+de 3.5 puntos.
+
+P á g . 30 | 35
+
+Caso 2
+Dos profesores con afiliación a la Universidad ESAN están dentro de los 7
+primeros autores (primera Sección) y tres profesores afiliados a la Universidad
+ESAN en los puestos 10, 12 y 14 de autoría, respectivamente (segunda sección).
+Se aplican las fórmulas:
+•
+
+(𝑎) =
+
+•
+
+(𝑏) =
+
+•
+
+(𝑐) =
+
+70% ∗ 15,400
+2
+30% ∗ 15,400
+3
+15,400−(5,390) ∗ 3
+2
+
+(a) = USD 5,390
+(b) = USD 1,540
+(c) = USD 0 (por dar resultado negativo)
+
+Como (a) ≥ (b) se aplica el escenario A, quedando como repartición de
+incentivos:
+•
+
+•
+
+Cada profesor de la primera sección recibirá USD 5,390.00 y cada
+uno de la segunda sección, USD 1,540.00. El incentivo total
+asignado es de USD 15,400.00
+En términos de puntaje asignado, cada uno de los dos profesores
+5390
+
+en las primeras 7 posiciones recibirán 1.4 × (15400) × 3.5 = 1.715
+puntos, y cada profesor en los puestos 10, 12 y 14 recibirá
+1540
+
+1.4 × (15400) × 3.5 = 0.49. El puntaje total asignado entre todos los
+•
+
+autores es igual a 1.4 × 3.5 = 4.9
+El incentivo y puntaje total asignado (en este caso USD 15,400.00
+y 4.9 puntos) también se pudieron asignar según participación
+declarada. En el caso del puntaje, ningún autor podrá recibir más
+de 3.5 puntos.
+
+Caso 3
+Ningún profesor afiliado a la Universidad ESAN está dentro de los 7 primeros
+autores (primera Sección) y cuatro profesores afiliados a la Universidad ESAN
+están en el puesto 8, 9, 10 y 11 de autoría, respectivamente (segunda sección).
+Se aplican las fórmulas:
+•
+
+(𝑎) =
+
+•
+
+(𝑏) =
+
+70% ∗ 15,400
+0
+30% ∗ 15,400
+4
+
+(a) = USD 0 (por tener denominador nulo)
+(b) = USD 1,155
+
+P á g . 31 | 35
+
+•
+
+(𝑐) =
+
+15,400−(5,390) ∗ 0
+0
+
+(c) = USD 0 (por tener de denominador
+
+nulo)
+Como (a) = 0, se aplica el escenario A, quedando como repartición de incentivos:
+•
+•
+
+Cada profesor de segunda sección recibirá USD 1,155.00. El
+incentivo total asignado es de USD 4,620.00
+Los puntos de repartirán proporcionalmente al incentivo monetario
+multiplicando por 1.4, en este caso cada profesor recibirá
+1155
+
+1.4 × (15400) × 3.5 = 0.3675. El incentivo total asignado es de
+•
+
+0.3675 × 4 = 1.47
+El incentivo y puntaje total asignado (en este caso USD 4,620.00 y
+1.47 puntos) también se pudieron asignar según participación
+declarada.
+
+P á g . 32 | 35
+
+ANEXO 5
+LISTAS REFERENCIALES PARA LIBROS, CAPÍTULOS DE LIBROS Y
+CASOS
+En el siguiente enlace, se encuentra la clasificación de editoriales académicas,
+universitarias y comerciales internacionales segmentadas en categorías A, B y
+C, incluye las bases de datos de Clarivate y Scopus.
+https://docs.google.com/spreadsheets/d/1OAU7UI18Jl_fjZ9_DvrXWySrsfJL5dor
+/edit?usp=sharing&ouid=101273785308532145787&rtpof=true&sd=true
+Nota. Toda editorial que no se encuentre en el enlace será evaluada por el
+Comité de Investigación y Ética.
+
+ANEXO 6
+EMPRESAS CONSIDERADAS PARA LA REDACCIÓN DE
+CASOS DE ESTUDIO DE ESAN EDICIONES
+Empresa
+Banco de Crédito del Perú
+Interbank
+Alicorp
+BACKUS AB Inbev
+BBVA
+Ferreyros
+Nestlé
+Google
+Cementos Pacasmayo
+Natura Cosméticos
+Rimac Seguros
+Scotiabank
+Real Plaza
+Pacífico Seguros
+Sodimac
+AJE
+Toyota
+Supermercados Peruanos
+Entel
+Kimberly-clark
+Arca Continental Lindley
+Latam
+Belcorp
+
+P á g . 33 | 35
+
+Saga Falabella
+Caja Arequipa
+Calidda
+América Móvil-Claro
+Gloria
+Corporación Aceros Arequipa
+Mapfre
+Microsoft
+Cencosud
+IBM
+Ripley
+AFP Integra del Grupo SURA
+LAP (Lima Airport Partners)
+Pastelería San Antonio
+Yanbal
+Coca-cola
+Adidas
+Primax
+Minera Antamina
+Casa Andina
+Ransa
+Engie
+Tottus
+Acurio Restaurantes
+El Comercio
+Prima AFP
+ISM-Industrias San Miguel
+Danper
+CBC
+Clínica Delgado - Auna
+RPP (Radio Programas del Perú)
+AFP Habitat
+Komatsu-Mitsui/ Dist Cummins
+Procter and Gamble
+Repsol
+Minera Las Bambas
+Gold Fields
+Jockey Plaza
+Tasa
+San Fernando
+Telefónica-Movistar
+Pepsico
+Unacem
+Sodexo
+Grupo Romero
+Anglo American - Quellaveco
+
+P á g . 34 | 35
+
+Pfizer
+Petroperú
+JW Marriott Hotel Lima
+3M
+Minera Cerro Verde
+Química Suiza
+Camposol
+Minera Yanacocha
+Southern Perú Copper Corporation
+PWC-Price Water House Coopers
+Minsur
+Hochschild Mining
+Grupo Breca
+Unilever
+Compañía de Minas Buenaventura
+ENEL Distribución
+Siemens Energy
+Pluspetrol
+Delosi
+Glencore
+Mondelez International
+Kallpa Generación
+Isa REP
+Nota. Adaptada de Rankings, por Monitor Empresarial de Reputación
+Corporativa, s. f., (https://www.merco.info/pe/ranking-merco-empresas). De
+dominio público.
+
+P á g . 35 | 35
+
+CONSEJO UNIVERSITARIO
+EXTRACTO DEL ACTA DE LA SESIÓN ORDINARIA N°05
+DE FECHA MIERCOLES 29 DE MAYO DE 2024
+Modalidad Virtual
+
+Orden del Día
+Política de Investigación: Modificación.
+Acuerdo N°178-05/2024
+El Consejo Universitario acordó por unanimidad aprobar la modificación de la
+Política de Investigación de la Universidad ESAN.
+Copia del documento actualizado queda registrado como Anexo 37 de esta acta y
+archivado en el Vicerrectorado de Investigación de la Universidad ESAN.
+
+Surco, 26 de junio de 2024
+
+Alonso de Molina 1652, Monterrico Chico, Surco │Apartado 1846, Lima 100 │Perú
+Telfs.: [511] 317-7200 / 712-7200 │Fax: [511] 345-1328
+
+Universidad ESAN
+Vicerrectorado de Investigación
+
+Política de Investigación
+
+Lima, julio de 2024
+
+ÍNDICE
+LA INVESTIGACIÓN COMO MANDATO INSTITUCIONAL ............................... 3
+OBJETIVOS ....................................................................................................... 4
+ALCANCE .......................................................................................................... 4
+LÍNEAS DE INVESTIGACIÓN............................................................................ 4
+RECURSOS PARA LA PROMOCIÓN DE LA INVESTIGACIÓN ..................... 10
+CLASIFICACIÓN DE LA INVESTIGACIÓN...................................................... 11
+COMITÉ DE INVESTIGACIÓN Y ÉTICA.......................................................... 11
+
+P á g . 2 | 11
+
+POLÍTICA DE INVESTIGACIÓN
+LA INVESTIGACIÓN COMO MANDATO INSTITUCIONAL
+Desde su fundación como escuela de negocios en 1963, ESAN ha mantenido
+una sólida reputación en la enseñanza de posgrado. Asimismo, ha llevado a cabo
+importantes investigaciones y proyectos de consultoría en los campos
+relacionados con la administración y disciplinas afines a esta ciencia, lo que le
+ha permitido desarrollar nuevos conocimientos de gran provecho para sus
+programas formativos y la sociedad en general.
+Cuando se instituye la Universidad ESAN, sus estatutos recogen la orientación
+y organización de las actividades de investigación:
+TÍTULO I: DE LA UNIVERSIDAD
+Artículo 3°. - Para cumplir con sus fines, la Universidad ESAN realiza las
+siguientes actividades esenciales: [...]
+c) Promueve la investigación y la creación intelectual
+En los estatutos también se establece que la investigación es inherente a la
+institución universitaria y al desarrollo de la plana docente. Por ello es promovida
+e incentivada.
+TÍTULO III: DE LA ORGANIZACIÓN ACADÉMICA
+Capítulo X: De la Investigación
+Artículo 68°. - La Universidad ESAN, en razón de la función esencial que
+cumple la investigación en una institución académica, la estimula y apoya
+en todos sus ámbitos y unidades académicas, poniendo énfasis en la
+investigación interdisciplinaria. La investigación es parte del desarrollo de
+los profesores y de la formación de los alumnos.
+El Vicerrectorado de Investigación (VDI) es la instancia que promueve y gestiona
+las actividades de investigación:
+TÍTULO II: DEL GOBIERNO DE LA UNIVERSIDAD
+Capítulo IV: Del Rector y los Vicerrectores
+Artículo 27°. - El Vicerrector de Investigación, quien dirige el área de
+investigación, es un docente con grado académico de doctor.
+El Vicerrector de Investigación promueve y desarrolla la actividad de
+investigación de la Universidad, colaborando en su tarea con todos los
+estamentos de la Universidad.
+Las principales atribuciones del Vicerrector de Investigación son las siguientes
+(artículo 27):
+a) Proponer las políticas de investigación de la Universidad y, una vez
+aprobadas éstas, organizar su implementación.
+
+P á g . 3 | 11
+
+b) Buscar activamente recursos humanos, materiales y financieros para
+fines de investigación, proponiendo las prioridades en el uso de los
+recursos disponibles de acuerdo con las políticas y planes aprobados por
+la Asamblea General y/o el Consejo Universitario.
+c) Facilitar y apoyar la actividad de investigación que se realiza en la
+Universidad, coordinando con el Vicerrector Académico y con los
+Decanos de las distintas unidades académicas.
+d) Diseñar y ejecutar evaluaciones periódicas de los resultados de la
+actividad de investigación en la Universidad y proponer los ajustes
+necesarios.
+e) Promover y coordinar relaciones con otras instituciones, nacionales o
+extranjeras, públicas o privadas, con fines de investigación.
+f) Conocer, resolver y ejecutar los demás asuntos necesarios para
+asegurar la buena marcha de la actividad de investigación en la
+Universidad.
+OBJETIVOS
+El Vicerrectorado de Investigación es la instancia que promueve, gestiona y
+articula las actividades de investigación científica de la Universidad ESAN. Los
+objetivos del Vicerrectorado de Investigación son los siguientes:
+• Velar por la calidad e integridad de la investigación en la comunidad
+universitaria.
+• Aumentar anualmente el número de proyectos de investigación y
+publicaciones de artículos científicos.
+• Gestionar los recursos económicos internos y externos para mejorar en
+forma sostenida la producción intelectual. • Atraer investigadores
+internacionales de reconocido prestigio para impulsar la coautoría en la
+publicación de artículos en revistas indizadas.
+• Fomentar convenios de cooperación con instituciones nacionales e
+internacionales orientados a desarrollar proyectos de investigación y
+capacitación científica.
+Para lograr sus objetivos cuenta con dos unidades:
+• Dirección de Investigación
+• ESAN Ediciones
+ALCANCE
+El ámbito de aplicación de la Política de Investigación comprende a los
+profesores ordinarios y contratados de la Universidad ESAN definidos como tales
+en el Reglamento del Cuerpo Académico vigente.
+LÍNEAS DE INVESTIGACIÓN
+La Universidad ESAN apunta a contribuir al desarrollo nacional en temas de
+mayor relevancia. Según sus estatutos:
+
+P á g . 4 | 11
+
+Artículo 69°. - Las actividades de investigación, incluyendo las tesis de
+grado y trabajos para la titulación profesional o de posgrado en segunda
+especialidad, sin perjuicio de ser orientadas a la ampliación del saber, son
+enmarcadas preferentemente en asuntos y proyectos de interés nacional
+y regional, recogiendo iniciativas de los sectores privado y público.
+Las principales líneas de investigación con sus respectivos objetivos son:
+•
+
+Administración. Promover y generar conocimientos que contribuyan a
+mejorar el desempeño, la solución de problemas, la competitividad y la
+gestión integral de las organizaciones. Permite desarrollar temas sobre
+Gestión Estratégica, Gestión del Desempeño, Cultura y Clima
+Organizacional, Auditoría, Empresas Familiares, Innovación Gerencial,
+Gobierno Corporativo, Gestión Inmobiliaria, Gestión de Agronegocios.
+
+•
+
+Contabilidad, Costos y/o Tributación. Promover y generar
+conocimientos sobre los componentes de la Contabilidad Gerencial, la
+normatividad nacional e internacional y la Auditoría, para contribuir a la
+solución de problemas asociados con el manejo de información financiera.
+Permite desarrollar temas con relación a Costos, Presupuestos y
+Tributación.
+
+•
+
+Derecho. Esta línea de investigación se divide en:
+Derecho y Nuevas Tecnologías. Promover y generar conocimiento sobre
+las implicancias jurídicas de las nuevas tecnologías en todos sus
+aspectos, con especial énfasis en los derechos fundamentales y en la
+necesidad de adaptar el Derecho y sus especialidades a las nuevas
+tecnologías e inteligencia artificial.
+Derecho Empresarial y Derecho Corporativo. Promover y generar
+conocimientos en relación con las ramas del derecho corporativo que
+inciden en la formación, organización, operación y control de las
+empresas y organizaciones similares, con la finalidad de promover una
+cultura de buen gobierno corporativo y de responsabilidad social
+abarcando por ejemplo las áreas del derecho comercial, derecho
+societario, derecho mercantil, fusiones y adquisiciones, derecho laboral.
+Derecho Económico. Promover y generar conocimiento en las ramas del
+derecho corporativo que permiten al Estado planificar su desarrollo
+socioeconómico, abarcando el derecho constitucional económico, el
+derecho regulatorio y las normas relativas a las concesiones. Asimismo,
+abordar temas de libre competencia, derecho financiero y bancario, y
+protección al consumidor.
+Derecho Público. Promover y generar conocimientos en relación con la
+rama del derecho que rige la organización y el funcionamiento
+administrativo y político de los diferentes estamentos públicos. Estudia
+
+P á g . 5 | 11
+
+también a las relaciones entre el poder público y la ciudadanía bajo el
+imperativo de interés general, abarcando las áreas del derecho
+constitucional, derecho administrativo, derecho internacional público y
+filosofía del derecho.
+•
+
+Desarrollo Sostenible, Responsabilidad Social Empresarial (RSE) y
+Relacionamiento Comunitario. Promover y generar conocimiento
+socialmente responsable sobre la conducta de personas, culturas y
+sociedades en contextos organizacionales a fin de contribuir al logro de
+los objetivos empresariales y al desarrollo y bienestar de la sociedad. Esta
+línea de investigación abarca temas como Ética Empresarial, Objetivos de
+Desarrollo Sostenible (ODS), Responsabilidad Social Corporativa (RSC),
+Empresarial (RSE) y Universitaria (RSU), Inversión Social, Gestión de
+Comunidades y Relaciones Comunitarias. Además, se incluyen estudios
+sobre el impacto de políticas y prácticas sostenibles en la reputación
+corporativa y la aceptación social, evaluando indicadores como Global
+Reporting Initiative (GRI), Pacto Mundial, ETHOS, ISO 26000, SG21, SA
+8000, Social Licence to Operate (SLO), Distintivo Empresa Socialmente
+Responsable (ESR), y mapeo de grupos de interés o stakeholders. Se
+busca integrar perspectivas de innovación social y económica que
+refuercen la sostenibilidad a largo plazo y el compromiso ético de las
+organizaciones con sus comunidades locales y globales.
+
+•
+
+Diseño Industrial, Automatización y/o Robótica. Promover y generar
+conocimiento sobre técnicas y teorías clásicas y avanzadas en el área de
+modelado, simulación, automatización y control, con el objetivo de diseñar
+e implementar sistemas que integren tecnologías de punta tanto para
+entornos industriales como para domésticos.
+
+•
+
+Economía y/o Finanzas. Promover y generar conocimientos que brinden
+soluciones a la gestión de recursos económico-financieros y a la toma de
+decisiones empresariales y gubernamentales. permite desarrollar temas
+de finanzas corporativas, finanzas públicas, presupuesto de capital,
+estructura de capital, gestión de tesorería, análisis financiero, alternativas
+de financiamiento, valorización, fusiones y adquisiciones, colusión,
+etcétera.
+Promover y generar conocimiento sobre el entorno de inversiones del
+sistema financiero, así como el proceso de inversión de los distintos
+agentes que participan en él. permite desarrollar temas en gestión de
+inversiones, gestión de activos y pasivos, gestión de riesgos, gestión de
+portafolios, estrategias de inversión, inversiones alternativas, y otros
+temas relacionados con banca y bolsa de valores.
+Promover y generar conocimiento sobre las condiciones para el desarrollo
+y crecimiento económico, la economía laboral, la disminución de la
+desigualdad y la equidad social.
+Promover el conocimiento en el uso de modelos matemáticos,
+estadísticos y econométricos para la solución óptima de problemas a los
+
+P á g . 6 | 11
+
+que se enfrentan las gerencias de las empresas, los diferentes niveles de
+gobierno y la sociedad en general.
+•
+
+Educación y/o Gestión del conocimiento. Promover y generar
+conocimiento sobre desarrollo del capital intelectual, gestión de
+conocimiento, análisis de la calidad educativa, metodología de
+enseñanza-aprendizaje, con el objetivo de contribuir en la mejorar los
+procesos del sistema educativo.
+
+•
+
+Emprendimiento y/o Innovación. Promover y generar conocimiento
+sobre la innovación, emprendimiento y liderazgo que permita mejorar el
+entendimiento del modelo de negocio, su entorno y cómo impacta en la
+sociedad. los temas relacionados son: factores de éxito, razones de
+fracaso y perfil del emprendedor, ciclo de vida del emprendimiento,
+emprendimiento social, razones para el emprendimiento, clusters,
+metodologías ágiles, entre otros.
+
+•
+
+Ética, Compliance y Gobernanza Corporativa. Promover y generar
+conocimiento sobre los principios éticos y el cumplimiento normativo
+dentro de las organizaciones para fortalecer la integridad y transparencia
+corporativa. Esta línea de investigación se enfoca en la implementación
+de marcos de gobernanza que aseguren la alineación de las prácticas
+empresariales con las expectativas legales y éticas. Los temas incluyen:
+códigos de ética, políticas de compliance, auditorías de cumplimiento,
+responsabilidad de la junta directiva, mecanismos de control interno,
+gestión de riesgos corporativos, transparencia en la información
+financiera, y cláusulas anticorrupción. Se aborda la prevención del fraude
+y la corrupción mediante políticas específicas y sistemas de denuncias
+efectivos, la ética en la toma de decisiones, la cultura organizacional en
+relación con la ética y el compliance, y el impacto de la regulación
+internacional en las prácticas de gobernanza. El objetivo es desarrollar
+estrategias que promuevan un liderazgo responsable y fomenten una
+cultura de alta integridad que contribuya al éxito sostenible de las
+organizaciones.
+
+•
+
+Gestión pública y/o Políticas públicas. Promover y generar
+conocimientos relacionados con la rama del derecho que rige la
+organización y el funcionamiento administrativo y político de los diferentes
+estamentos públicos. Incluye también las relaciones entre el poder público
+y la ciudadanía bajo el imperativo del interés general, lo que abarca las
+áreas del derecho constitucional, derecho administrativo, derecho
+internacional público y filosofía del derecho.
+Promover y generar conocimiento sobre las variables macroeconómicas
+y sus proyecciones político-sociales, entendidas como el conjunto de
+orientaciones y lineamientos que permitan el bienestar social. Contiene
+temas de desigualdad, género, pobreza, migración, corrupción, políticas
+antisoborno, gestión pública, política monetaria y fiscal.
+
+P á g . 7 | 11
+
+Promover y generar conocimiento para estudiar las actividades públicas
+en lo relacionado con la liberalización en la prestación de servicios
+públicos, enmarcados en regulación y competencia.
+•
+
+Globalización y/o Negocios internacionales. Promover y generar
+conocimientos que contribuyan al desarrollo de la gestión de negocios a
+nivel internacional, articulando la cadena global de valor para identificar
+oportunidades de negocios, favorecer la competitividad y expansión
+empresarial en mercados internacionales.
+Permite desarrollar temas relacionados con comercio exterior,
+transnacionales, tratados de comercio, barreras comerciales, inversión
+extranjera directa, mercados financieros globales, desarrollo de
+herramientas de negociación y de gestión administrativa de empresas
+internacionales, entre otros.
+
+•
+
+Industrias Extractivas, Agroindustria, Pesca y Energía. Promover y
+generar conocimiento sobre la gestión sostenible de recursos naturales
+(renovables y no renovables), innovaciones en la extracción y producción,
+y su relación con el medio ambiente. Esta línea de investigación busca
+explorar métodos y prácticas que permitan equilibrar el desarrollo
+económico con la conservación ambiental. Los temas incluyen, pero no
+se limitan a: tecnologías limpias en la extracción de minerales, prácticas
+sostenibles en agroindustria, gestión de recursos marinos, desarrollo de
+energías renovables, impacto ambiental de las actividades extractivas y
+productivas, y políticas para la sostenibilidad, desarrollo maderero y
+forestal, entre otros.
+
+•
+
+Liderazgo, Comportamiento y/o Gestión del Talento. Promover y
+generar conocimientos sobre la conducta de personas y/o de sociedades
+en contextos aplicados a la empresa o a la sociedad, con el objetivo de
+buscar oportunidades para que los diferentes actores sean artífices y
+objetivos del desarrollo en un contexto histórico, ético y sociológico.
+Permite desarrollar temas relacionados con psicología del consumidor,
+psicología organizacional, recursos humanos y su vínculo con la
+tecnología, dirección de personas, coaching, mentoring, empleabilidad,
+psicología financiera, liderazgo femenino entre otros.
+
+•
+
+Marketing. Propone metodologías y estrategias para manejar y generar
+conocimientos sobre estos temas para crear valor y facilitar la adopción
+de buenas prácticas en marketing.
+Permite desarrollar temas sobre marketing digital, comportamiento del
+consumidor y creación de valor, B2B, marketing de servicios, retail,
+marketing analytics, comunicaciones de marketing, branding,
+neuromarketing, marketing social, marketing deportivo, así como
+ecosistemas digitales de marketing, y temas de marketing digital en
+general.
+
+P á g . 8 | 11
+
+•
+
+Medio Ambiente. Promover y generar conocimientos socioambientales,
+manejo de recursos naturales y contaminación ambiental. También, se
+enfoca en el manejo de ecosistemas y biodiversidad, así como en la
+gestión ambiental y la planificación sostenible. Esta línea considera la
+gestión del riesgo de desastres naturales y las estrategias de adaptación
+al cambio climático, así como el desarrollo de modelos matemáticos para
+optimizar la gestión de recursos naturales. El objetivo es contribuir a la
+creación de estrategias que aseguren la viabilidad económica mientras
+protegen y restauran el ecosistema natural.
+
+•
+
+Producción, Procesos y/o Gestión de la Calidad. Promover y generar
+conocimiento a través del análisis, modelación y mejoramiento de
+sistemas complejos de manufactura de cualquier tipo, relacionados con la
+planeación, programación de producción, certificaciones. promover y
+generar conocimiento mediante el análisis de la organización de las
+empresas y, a partir de ello, proponer estrategias que permitan mejorar la
+calidad y el desempeño.
+
+•
+
+Psicología (desarrollo del factor humano). Promover y generar
+conocimientos sobre la conducta de personas y/o de grupos en contextos
+aplicados a la empresa o a la sociedad, con el objetivo de buscar
+oportunidades para que los diferentes actores sociales sean artífices y fin
+del desarrollo, considerando el contexto histórico, ético y sociológico y la
+inclusión de la tecnología en el campo de la psicología, tales como la
+neurociencia.
+
+•
+
+Seguridad Industrial, Salud Ocupacional y/o Servicios de Salud.
+Promover y generar conocimiento en relación con programas de salud
+ocupacional que puedan ser diseñados e implementados en una empresa
+con el fin de fortalecer el bienestar laboral de la comunidad en una
+organización. También considera la gestión de servicios privados de
+salud, organizaciones asistenciales, tendencias globales, entre otros.
+
+•
+
+Sistemas y/o Tecnologías de Información. Promueve la investigación
+en técnicas avanzadas relacionadas con los sistemas de información, lo
+que en un sentido amplio cubre las tecnologías de información, y su
+interacción en la empresa con el área administrativa y organizativa.
+comprende hardware, software, base de datos y redes de comunicación,
+data warehouse, sistemas ERP, CRM, cadena de suministros, inteligencia
+de negocios y analytics, cloud computing, inteligencia artificial, big data y
+otros.
+
+•
+
+Supply Chain y Gestión Logística Integral. Promover y generar
+conocimiento a través del análisis, modelación, planificación y mejora de
+sistemas complejos de redes o cadenas de suministro. Esta línea de
+investigación se centra en optimizar los flujos de información y materiales
+a lo largo de toda la cadena de valor, desde los proveedores hasta el
+
+P á g . 9 | 11
+
+cliente final. Los temas abordados incluyen logística inversa, gestión de la
+cadena de suministro, gestión de proveedores y compras, estrategias de
+distribución, eficiencia en la gestión de almacenes e inventarios, y
+estándares de servicio al cliente. Además, se exploran aspectos como la
+integración de tecnologías de la información en la logística, sostenibilidad
+y responsabilidad social en la cadena de suministro, análisis de riesgos y
+resiliencia de la cadena de suministro, y políticas de recall. El objetivo es
+desarrollar prácticas innovadoras que respondan a los desafíos
+contemporáneos del mercado y contribuyan a la sostenibilidad económica
+y ambiental.
+•
+
+Turismo, Hotelería y Gastronomía. Promover y generar conocimiento
+sobre el desarrollo sostenible en turismo, la gestión de la hospitalidad y
+las innovaciones en gastronomía, con el objetivo de mejorar los servicios
+y la experiencia del cliente en estos sectores. Investigar el potencial de
+ingredientes autóctonos y productos regionales en la gastronomía,
+promoviendo su uso e industrialización. Los temas de interés incluyen
+estrategias para el turismo sostenible, impacto económico del turismo,
+tendencias en la hospitalidad, gestión de operaciones hoteleras,
+innovaciones culinarias, emprendimientos gastronómicos, efectos de la
+gastronomía en la atracción turística, y la influencia de la cultura local en
+la gastronomía, entre otros relacionados con los ejes temáticos de esta
+línea de investigación. En síntesis, esta línea busca explorar cómo estos
+aspectos contribuyen al desarrollo social, territorial, económico, ambiental
+y cultural, así como su impacto en la conservación del patrimonio local y
+global.
+
+RECURSOS PARA LA PROMOCIÓN DE LA INVESTIGACIÓN
+El Vicerrectorado de Investigación gestiona los recursos asignados por la
+Universidad para la investigación. Estos recursos son distribuidos de acuerdo
+con las líneas estratégicas priorizadas por la institución y el VDI que serán
+comunicadas al inicio de cada año.
+Asimismo, el VDI valora la producción científica de los profesores otorgando
+incentivos a la investigación, de acuerdo con la importancia y el impacto de los
+productos publicados y la propiedad intelectual generada.
+
+P á g . 10 | 11
+
+CLASIFICACIÓN DE LA INVESTIGACIÓN
+Para efectos de la Política de Investigación, los proyectos y/o productos se
+clasifican en cuatro categorías:
+a) Investigación básica y aplicada
+b) Propiedad intelectual: invenciones, modelos de utilidad, diseño
+industrial o esquemas de trazados de circuitos integrados.
+c) Investigación para la enseñanza y el aprendizaje
+d) Contribución a la práctica
+
+COMITÉ DE INVESTIGACIÓN Y ÉTICA
+Son funciones del Comité de Investigación y Ética (CI):
+1.
+
+Evaluar y aprobar los proyectos y productos de investigación con
+características no contempladas en el Procedimiento para la
+Aprobación de Proyectos y Productos de Investigación.
+2. Velar por el cumplimiento de los principios y normas del Código de
+Ética en la Investigación en todas las prácticas de investigación de
+la Universidad ESAN.
+3. Establecer las sanciones aplicables en caso de que estas no estén
+definidas en la sección sexta de sanciones del Código de Ética en
+la Investigación.
+4. Desarrollar cualquier función adicional relacionada con el
+cumplimiento del Código Ética en la Investigación.
+El CI de la Universidad ESAN depende del Vicerrectorado de Investigación (VDI)
+y está conformado por el vicerrector de Investigación, quien lo preside, el director
+de Investigación y tres profesores que hayan obtenido el grado de doctor y
+pertenezcan a diferentes disciplinas. Las decisiones son tomadas por mayoría
+simple. En caso de empate, el vicerrector de Investigación emite el voto
+dirimente. En ausencia justificada del vicerrector de Investigación, el director de
+Investigación preside el CI y asume el voto dirimente.
+Cuando lo juzgue necesario, el VDI tiene la potestad de invitar a especialistas de
+la industria para que brinden su opinión sobre los proyectos y productos de
+investigación en evaluación.
+
+P á g . 11 | 11
+
+
+
+
+Instrucciones: 
+Responde ÚNICAMENTE de acuerdo con el texto anterior. 
+Si la pregunta no está relacionada con el contenido anterior, responde exactamente con este mensaje:
+FORMULE UNA PREGUNTA MAS CLARA ACERCA DE VDI DE LA UNIVERSIDAD ESAN.
+Tu respuesta debe ser breve en 50 palabras, clara y organizada, y no debe incluir explicaciones innecesarias ni decir la palabra 'resumen'. 
+Pregunta del usuario: """ + pregunta + @"?"""; 
+
+            // Replace with the actual Gemini API endpoint and your API key
+            var apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBNxdhtlmjRMHt8h1TdmtGVOrl73Xy0K2c";
+            var requestBody = new
+            {
+                contents = new[] { new { parts = new[] { new { text = prompt } } } }
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(apiUrl, content);
+
+            if (!response.IsSuccessStatusCode)
+                return StatusCode((int)response.StatusCode, "Error calling Gemini API");
+
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            // Deserializa y extrae solo el texto generado por el modelo
+            using var doc = JsonDocument.Parse(responseString);
+            var text = doc.RootElement
+                .GetProperty("candidates")[0]
+                .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
+                .GetString();
+
+            // Devuelve solo el texto como respuesta
+            return Ok(text);
+        }
+    }
+}
