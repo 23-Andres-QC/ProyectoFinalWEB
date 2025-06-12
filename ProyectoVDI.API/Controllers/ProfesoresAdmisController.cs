@@ -58,10 +58,10 @@ namespace ProyectoVDI.API.Controllers
         // Método: PUT
         // Ruta: api/profesoresadmis/{id}
         // Body: { ... }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ProfesoresAdmisUpdateDTO dto)
+        [HttpPut]
+        public async Task<IActionResult> Update( [FromBody] ProfesoresAdmisUpdateDTO dto)
         {
-            if (id != dto.IdProfesorAdmis) return BadRequest();
+            
             var updated = await _service.UpdateAsync(dto);
             if (!updated) return NotFound();
             return NoContent();

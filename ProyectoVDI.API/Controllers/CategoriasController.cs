@@ -24,13 +24,32 @@ namespace ProyectoVDI.API.Controllers
         {
             var result = await _service.GetAllAsync();
             // Mapea a DTO sin IdCategoria
-            var resultNoId = result.Select(x => new CategoriasListNoIdDTO
+            var resultado = result.Select(x => new CategoriasListNoIdDTO
             {
+                
                 Descripcion = x.Descripcion,
                 Estado = x.Estado
             });
-            return Ok(resultNoId);
+            return Ok(resultado);
         }
+
+        //obtener todas las categorias y detalles
+        //api/categorias/all
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllWithDetails()
+        {
+            var result = await _service.GetAllAsync();
+            // Mapea a DTO de detalle (incluye IdCategoria)
+            var detalles = result.Select(x => new CategoriasDetailDTO
+            {
+                IdCategoria = x.IdCategoria,
+                Descripcion = x.Descripcion,
+                Estado = x.Estado
+            });
+            return Ok(detalles);
+        }
+
+
 
         // GET: api/categorias/{id}
         // Obtiene una categoria por su ID
@@ -52,10 +71,10 @@ namespace ProyectoVDI.API.Controllers
 
         // PUT: api/categorias/{id}
         // Actualiza una categoria existente
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CategoriasUpdateDTO dto)
+        [HttpPut]
+        public async Task<IActionResult> Update( [FromBody] CategoriasUpdateDTO dto)
         {
-            if (id != dto.IdCategoria) return BadRequest();
+            
             var updated = await _service.UpdateAsync(dto);
             if (!updated) return NotFound();
             return NoContent();
