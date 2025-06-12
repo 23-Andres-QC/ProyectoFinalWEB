@@ -27,11 +27,12 @@ namespace ProyectoVDI.CORE.Core.Services
                 result.Add(new ProfesoresAdmisListDTO
                 {
                     IdProfesorAdmis = item.IdProfesorAdmis,
-                    IdCategoria = item.IdCategoriaNavigation?.Descripcion, // Ahora muestra la descripción
+                    IdCateg = item.IdCategoria, // ahora vuelve mas la categoria id
+                    Categoria = item.IdCategoriaNavigation?.Descripcion, // Ahora muestra la descripción
                     Dni = item.Dni,
                     NombreyApellido = item.NombreyApellido,
                     Correo = item.Correo,
-                    Estado = item.Estado
+                    Estado = item.Estado == 1 ? "Activo" : "Inactivo"
                 });
             }
             return result;
@@ -69,6 +70,7 @@ namespace ProyectoVDI.CORE.Core.Services
         }
 
         // Actualiza los datos de un profesor existente.
+        //api/
         public async Task<bool> UpdateAsync(ProfesoresAdmisUpdateDTO dto)
         {
             var entity = new ProfesoresAdmis
@@ -78,7 +80,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 Dni = dto.Dni,
                 NombreyApellido = dto.NombreyApellido,
                 Correo = dto.Correo,
-                Estado = dto.Estado
+                Estado = dto.Estado == "Activo" ? 1 : 0
             };
             return await _repository.UpdateAsync(entity);
         }
