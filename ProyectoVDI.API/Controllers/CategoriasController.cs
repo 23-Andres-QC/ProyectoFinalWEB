@@ -34,7 +34,7 @@ namespace ProyectoVDI.API.Controllers
         }
 
         // GET: api/categorias/descripciones
-   
+        //s
         [HttpGet("descripciones")]
         public async Task<IActionResult> GetDistinctDescripciones()
         {
