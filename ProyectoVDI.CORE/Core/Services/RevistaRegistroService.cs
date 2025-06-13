@@ -360,5 +360,17 @@ namespace ProyectoVDI.CORE.Core.Services
             if (issnObj == null || !issnObj.IdRevista.HasValue) return false;
             return await _revistaRepo.DeleteAsync(issnObj.IdRevista.Value);
         }
+
+        // NUEVO: Obtener nombres de columnas válidas para consulta distinct en MetadatosRevistaISSN
+        public Task<IEnumerable<string>> GetMetadatosColumnNamesAsync()
+        {
+            return _metaRepo.GetColumnNamesAsync();
+        }
+
+        // NUEVO: Obtener valores distintos de una columna en MetadatosRevistaISSN
+        public Task<IEnumerable<string>> GetMetadatosDistinctValuesAsync(string columnName)
+        {
+            return _metaRepo.GetDistinctValuesAsync(columnName);
+        }
     }
 }

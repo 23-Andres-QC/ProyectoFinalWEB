@@ -7,6 +7,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
 {
     public interface IUsuariosRepository
     {
+        Task<List<UsuarioReporteDTO>> GetUsuariosReporteAsync(UsuarioReporteFiltroDTO filtro);
         Task<List<Usuario>> GetAllAsync();
         Task<Usuario?> GetByIdAsync(int id);
         Task<int> CreateAsync(Usuario usuario);

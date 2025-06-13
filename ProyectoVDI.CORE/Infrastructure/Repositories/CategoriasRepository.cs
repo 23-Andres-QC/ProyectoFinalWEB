@@ -3,6 +3,7 @@ using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.Infrastructure.Data;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Infrastructure.Repositories
@@ -21,6 +22,16 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task<IEnumerable<Categorias>> GetAllAsync()
         {
             return await _context.Categorias.ToListAsync();
+        }
+
+        // Obtiene todas las descripciones de categorias distintas
+        public async Task<IEnumerable<string>> GetDistinctDescripcionAsync()
+        {
+            return await _context.Categorias
+                .Select(c => c.Descripcion)
+                .Where(d => d != null)
+                .Distinct()
+                .ToListAsync();
         }
 
         // Obtiene una categoria por su ID

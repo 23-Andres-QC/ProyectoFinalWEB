@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.Infrastructure.Data;
@@ -88,6 +89,36 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             usuario.FechaModificacion = System.DateTime.Now;
             _context.Usuario.Update(usuario);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<UsuarioReporteDTO>> GetUsuariosReporteAsync(UsuarioReporteFiltroDTO filtro)
+        {
+            var query = _context.Usuario
+                .Include(u => u.IdProfesorAdmisNavigation)
+                .Include(u => u.IdRolNavigation)
+                .AsQueryable();
+
+            if (filtro.IdRol.HasValue)
+                query = query.Where(u => u.IdRol == filtro.IdRol);
+
+            if (filtro.Estado.HasValue)
+                query = query.Where(u => u.Estado == filtro.Estado);
+
+            if (filtro.FechaInicio.HasValue)
+                query = query.Where(u => u.FechaCreacion >= filtro.FechaInicio);
+
+            if (filtro.FechaFin.HasValue)
+                query = query.Where(u => u.FechaCreacion <= filtro.FechaFin);
+
+            return await query.Select(u => new UsuarioReporteDTO
+            {
+                Correo = u.Correo,
+                Descripcion = u.IdRolNavigation.Descripcion,
+                DNI = u.IdProfesorAdmisNavigation.Dni,
+                Estado = u.Estado,
+                FechaCreacion = u.FechaCreacion,
+                FechaModificacion = u.FechaModificacion
+            }).ToListAsync();
         }
     }
 }

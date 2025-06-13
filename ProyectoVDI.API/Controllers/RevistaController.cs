@@ -147,5 +147,45 @@ namespace ProyectoVDI.API.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
+
+        // GET: api/Revista/categorias-listacerrada
+        [HttpGet("categorias-listacerrada")]
+        public async Task<IActionResult> GetCategoriasListaCerrada()
+        {
+            var categorias = await _lcdService.GetDistinctCategoriasAsync();
+            return Ok(categorias);
+        }
+
+        // GET: api/Revista/columnas-listacerrada
+        [HttpGet("columnas-listacerrada")]
+        public async Task<IActionResult> GetColumnasListaCerrada()
+        {
+            var columnas = await _lcdService.GetColumnNamesAsync();
+            return Ok(columnas);
+        }
+
+        // GET: api/Revista/distinct-listacerrada/{columna}
+        [HttpGet("distinct-listacerrada/{columna}")]
+        public async Task<IActionResult> GetDistinctValoresListaCerrada(string columna)
+        {
+            var valores = await _lcdService.GetDistinctValuesAsync(columna);
+            return Ok(valores);
+        }
+
+        // GET: api/Revista/columnas-metadatos
+        [HttpGet("columnas-metadatos")]
+        public async Task<IActionResult> GetColumnasMetadatos()
+        {
+            var columnas = await _service.GetMetadatosColumnNamesAsync();
+            return Ok(columnas);
+        }
+
+        // GET: api/Revista/distinct-metadatos/{columna}
+        [HttpGet("distinct-metadatos/{columna}")]
+        public async Task<IActionResult> GetDistinctValoresMetadatos(string columna)
+        {
+            var valores = await _service.GetMetadatosDistinctValuesAsync(columna);
+            return Ok(valores);
+        }
     }
 }

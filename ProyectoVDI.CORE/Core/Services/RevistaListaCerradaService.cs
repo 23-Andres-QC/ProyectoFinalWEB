@@ -216,5 +216,24 @@ namespace ProyectoVDI.CORE.Core.Services
             await _revistaRepo.UpdateAsync(revista);
             return true;
         }
+
+        public async Task<IEnumerable<string>> GetDistinctCategoriasAsync()
+        {
+            var lcds = await _lcdRepo.GetAllAsync();
+            return lcds.Select(lcd => lcd.Categoria)
+                       .Where(c => !string.IsNullOrWhiteSpace(c))
+                       .Distinct()
+                       .ToList();
+        }
+
+        public Task<IEnumerable<string>> GetColumnNamesAsync()
+        {
+            return _lcdRepo.GetColumnNamesAsync();
+        }
+
+        public Task<IEnumerable<string>> GetDistinctValuesAsync(string columnName)
+        {
+            return _lcdRepo.GetDistinctValuesAsync(columnName);
+        }
     }
 }

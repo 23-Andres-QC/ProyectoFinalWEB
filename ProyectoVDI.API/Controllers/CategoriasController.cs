@@ -33,6 +33,15 @@ namespace ProyectoVDI.API.Controllers
             return Ok(resultado);
         }
 
+        // GET: api/categorias/descripciones
+        //1
+        [HttpGet("descripciones")]
+        public async Task<IActionResult> GetDistinctDescripciones()
+        {
+            var descripciones = await _service.GetDistinctDescripcionAsync();
+            return Ok(descripciones);
+        }
+
         //obtener todas las categorias y detalles
         //api/categorias/all
         [HttpGet("all")]

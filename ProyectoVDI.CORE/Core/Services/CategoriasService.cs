@@ -3,6 +3,7 @@ using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ProyectoVDI.CORE.Core.Services
 {
@@ -31,6 +32,12 @@ namespace ProyectoVDI.CORE.Core.Services
                 });
             }
             return result;
+        }
+
+        // Obtiene descripciones distintas de categorias
+        public async Task<IEnumerable<string>> GetDistinctDescripcionAsync()
+        {
+            return await _repository.GetDistinctDescripcionAsync();
         }
 
         // Obtiene una categoria por su ID y la mapea a DTO de detalle

@@ -127,6 +127,26 @@ namespace ProyectoVDI.API.Controllers
             return Ok(result);
         }
 
+        // =====================
+        // Reporte de usuarios con filtros
+        // =====================
+        [HttpGet("reporte")]
+        public async Task<IActionResult> GetUsuariosReporte(
+            [FromQuery] int? idRol,
+            [FromQuery] int? estado,
+            [FromQuery] DateTime? fechaInicio,
+            [FromQuery] DateTime? fechaFin)
+        {
+            var filtro = new UsuarioReporteFiltroDTO
+            {
+                IdRol = idRol,
+                Estado = estado,
+                FechaInicio = fechaInicio,
+                FechaFin = fechaFin
+            };
+            var resultado = await _usuarioService.GetUsuariosReporte(filtro);
+            return Ok(resultado);
+        }
 
         // creacion de token de autenticación para el usuario
         //api/usuario/signin

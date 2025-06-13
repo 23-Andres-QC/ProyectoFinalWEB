@@ -212,7 +212,12 @@ namespace ProyectoVDI.CORE.Core.Services
             return usuarioList;
         }
 
-
-        
+        // =====================
+        // Reporte de usuarios con filtros
+        // =====================
+        public async Task<IEnumerable<UsuarioReporteDTO>> GetUsuariosReporte(UsuarioReporteFiltroDTO filtro)
+        {
+            return await _usuariosRepository.GetUsuariosReporteAsync(filtro);
+        }
     }
 }

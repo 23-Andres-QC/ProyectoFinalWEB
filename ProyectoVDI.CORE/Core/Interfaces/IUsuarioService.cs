@@ -15,7 +15,7 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<bool> RecuperarContraseña(UsuarioRecuperarDTO dto);
         Task<bool> CambiarContraseña(UsuarioChangePasswordDTO dto);
         Task<IEnumerable<UsuarioListDTO>> BuscarUsuarios(string query);
-
         Task<SignInResponseDTO?> SignIn(SignInRequestDTO request);
+        Task<IEnumerable<UsuarioReporteDTO>> GetUsuariosReporte(UsuarioReporteFiltroDTO filtro);
     }
 }

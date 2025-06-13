@@ -15,6 +15,8 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<int> CreateAsync(CategoriasCreateDTO dto);
         // Actualiza una categoria existente
         Task<bool> UpdateAsync(CategoriasUpdateDTO dto);
+        // Obtiene descripciones distintas de categorias
+        Task<IEnumerable<string>> GetDistinctDescripcionAsync();
         // Elimina (desactiva) una categoria (ya no se usará)
         // Task<bool> DeleteAsync(int id); // Comentado para dejar claro que no se usa
     }
