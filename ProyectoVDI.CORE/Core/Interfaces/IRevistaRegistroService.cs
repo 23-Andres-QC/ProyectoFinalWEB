@@ -17,5 +17,9 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<bool> ActualizarRevistaPorIssnAsync(RevistaRegistroDTO dto);
         // DELETE
         Task<bool> EliminarRevistaPorIssnAsync(string issn);
+        // NUEVO: Obtener nombres de columnas válidas para consulta distinct en MetadatosRevistaISSN
+        Task<IEnumerable<string>> GetMetadatosColumnNamesAsync();
+        // NUEVO: Obtener valores distintos de una columna en MetadatosRevistaISSN
+        Task<IEnumerable<string>> GetMetadatosDistinctValuesAsync(string columnName);
     }
 }

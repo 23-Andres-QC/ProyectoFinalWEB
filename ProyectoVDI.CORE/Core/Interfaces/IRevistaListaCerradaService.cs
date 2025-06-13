@@ -11,5 +11,8 @@ namespace ProyectoVDI.CORE.Core.Interfaces
         Task<bool> RegistrarLCDAsync(int idUsuario, List<ListaCerradaRegistroDTO> revistas);
         Task<bool> ActualizarLCDPorIssnAsync(ListaCerradaRegistroDTO dto);
         Task<bool> EliminarLCDPorIssnAsync(string issn);
+        Task<IEnumerable<string>> GetDistinctCategoriasAsync();
+        Task<IEnumerable<string>> GetColumnNamesAsync();
+        Task<IEnumerable<string>> GetDistinctValuesAsync(string columnName);
     }
 }
