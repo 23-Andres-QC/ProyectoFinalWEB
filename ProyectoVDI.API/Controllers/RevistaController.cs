@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Interfaces;
 using ProyectoVDI.CORE.Core.Services;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class RevistaController : ControllerBase

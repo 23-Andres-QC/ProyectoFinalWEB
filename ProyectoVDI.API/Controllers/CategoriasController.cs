@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Interfaces;
 using System.Linq; // Para usar .Select
@@ -6,6 +7,7 @@ using System.Linq; // Para usar .Select
 namespace ProyectoVDI.API.Controllers
 {
     // Controlador para exponer los endpoints CRUD de Categorias
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CategoriasController : ControllerBase

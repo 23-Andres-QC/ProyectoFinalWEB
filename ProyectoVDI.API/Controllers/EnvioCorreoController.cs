@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using System.Net.Mail;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/enviar-reporte")]
     public class EnvioCorreoController : ControllerBase
