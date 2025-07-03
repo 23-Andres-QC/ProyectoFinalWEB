@@ -31,7 +31,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Shared
                 new Claim(ClaimTypes.Name, user.Correo ?? string.Empty),
                 new Claim(ClaimTypes.Email, user.Correo ?? string.Empty),
                 new Claim("UserId", user.IdUsuario.ToString()),
-                new Claim(ClaimTypes.Role, user.IdRol?.ToString() ?? "User")
+                new Claim(ClaimTypes.Role, user.Id_Rol?.ToString() ?? "User")
             };
 
             var payload = new JwtPayload(

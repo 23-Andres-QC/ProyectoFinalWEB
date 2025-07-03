@@ -26,10 +26,10 @@ namespace ProyectoVDI.CORE.Core.Services
             {
                 result.Add(new ProfesoresAdmisListDTO
                 {
-                    IdProfesorAdmis = item.IdProfesorAdmis,
+                    IdProfesorAdmis = item.Id_Profesor_Admis,
                     IdCateg = item.IdCategoria, // ahora vuelve mas la categoria id
                     Categoria = item.IdCategoriaNavigation?.Descripcion, // Ahora muestra la descripción
-                    Dni = item.Dni,
+                    Dni = item.DNI,
                     NombreyApellido = item.NombreyApellido,
                     Correo = item.Correo,
                     Estado = item.Estado == 1 ? "Activo" : "Inactivo"
@@ -45,9 +45,9 @@ namespace ProyectoVDI.CORE.Core.Services
             if (item == null) return null;
             return new ProfesoresAdmisDetailDTO
             {
-                IdProfesorAdmis = item.IdProfesorAdmis,
+                IdProfesorAdmis = item.Id_Profesor_Admis,
                 IdCategoria = item.IdCategoriaNavigation?.Descripcion, // Ahora muestra la descripción
-                Dni = item.Dni,
+                Dni = item.DNI,
                 NombreyApellido = item.NombreyApellido,
                 Correo = item.Correo,
                 Estado = item.Estado
@@ -61,7 +61,7 @@ namespace ProyectoVDI.CORE.Core.Services
             var entity = new ProfesoresAdmis
             {
                 IdCategoria = dto.IdCategoria,
-                Dni = dto.Dni,
+                DNI = dto.Dni,
                 NombreyApellido = dto.NombreyApellido,
                 Correo = dto.Correo,
                 Estado = dto.Estado // El estado es proporcionado manualmente
@@ -75,9 +75,9 @@ namespace ProyectoVDI.CORE.Core.Services
         {
             var entity = new ProfesoresAdmis
             {
-                IdProfesorAdmis = dto.IdProfesorAdmis,
+                Id_Profesor_Admis = dto.IdProfesorAdmis,
                 IdCategoria = dto.IdCategoria,
-                Dni = dto.Dni,
+                DNI = dto.Dni,
                 NombreyApellido = dto.NombreyApellido,
                 Correo = dto.Correo,
                 Estado = dto.Estado == "Activo" ? 1 : 0

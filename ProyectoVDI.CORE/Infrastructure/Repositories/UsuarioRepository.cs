@@ -29,7 +29,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task<List<Usuario>> GetAllAsync()
         {
             // Incluye la navegación a ProfesoresAdmis para poder acceder a NombreyApellido
-            return await _context.Usuario.Include(u => u.IdProfesorAdmisNavigation).ToListAsync();
+            return await _context.Usuario
+                .Include(u => u.IdProfesorAdmisNavigation)
+                .ThenInclude(p => p.IdCategoriaNavigation)
+                .Where(u => u.IdProfesorAdmisNavigation != null && u.IdProfesorAdmisNavigation.IdCategoriaNavigation != null) // Verificación adicional
+                .ToListAsync();
         }
 
         // =====================
@@ -38,9 +42,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         public async Task<Usuario?> GetByIdAsync(int id)
         {
             return await _context.Usuario
-                .Where(u => u.IdUsuario == id)
-                .FirstOrDefaultAsync();
+                .Include(u => u.IdProfesorAdmisNavigation)
+                    .ThenInclude(p => p.IdCategoriaNavigation)
+                .FirstOrDefaultAsync(u => u.IdUsuario == id);
         }
+
 
         // =====================
         // Crea un nuevo usuario
@@ -65,10 +71,10 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             {
                 throw new System.InvalidOperationException($"No se encontró el usuario con ID {usuario.IdUsuario} para actualizar.");
             }
-            existingUsuario.IdProfesorAdmis = usuario.IdProfesorAdmis;
+            existingUsuario.Id_Profesor_Admis = usuario.Id_Profesor_Admis;
             existingUsuario.Correo = usuario.Correo;
             existingUsuario.Contraseña = usuario.Contraseña;
-            existingUsuario.IdRol = usuario.IdRol;
+            existingUsuario.Id_Rol = usuario.Id_Rol;
             // Estado ya no se actualiza desde el servicio
             existingUsuario.FechaModificacion = System.DateTime.Now;
             _context.Usuario.Update(existingUsuario);
@@ -95,11 +101,11 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
         {
             var query = _context.Usuario
                 .Include(u => u.IdProfesorAdmisNavigation)
-                .Include(u => u.IdRolNavigation)
+                .Include(u => u.Rol)
                 .AsQueryable();
 
             if (filtro.IdRol.HasValue)
-                query = query.Where(u => u.IdRol == filtro.IdRol);
+                query = query.Where(u => u.Id_Rol == filtro.IdRol);
 
             if (filtro.Estado.HasValue)
                 query = query.Where(u => u.Estado == filtro.Estado);
@@ -113,8 +119,8 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             return await query.Select(u => new UsuarioReporteDTO
             {
                 Correo = u.Correo,
-                Descripcion = u.IdRolNavigation.Descripcion,
-                DNI = u.IdProfesorAdmisNavigation.Dni,
+                Descripcion = u.Rol != null ? u.Rol.Descripcion : null, // Verificación de null para evitar CS8602
+                DNI = u.IdProfesorAdmisNavigation != null ? u.IdProfesorAdmisNavigation.DNI : null, // Verificación de null
                 Estado = u.Estado,
                 FechaCreacion = u.FechaCreacion,
                 FechaModificacion = u.FechaModificacion

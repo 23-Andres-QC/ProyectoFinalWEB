@@ -50,12 +50,16 @@ namespace ProyectoVDI.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] UsuarioCreateDTO dto)
         {
-            // Validación de modelo
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            var id = await _usuarioService.CreateUsuario(dto);
-            // Devuelve el usuario creado con su nombre
-            var usuarioCreado = await _usuarioService.GetUsuarioById(id);
-            return CreatedAtAction(nameof(GetById), new { id }, usuarioCreado);
+            try
+            {
+                var id = await _usuarioService.CreateUsuario(dto);
+                var usuarioCreado = await _usuarioService.GetUsuarioById(id);
+                return CreatedAtAction(nameof(GetById), new { id }, usuarioCreado);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message); // Código 409 para duplicado
+            }
         }
 
         // =====================

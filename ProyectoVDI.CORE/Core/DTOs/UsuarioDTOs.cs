@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace ProyectoVDI.CORE.Core.DTOs
 {
     // =====================
-    // DTO detallado para mostrar informaciÛn de un usuario (GET)
+    // DTO detallado para mostrar informaci√≥n de un usuario (GET)
     // =====================
     public class UsuarioDTO
     {
         public int IdUsuario { get; set; }
         public string? NombreyApellido { get; set; } // Nombre y apellido del profesor
         public string? Correo { get; set; }
-        public int? IdRol { get; set; }
+        public int? Id_Rol { get; set; }
         public int? Estado { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaModificacion { get; set; }
@@ -28,8 +28,10 @@ namespace ProyectoVDI.CORE.Core.DTOs
         public int IdUsuario { get; set; }
         public string? NombreyApellido { get; set; } // Nombre y apellido del profesor
         public string? Correo { get; set; }
-        public int? IdRol { get; set; }
+        public int? Id_Rol { get; set; }
         public int? Estado { get; set; }
+        public string? DNI { get; set; }       // ‚Üê agrega esto
+        public string? Categoria { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaModificacion { get; set; }
     }
@@ -39,10 +41,10 @@ namespace ProyectoVDI.CORE.Core.DTOs
     // =====================
     public class UsuarioCreateDTO
     {
-        public int? IdProfesorAdmis { get; set; }
+        public int? Id_Profesor_Admis { get; set; }
         public string? Correo { get; set; }
-        public string? ContraseÒa { get; set; }
-        public int? IdRol { get; set; }
+        public string? Contrase√±a { get; set; }
+        public int? Id_Rol { get; set; }
         public int? Estado { get; set; }
     }
 
@@ -52,10 +54,10 @@ namespace ProyectoVDI.CORE.Core.DTOs
     public class UsuarioUpdateDTO
     {
         public int IdUsuario { get; set; }
-        public int? IdProfesorAdmis { get; set; }
+        public int? Id_Profesor_Admis { get; set; }
         public string? Correo { get; set; }
-        public string? ContraseÒa { get; set; }
-        public int? IdRol { get; set; }
+        public string? Contrase√±a { get; set; }
+        public int? Id_Rol { get; set; }
         public int? Estado { get; set; }
     }
 
@@ -65,11 +67,11 @@ namespace ProyectoVDI.CORE.Core.DTOs
     public class UsuarioLoginDTO
     {
         public string? Correo { get; set; } // O usuario
-        public string? ContraseÒa { get; set; }
+        public string? Contrase√±a { get; set; }
     }
 
     // =====================
-    // DTO para recuperaciÛn de contraseÒa
+    // DTO para recuperaci√≥n de contrase√±a
     // =====================
     public class UsuarioRecuperarDTO
     {
@@ -77,13 +79,13 @@ namespace ProyectoVDI.CORE.Core.DTOs
     }
 
     // =====================
-    // DTO para cambio de contraseÒa
+    // DTO para cambio de contrase√±a
     // =====================
     public class UsuarioChangePasswordDTO
     {
         public int IdUsuario { get; set; }
-        public string? ContraseÒaActual { get; set; }
-        public string? NuevaContraseÒa { get; set; }
-        public string? ConfirmarContraseÒa { get; set; }
+        public string? Contrase√±aActual { get; set; }
+        public string? NuevaContrase√±a { get; set; }
+        public string? ConfirmarContrase√±a { get; set; }
     }
 }

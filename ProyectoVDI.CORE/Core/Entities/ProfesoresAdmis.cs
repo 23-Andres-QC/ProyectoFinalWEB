@@ -7,9 +7,9 @@ namespace ProyectoVDI.CORE.Core.Entities;
 public partial class ProfesoresAdmis
 {
     // Propiedades principales del profesor: identificador, categoría, DNI, nombre, correo y estado.
-    public int IdProfesorAdmis { get; set; }
+    public int Id_Profesor_Admis { get; set; }
     public int? IdCategoria { get; set; }
-    public int? Dni { get; set; }
+    public int? DNI { get; set; }
     public string? NombreyApellido { get; set; }
     public string? Correo { get; set; }
     public int? Estado { get; set; }

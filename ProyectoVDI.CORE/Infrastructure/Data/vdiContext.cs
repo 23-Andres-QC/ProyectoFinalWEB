@@ -228,15 +228,15 @@ public partial class vdiContext : DbContext
 
         modelBuilder.Entity<ProfesoresAdmis>(entity =>
         {
-            entity.HasKey(e => e.IdProfesorAdmis).HasName("PK__Profesor__FE7EEAD47F02E431");
+            entity.HasKey(e => e.Id_Profesor_Admis).HasName("PK__Profesor__FE7EEAD47F02E431");
 
             entity.ToTable("Profesores_Admis");
 
-            entity.Property(e => e.IdProfesorAdmis).HasColumnName("Id_Profesor_Admis");
+            entity.Property(e => e.Id_Profesor_Admis).HasColumnName("Id_Profesor_Admis");
             entity.Property(e => e.Correo)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Dni).HasColumnName("DNI");
+            entity.Property(e => e.DNI).HasColumnName("DNI");
             entity.Property(e => e.NombreyApellido)
                 .HasMaxLength(500)
                 .IsUnicode(false);
@@ -345,15 +345,19 @@ public partial class vdiContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
             entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
-            entity.Property(e => e.IdProfesorAdmis).HasColumnName("Id_Profesor_Admis");
-            entity.Property(e => e.IdRol).HasColumnName("Id_Rol");
+            entity.Property(e => e.Id_Profesor_Admis).HasColumnName("Id_Profesor_Admis");
+            entity.Property(e => e.Id_Rol).HasColumnName("Id_Rol");
 
             entity.HasOne(d => d.IdProfesorAdmisNavigation).WithMany(p => p.Usuario)
-                .HasForeignKey(d => d.IdProfesorAdmis)
+                .HasForeignKey(d => d.Id_Profesor_Admis)
                 .HasConstraintName("FK__Usuario__Id_Prof__3E52440B");
 
-            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.Usuario)
-                .HasForeignKey(d => d.IdRol)
+            entity.HasOne(d => d.Rol).WithMany(p => p.Usuario)
+                .HasForeignKey(d => d.Id_Rol)
+                .HasConstraintName("FK__Usuario__Id_Rol__3F466844");
+
+            entity.HasOne(d => d.Rol).WithMany(p => p.Usuario)
+                .HasForeignKey(d => d.Id_Rol)
                 .HasConstraintName("FK__Usuario__Id_Rol__3F466844");
         });
 

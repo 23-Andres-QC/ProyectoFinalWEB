@@ -28,7 +28,7 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             // Incluye la navegación a Categorias para que la descripción esté disponible
             return await _context.ProfesoresAdmis
                 .Include(p => p.IdCategoriaNavigation)
-                .FirstOrDefaultAsync(p => p.IdProfesorAdmis == id);
+                .FirstOrDefaultAsync(p => p.Id_Profesor_Admis == id);
         }
 
         public async Task<int> CreateAsync(ProfesoresAdmis entity)
@@ -36,12 +36,12 @@ namespace ProyectoVDI.CORE.Infrastructure.Repositories
             entity.Estado = 1;
             _context.ProfesoresAdmis.Add(entity);
             await _context.SaveChangesAsync();
-            return entity.IdProfesorAdmis;
+            return entity.Id_Profesor_Admis;
         }
 
         public async Task<bool> UpdateAsync(ProfesoresAdmis entity)
         {
-            var existing = await _context.ProfesoresAdmis.FindAsync(entity.IdProfesorAdmis);
+            var existing = await _context.ProfesoresAdmis.FindAsync(entity.Id_Profesor_Admis);
             if (existing == null) return false;
             _context.Entry(existing).CurrentValues.SetValues(entity);
             await _context.SaveChangesAsync();

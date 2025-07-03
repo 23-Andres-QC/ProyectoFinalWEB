@@ -47,7 +47,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdUsuario = usuario.IdUsuario,
                 NombreyApellido = usuario.IdProfesorAdmisNavigation?.NombreyApellido,
                 Correo = usuario.Correo,
-                IdRol = usuario.IdRol,
+                IdRol = usuario.Id_Rol,
                 Estado = usuario.Estado,
                 Token = token
             };
@@ -67,10 +67,8 @@ namespace ProyectoVDI.CORE.Core.Services
                     IdUsuario = usuario.IdUsuario,
                     NombreyApellido = usuario.IdProfesorAdmisNavigation?.NombreyApellido,
                     Correo = usuario.Correo,
-                    IdRol = usuario.IdRol,
-                    Estado = usuario.Estado,
-                    FechaCreacion = usuario.FechaCreacion,
-                    FechaModificacion = usuario.FechaModificacion
+                    DNI = usuario.IdProfesorAdmisNavigation?.DNI?.ToString(),                   
+                    Categoria = usuario.IdProfesorAdmisNavigation?.IdCategoriaNavigation?.Descripcion
                 });
             }
             return usuarioList;
@@ -88,7 +86,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdUsuario = usuario.IdUsuario,
                 NombreyApellido = usuario.IdProfesorAdmisNavigation?.NombreyApellido,
                 Correo = usuario.Correo,
-                IdRol = usuario.IdRol,
+                Id_Rol = usuario.Id_Rol,
                 Estado = usuario.Estado,
                 FechaCreacion = usuario.FechaCreacion,
                 FechaModificacion = usuario.FechaModificacion
@@ -100,12 +98,18 @@ namespace ProyectoVDI.CORE.Core.Services
         // =====================
         public async Task<int> CreateUsuario(UsuarioCreateDTO dto)
         {
+            var yaExiste = (await _usuariosRepository.GetAllAsync())
+       .Any(u => u.Id_Profesor_Admis == dto.Id_Profesor_Admis);
+
+            if (yaExiste)
+                throw new Exception("Este profesor ya está registrado como usuario.");
+
             var usuario = new Usuario
             {
-                IdProfesorAdmis = dto.IdProfesorAdmis,
+                Id_Profesor_Admis = dto.Id_Profesor_Admis, // Corregido: Usar el nombre correcto de la propiedad
                 Correo = dto.Correo,
                 Contraseña = dto.Contraseña,
-                IdRol = dto.IdRol,
+                Id_Rol = dto.Id_Rol,
                 Estado = dto.Estado ?? 1, // Usa el estado proporcionado o 1 por defecto
                 FechaCreacion = DateTime.Now
             };
@@ -121,10 +125,10 @@ namespace ProyectoVDI.CORE.Core.Services
             var usuario = await _usuariosRepository.GetByIdAsync(dto.IdUsuario);
             if (usuario == null) return false;
 
-            usuario.IdProfesorAdmis = dto.IdProfesorAdmis;
+            usuario.Id_Profesor_Admis = dto.Id_Profesor_Admis;
             usuario.Correo = dto.Correo;
             usuario.Contraseña = dto.Contraseña;
-            usuario.IdRol = dto.IdRol;
+            usuario.Id_Rol = dto.Id_Rol;
             usuario.Estado = dto.Estado ?? usuario.Estado; // Permite actualizar el estado
             usuario.FechaModificacion = DateTime.Now;
 
@@ -153,7 +157,7 @@ namespace ProyectoVDI.CORE.Core.Services
                 IdUsuario = usuario.IdUsuario,
                 NombreyApellido = usuario.IdProfesorAdmisNavigation?.NombreyApellido,
                 Correo = usuario.Correo,
-                IdRol = usuario.IdRol,
+                Id_Rol = usuario.Id_Rol,
                 Estado = usuario.Estado,
                 FechaCreacion = usuario.FechaCreacion,
                 FechaModificacion = usuario.FechaModificacion
@@ -203,10 +207,12 @@ namespace ProyectoVDI.CORE.Core.Services
                     IdUsuario = usuario.IdUsuario,
                     NombreyApellido = usuario.IdProfesorAdmisNavigation?.NombreyApellido,
                     Correo = usuario.Correo,
-                    IdRol = usuario.IdRol,
+                    Id_Rol = usuario.Id_Rol,
                     Estado = usuario.Estado,
                     FechaCreacion = usuario.FechaCreacion,
-                    FechaModificacion = usuario.FechaModificacion
+                    FechaModificacion = usuario.FechaModificacion,
+                    DNI = usuario.IdProfesorAdmisNavigation?.DNI.ToString(),
+                    Categoria = usuario.IdProfesorAdmisNavigation?.IdCategoriaNavigation?.Descripcion
                 });
             }
             return usuarioList;
