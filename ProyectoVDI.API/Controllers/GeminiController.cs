@@ -37,7 +37,7 @@ namespace ProyectoVDI.API.Controllers
 Responde únicamente con base en el texto anterior o lleva la respuesta al contexto directo del mismo. No incluyas en la respuesta frases como “en el texto”, “según el contenido”, “según el texto”, “de acuerdo con el texto” ni términos similares.
 
 Si la pregunta está completamente fuera del contenido proporcionado, responde exactamente con este mensaje:
-FORMULE UNA PREGUNTA MÁS CLARA ACERCA DE VDI DE LA UNIVERSIDAD ESAN.
+¡Hola! 😊 Por favor, formula una pregunta más clara sobre el VDI de la Universidad ESAN para poder ayudarte mejor 🙌..
 
 La respuesta debe ser breve (máximo 50 palabras), clara, organizada y no debe incluir explicaciones innecesarias ni la palabra “resumen”
 Pregunta del usuario: ""{pregunta}?""";
