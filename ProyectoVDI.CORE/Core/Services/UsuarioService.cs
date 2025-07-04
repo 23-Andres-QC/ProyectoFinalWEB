@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using ProyectoVDI.CORE.Core.DTOs;
 using ProyectoVDI.CORE.Core.Entities;
 using ProyectoVDI.CORE.Core.Interfaces;
@@ -5,6 +6,8 @@ using ProyectoVDI.CORE.Infrastructure.Repositories;
 using ProyectoVDI.CORE.Infrastructure.Shared;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace ProyectoVDI.CORE.Core.Services
@@ -19,13 +22,18 @@ namespace ProyectoVDI.CORE.Core.Services
         // Repositorio de usuarios inyectado
         private readonly IUsuariosRepository _usuariosRepository;
         private readonly IJWTService _jwtService;
+        private readonly IConfiguration _config;
 
-        // Constructor que recibe el repositorio
-        public UsuarioService(IUsuariosRepository usuariosRepository, IJWTService service)
+        public UsuarioService(
+            IUsuariosRepository usuariosRepository,
+            IJWTService jwtService,
+            IConfiguration config)
         {
             _usuariosRepository = usuariosRepository;
-            _jwtService = service;
+            _jwtService = jwtService;
+            _config = config;
         }
+
 
 
 
@@ -170,9 +178,50 @@ namespace ProyectoVDI.CORE.Core.Services
         public async Task<bool> RecuperarContraseña(UsuarioRecuperarDTO dto)
         {
             var usuarios = await _usuariosRepository.GetAllAsync();
-            var usuario = usuarios.Find(u => u.Correo == dto.Correo);
-            return usuario != null;
+            var usuario = usuarios.FirstOrDefault(u => u.Correo == dto.Correo);
+
+            if (usuario == null)
+                return false;
+
+            try
+            {
+                var smtpHost = _config["SMTP:Host"];
+                var smtpPort = int.Parse(_config["SMTP:Port"]);
+                var smtpUser = _config["SMTP:User"];
+                var smtpPass = _config["SMTP:Pass"];
+                var enableSsl = bool.Parse(_config["SMTP:EnableSsl"]);
+
+                var nombre = usuario.IdProfesorAdmisNavigation?.NombreyApellido ?? "usuario";
+
+                var mensaje = new MailMessage
+                {
+                    From = new MailAddress(smtpUser, "Soporte VDI"),
+                    Subject = "Recuperación de contraseña",
+                    Body = $"Hola {nombre},\n\n" +
+                           $"Tu contraseña actual es: {usuario.Contraseña}\n\n" +
+                           $"Si no hiciste esta solicitud, por favor cámbiala.\n\n" +
+                           $"Saludos,\nEquipo VDI",
+                    IsBodyHtml = false
+                };
+
+                mensaje.To.Add(dto.Correo);
+
+                using var smtp = new SmtpClient(smtpHost, smtpPort)
+                {
+                    Credentials = new NetworkCredential(smtpUser, smtpPass),
+                    EnableSsl = enableSsl
+                };
+
+                await smtp.SendMailAsync(mensaje);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al enviar correo: " + ex.Message);
+                return false;
+            }
         }
+
 
         // =====================
         // Cambio de contraseña

@@ -101,13 +101,16 @@ namespace ProyectoVDI.API.Controllers
         // Recuperación de contraseña
         // =====================
         [HttpPost("recuperar")]
-        public async Task<IActionResult> Recuperar([FromBody] UsuarioRecuperarDTO dto)
+        public async Task<IActionResult> RecuperarContraseña([FromBody] UsuarioRecuperarDTO dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            var ok = await _usuarioService.RecuperarContraseña(dto);
-            if (!ok) return NotFound("Usuario no encontrado");
-            return Ok("Se ha enviado un correo de recuperación (simulado)");
+            var resultado = await _usuarioService.RecuperarContraseña(dto);
+            if (resultado)
+                return Ok("Se envió la contraseña a su correo registrado.");
+            else
+                return BadRequest("No se encontró el correo registrado.");
         }
+
+
 
         // =====================
         // Cambio de contraseña
