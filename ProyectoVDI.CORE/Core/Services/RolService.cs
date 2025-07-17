@@ -12,6 +12,7 @@ namespace ProyectoVDI.CORE.Core.Services
         public RolService(IRolRepository repository)
         {
             _repository = repository;
+            //ASDADASDASD
         }
 
         public async Task<IEnumerable<RolListDTO>> GetAllAsync()
